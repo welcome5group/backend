@@ -10,7 +10,8 @@ class JasyptConfigTest {
 
     @Test
     void jasypt(){
-        String url = "jdbc:mysql://localhost:3306/fingerorder_db";
+
+        String url = "jdbc:mysql://fingerorder-rds-instance.c1lv9wykwk3f.ap-northeast-2.rds.amazonaws.com:3306/fingerorder_db";
         String username = "fingerorder";
         String password = "zerobase12#$";
 
