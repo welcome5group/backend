@@ -1,0 +1,18 @@
+
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:(MySQL? ????)/(DB??)?serverTimezone=Asia/Seoul
+#    username: (user?)
+#    password: (password)
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+##                show_sql: true
+#        format_sql: true
+#logging.level:
+#  org.hibernate.SQL: debug
+#  #  org.hibernate.type: trace
+
