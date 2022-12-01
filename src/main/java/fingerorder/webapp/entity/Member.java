@@ -25,5 +25,4 @@ public class Member {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-
 }
