@@ -15,7 +15,6 @@ logging.level:
   org.hibernate.SQL: debug
   #  org.hibernate.type: trace
 
-
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
