@@ -1,6 +1,5 @@
 package fingerorder.webapp.entity;
 
-
 import fingerorder.webapp.status.UserStatus;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -20,9 +19,11 @@ public class Member {
     private String email;
     private String password;
     private String nickname;
+
     private UserStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
+
 
 }
