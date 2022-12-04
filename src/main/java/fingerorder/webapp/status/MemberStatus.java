@@ -1,6 +1,6 @@
-//package fingerorder.webapp.status;
-//
-//public enum MemberStatus {
-//
-//
-//}
+package fingerorder.webapp.status;
+
+public enum MemberStatus {
+
+
+}
