@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
 		} else if (optionalMerchant.isPresent()){
 			Merchant merchant = optionalMerchant.get();
 			password = merchant.getPassword();
-			authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+			authorities.add(new SimpleGrantedAuthority("ROLE_MERCHANT"));
 		} else {
 			throw new UsernameNotFoundException("couldn't find user"+ email);
 
