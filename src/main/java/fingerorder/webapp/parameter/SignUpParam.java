@@ -15,5 +15,4 @@ public class SignUpParam {
 	private String password;
 	private String nickName;
 	private String type;
-	private List<String> roles;
 }

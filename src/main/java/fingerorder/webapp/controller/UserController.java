@@ -3,10 +3,15 @@ package fingerorder.webapp.controller;
 import fingerorder.webapp.Service.UserService;
 import fingerorder.webapp.parameter.SignInParam;
 import fingerorder.webapp.parameter.SignUpParam;
+import fingerorder.webapp.parameter.UserEditParam;
+import fingerorder.webapp.parameter.UserParam;
 import fingerorder.webapp.security.JwtTokenProvider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,4 +38,18 @@ public class UserController {
 		return ResponseEntity.ok(token);
 	}
 
+	@GetMapping("/api/users")
+	@PreAuthorize("hasRole(MEMBER) or hasRole(MERCHANT)")
+	public ResponseEntity<?> userInfo(@RequestBody UserParam userParam) {
+		var result = this.userService.getUserInfo(userParam);
+
+		return ResponseEntity.ok(result);
+	}
+
+	@PatchMapping("/api/users")
+	@PreAuthorize("hasRole(MEMBER) or hasRole(MERCHANT)")
+	public ResponseEntity<?> userInfoEdit(@RequestBody UserEditParam userEditParam) {
+
+		return ResponseEntity.ok("222");
+	}
 }

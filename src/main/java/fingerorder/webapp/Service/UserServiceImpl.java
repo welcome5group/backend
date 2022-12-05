@@ -5,6 +5,8 @@ import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.entity.Merchant;
 import fingerorder.webapp.parameter.SignInParam;
 import fingerorder.webapp.parameter.SignUpParam;
+import fingerorder.webapp.parameter.UserEditParam;
+import fingerorder.webapp.parameter.UserParam;
 import fingerorder.webapp.repository.MemberRepository;
 import fingerorder.webapp.repository.MerchantRepository;
 import java.time.LocalDateTime;
@@ -25,7 +27,6 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
-
 	private final MerchantRepository merchantRepository;
 
 	@Override
@@ -52,7 +53,6 @@ public class UserServiceImpl implements UserService {
 
 			return this.memberRepository.save(newMember).toUserDto();
 		} else {
-
 			Merchant newMerchant = Merchant.builder()
 				.email(signUpParam.getEmail())
 				.password(this.passwordEncoder.encode(signUpParam.getPassword()))
@@ -88,6 +88,35 @@ public class UserServiceImpl implements UserService {
 		return userDto;
 	}
 
+	//유저 정보 가져오기
+	@Override
+	public UserDto getUserInfo(UserParam userParam) {
+		boolean exist = false;
+		if (userParam.getType().equals("member")) {
+			exist = this.memberRepository.existsByEmail(userParam.getEmail());
+		} else {
+			exist = this.merchantRepository.existsByEmail(userParam.getEmail());
+		}
+
+		if (!exist) {
+			throw new RuntimeException("등록되지 않은 사용자 입니다.");
+		}
+
+		UserDto result = new UserDto();
+
+		if (userParam.getType().equals("member")) {
+			Member findMember = this.memberRepository.findByEmail(userParam.getEmail())
+				.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+			result = findMember.toUserDto();
+		} else {
+			Merchant findMerchant = this.merchantRepository.findByEmail(userParam.getEmail())
+				.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+			result = findMerchant.toUserDto();
+		}
+
+		return result;
+	}
+
 	//roles 가져오기
 	@Override
 	public List<String> getRoles(SignInParam signInParam) {
@@ -98,6 +127,23 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return roles;
+	}
+
+	// user 정보 수정(nickName 밖에 없음)
+	@Override
+	public UserDto editUserInfo(UserEditParam userEditParam) {
+		boolean exist = false;
+		if (userEditParam.getType().equals("member")) {
+			exist = this.memberRepository.existsByEmail(userEditParam.getEmail());
+		} else {
+			exist = this.merchantRepository.existsByEmail(userEditParam.getEmail());
+		}
+
+		if (!exist) {
+			throw new RuntimeException("등록되지 않은 사용자 입니다.");
+		}
+
+		return null;
 	}
 
 	// security 관련

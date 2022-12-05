@@ -1,10 +1,12 @@
 package fingerorder.webapp.parameter;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class SignInParam {
+@Builder
+public class UserEditParam {
 	private String email;
-	private String password;
+	private String nickName;
 	private String type;
 }
