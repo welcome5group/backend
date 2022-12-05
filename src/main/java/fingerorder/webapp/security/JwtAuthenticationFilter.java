@@ -1,6 +1,5 @@
 package fingerorder.webapp.security;
 
-import fingerorder.webapp.config.SecurityConfig;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
