@@ -31,16 +31,20 @@ public class Member{
     private Long id;
     private String email;
     private String password;
-    private String nickname;
+    private String nickName;
     private String status;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
     private LocalDateTime deleted_at;
 
+    public void editNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     public UserDto toUserDto() {
         return UserDto.builder()
             .email(this.email)
-            .nickName(this.nickname)
+            .nickName(this.nickName)
             .status(this.status)
             .created_at(this.created_at)
             .updated_at(this.updated_at)

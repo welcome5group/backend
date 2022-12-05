@@ -1,6 +1,6 @@
 package fingerorder.webapp.security;
 
-import fingerorder.webapp.Service.UserService;
+import fingerorder.webapp.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

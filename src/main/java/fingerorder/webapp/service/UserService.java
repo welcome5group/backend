@@ -1,4 +1,4 @@
-package fingerorder.webapp.Service;
+package fingerorder.webapp.service;
 
 import fingerorder.webapp.dto.UserDto;
 import fingerorder.webapp.parameter.SignInParam;

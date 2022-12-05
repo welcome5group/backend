@@ -1,4 +1,4 @@
-package fingerorder.webapp.Service;
+package fingerorder.webapp.service;
 
 import fingerorder.webapp.dto.UserDto;
 import fingerorder.webapp.entity.Member;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 			Member newMember = Member.builder()
 				.email(signUpParam.getEmail())
 				.password(this.passwordEncoder.encode(signUpParam.getPassword()))
-				.nickname(signUpParam.getNickName())
+				.nickName(signUpParam.getNickName())
 				.created_at(LocalDateTime.now())
 				.updated_at(LocalDateTime.now())
 				.build();
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 			Merchant newMerchant = Merchant.builder()
 				.email(signUpParam.getEmail())
 				.password(this.passwordEncoder.encode(signUpParam.getPassword()))
-				.nickname(signUpParam.getNickName())
+				.nickName(signUpParam.getNickName())
 				.created_at(LocalDateTime.now())
 				.updated_at(LocalDateTime.now())
 				.build();
@@ -91,18 +91,7 @@ public class UserServiceImpl implements UserService {
 	//유저 정보 가져오기
 	@Override
 	public UserDto getUserInfo(UserParam userParam) {
-		boolean exist = false;
-		if (userParam.getType().equals("member")) {
-			exist = this.memberRepository.existsByEmail(userParam.getEmail());
-		} else {
-			exist = this.merchantRepository.existsByEmail(userParam.getEmail());
-		}
-
-		if (!exist) {
-			throw new RuntimeException("등록되지 않은 사용자 입니다.");
-		}
-
-		UserDto result = new UserDto();
+		UserDto result = null;
 
 		if (userParam.getType().equals("member")) {
 			Member findMember = this.memberRepository.findByEmail(userParam.getEmail())
@@ -132,18 +121,25 @@ public class UserServiceImpl implements UserService {
 	// user 정보 수정(nickName 밖에 없음)
 	@Override
 	public UserDto editUserInfo(UserEditParam userEditParam) {
-		boolean exist = false;
+		UserDto result = null;
+
 		if (userEditParam.getType().equals("member")) {
-			exist = this.memberRepository.existsByEmail(userEditParam.getEmail());
+			Member findMember = this.memberRepository.findByEmail(userEditParam.getEmail())
+				.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+
+			findMember.editNickName(userEditParam.getNickName());
+
+			result = this.memberRepository.save(findMember).toUserDto();
 		} else {
-			exist = this.merchantRepository.existsByEmail(userEditParam.getEmail());
+			Merchant findMerchant = this.merchantRepository.findByEmail(userEditParam.getEmail())
+				.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+
+			findMerchant.editNickName(userEditParam.getNickName());
+
+			result = this.merchantRepository.save(findMerchant).toUserDto();
 		}
 
-		if (!exist) {
-			throw new RuntimeException("등록되지 않은 사용자 입니다.");
-		}
-
-		return null;
+		return result;
 	}
 
 	// security 관련

@@ -1,6 +1,6 @@
 package fingerorder.webapp.controller;
 
-import fingerorder.webapp.Service.UserService;
+import fingerorder.webapp.service.UserService;
 import fingerorder.webapp.parameter.SignInParam;
 import fingerorder.webapp.parameter.SignUpParam;
 import fingerorder.webapp.parameter.UserEditParam;
