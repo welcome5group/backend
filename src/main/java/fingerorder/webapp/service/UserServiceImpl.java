@@ -121,7 +121,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Optional<Member> optionalMember = memberRepository.findByEmail(email);
-		Optional<Merchant> optionalMerchant = merchantRepository.findByEmail(email);
 
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		String password = "";
@@ -132,13 +131,11 @@ public class UserServiceImpl implements UserService {
 			Member member = optionalMember.get();
 			password = member.getPassword();
 
-		} else if (optionalMerchant.isPresent()){
-			Merchant merchant = optionalMerchant.get();
-			password = merchant.getPassword();
-			authorities.add(new SimpleGrantedAuthority("ROLE_MERCHANT"));
+			if (member.getUserType().equals("merchant")) {
+				authorities.add(new SimpleGrantedAuthority("ROLE_MERCHANT"));
+			}
 		} else {
 			throw new UsernameNotFoundException("couldn't find user"+ email);
-
 		}
 
 		return new User(email,password,authorities);
