@@ -49,7 +49,8 @@ public class UserController {
 	@PatchMapping("/api/users")
 	@PreAuthorize("hasRole(MEMBER) or hasRole(MERCHANT)")
 	public ResponseEntity<?> userInfoEdit(@RequestBody UserEditDto userEditDto) {
+		var result = this.userService.editUserInfo(userEditDto);
 
-		return ResponseEntity.ok("222");
+		return ResponseEntity.ok(result);
 	}
 }

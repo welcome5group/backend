@@ -34,6 +34,7 @@ public class Member{
 
     public void editNickName(String nickName) {
         this.nickName = nickName;
+        this.updated_at = LocalDateTime.now();
     }
 
     public UserDto toUserDto() {
