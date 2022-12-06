@@ -25,13 +25,13 @@ public class OrderService {
     @Transactional
     public Long save(final OrderRequestDto params) {
 
-        Optional<Member> member = memberRepository.findById(params.getMemberId());
-        Member member1 = member.get();
+        Optional<Member> optionalMember = memberRepository.findById(params.getMemberId());
+        Member member = optionalMember.orElseThrow(() -> new NullPointerException());
 
-        Optional<Store> store = storeRepository.findById(params.getStoreId());
-        Store store1 = store.get();
+        Optional<Store> optionalStore = storeRepository.findById(params.getStoreId());
+        Store store = optionalStore.orElseThrow(() -> new NullPointerException());
 
-        return orderRepository.save(params.toEntity(member1, store1)).getId();
+        return orderRepository.save(params.toEntity(member, store)).getId();
     }
 
 }
