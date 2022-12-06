@@ -4,7 +4,7 @@ import fingerorder.webapp.dto.UserDto;
 import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.entity.Merchant;
 import fingerorder.webapp.parameter.SignInParam;
-import fingerorder.webapp.parameter.SignUpParam;
+import fingerorder.webapp.dto.SignUpDto;
 import fingerorder.webapp.parameter.UserEditParam;
 import fingerorder.webapp.parameter.UserParam;
 import fingerorder.webapp.repository.MemberRepository;
@@ -30,38 +30,54 @@ public class UserServiceImpl implements UserService {
 	private final MerchantRepository merchantRepository;
 
 	@Override
-	public UserDto signUp(SignUpParam signUpParam) {
-		boolean exists = false;
-		if (signUpParam.getType().equals("member")) {
-			exists = this.memberRepository.existsByEmail(signUpParam.getEmail());
-		} else {
-			exists = this.merchantRepository.existsByEmail(signUpParam.getEmail());
-		}
+	public UserDto signUp(SignUpDto signUpDto) {
+		boolean exists = this.memberRepository.existsByEmail(signUpDto.getEmail());
 
 		if (exists) {
 			throw new RuntimeException("이미 사용 중인 email 입니다.");
 		}
 
-		if (signUpParam.getType().equals("member")) {
-			Member newMember = Member.builder()
-				.email(signUpParam.getEmail())
-				.password(this.passwordEncoder.encode(signUpParam.getPassword()))
-				.nickName(signUpParam.getNickName())
-				.created_at(LocalDateTime.now())
-				.updated_at(LocalDateTime.now())
-				.build();
+		Member newMember = Member.builder()
+			.email(signUpDto.getEmail())
+			.password(this.passwordEncoder.encode(signUpDto.getPassword()))
+			.nickName(signUpDto.getNickName())
+			.userType(signUpDto.getType())
+			.created_at(LocalDateTime.now())
+			.updated_at(LocalDateTime.now())
+			.build();
 
-			return this.memberRepository.save(newMember).toUserDto();
-		} else {
-			Merchant newMerchant = Merchant.builder()
-				.email(signUpParam.getEmail())
-				.password(this.passwordEncoder.encode(signUpParam.getPassword()))
-				.nickName(signUpParam.getNickName())
-				.created_at(LocalDateTime.now())
-				.updated_at(LocalDateTime.now())
-				.build();
-			return this.merchantRepository.save(newMerchant).toUserDto();
-		}
+		return this.memberRepository.save(newMember).toUserDto();
+//		boolean exists = false;
+//		if (signUpParam.getType().equals("member")) {
+//			exists = this.memberRepository.existsByEmail(signUpParam.getEmail());
+//		} else {
+//			exists = this.merchantRepository.existsByEmail(signUpParam.getEmail());
+//		}
+//
+//		if (exists) {
+//			throw new RuntimeException("이미 사용 중인 email 입니다.");
+//		}
+//
+//		if (signUpParam.getType().equals("member")) {
+//			Member newMember = Member.builder()
+//				.email(signUpParam.getEmail())
+//				.password(this.passwordEncoder.encode(signUpParam.getPassword()))
+//				.nickName(signUpParam.getNickName())
+//				.created_at(LocalDateTime.now())
+//				.updated_at(LocalDateTime.now())
+//				.build();
+//
+//			return this.memberRepository.save(newMember).toUserDto();
+//		} else {
+//			Merchant newMerchant = Merchant.builder()
+//				.email(signUpParam.getEmail())
+//				.password(this.passwordEncoder.encode(signUpParam.getPassword()))
+//				.nickName(signUpParam.getNickName())
+//				.created_at(LocalDateTime.now())
+//				.updated_at(LocalDateTime.now())
+//				.build();
+//			return this.merchantRepository.save(newMerchant).toUserDto();
+//		}
 	}
 
 	@Override

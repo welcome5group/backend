@@ -2,7 +2,7 @@ package fingerorder.webapp.controller;
 
 import fingerorder.webapp.service.UserService;
 import fingerorder.webapp.parameter.SignInParam;
-import fingerorder.webapp.parameter.SignUpParam;
+import fingerorder.webapp.dto.SignUpDto;
 import fingerorder.webapp.parameter.UserEditParam;
 import fingerorder.webapp.parameter.UserParam;
 import fingerorder.webapp.security.JwtTokenProvider;
@@ -23,7 +23,7 @@ public class UserController {
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@PostMapping("/api/auth/sign-up")
-	public ResponseEntity<?> signUp(@RequestBody SignUpParam signUpParam) {
+	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpParam) {
 		var result = this.userService.signUp(signUpParam);
 
 		return ResponseEntity.ok(result);

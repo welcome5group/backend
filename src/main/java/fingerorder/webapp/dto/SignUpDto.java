@@ -1,6 +1,5 @@
-package fingerorder.webapp.parameter;
+package fingerorder.webapp.dto;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpParam {
+public class SignUpDto {
 	private String email;
 	private String password;
 	private String nickName;
