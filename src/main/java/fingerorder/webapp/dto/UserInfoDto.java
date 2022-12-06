@@ -7,5 +7,4 @@ import lombok.Getter;
 @Builder
 public class UserInfoDto {
 	private String email;
-	private String type;
 }

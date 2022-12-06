@@ -14,6 +14,7 @@ public class UserDto {
 	private String email;
 	private String nickName;
 	private String status;
+	private String userType;
 	private LocalDateTime created_at;
 	private LocalDateTime updated_at;
 }

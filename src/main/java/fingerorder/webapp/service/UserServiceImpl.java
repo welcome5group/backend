@@ -2,13 +2,11 @@ package fingerorder.webapp.service;
 
 import fingerorder.webapp.dto.UserDto;
 import fingerorder.webapp.entity.Member;
-import fingerorder.webapp.entity.Merchant;
 import fingerorder.webapp.dto.SignInDto;
 import fingerorder.webapp.dto.SignUpDto;
 import fingerorder.webapp.dto.UserEditDto;
 import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.repository.MemberRepository;
-import fingerorder.webapp.repository.MerchantRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
