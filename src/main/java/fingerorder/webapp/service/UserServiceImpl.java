@@ -48,8 +48,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto authenticate(SignInDto signInDto) {
-		Member findMember =this.memberRepository.findByEmail(signInDto.getEmail())
-			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+		Member findMember = checkInvalidEmail(signInDto.getEmail());
 
 		String password = findMember.getPassword();
 
@@ -63,8 +62,7 @@ public class UserServiceImpl implements UserService {
 	//유저 정보 가져오기
 	@Override
 	public UserDto getUserInfo(UserInfoDto userInfoDto) {
-		Member findMember = this.memberRepository.findByEmail(userInfoDto.getEmail())
-			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+		Member findMember = checkInvalidEmail(userInfoDto.getEmail());
 
 		return findMember.toUserDto();
 	}
@@ -84,8 +82,7 @@ public class UserServiceImpl implements UserService {
 	// user 정보 수정(nickName 밖에 없음)
 	@Override
 	public UserDto editUserInfo(UserEditDto userEditDto) {
-		Member findMember =this.memberRepository.findByEmail(userEditDto.getEmail())
-			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+		Member findMember = checkInvalidEmail(userEditDto.getEmail());
 
 		findMember.editNickName(userEditDto.getNickName());
 
@@ -114,5 +111,10 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return new User(email,password,authorities);
+	}
+
+	private Member checkInvalidEmail(String email) {
+		return this.memberRepository.findByEmail(email)
+			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
 	}
 }
