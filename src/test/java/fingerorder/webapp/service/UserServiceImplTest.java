@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import fingerorder.webapp.dto.UserDto;
 import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.entity.Merchant;
-import fingerorder.webapp.parameter.UserEditParam;
-import fingerorder.webapp.parameter.UserParam;
+import fingerorder.webapp.dto.UserEditDto;
+import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.repository.MemberRepository;
 import fingerorder.webapp.repository.MerchantRepository;
 import java.time.LocalDateTime;
@@ -46,12 +46,12 @@ class UserServiceImplTest {
 			.created_at(LocalDateTime.now())
 			.build();
 
-		UserParam userParamMember = UserParam.builder()
+		UserInfoDto userParamMember = UserInfoDto.builder()
 			.email("testMember@naver.com")
 			.type("member")
 			.build();
 
-		UserParam userParamMerchant = UserParam.builder()
+		UserInfoDto userParamMerchant = UserInfoDto.builder()
 			.email("testMerchant@naver.com")
 			.type("merchant")
 			.build();
@@ -87,24 +87,24 @@ class UserServiceImplTest {
 			.created_at(LocalDateTime.now())
 			.build();
 
-		UserEditParam userEditParamMember = UserEditParam.builder()
+		UserEditDto userEditParamMember = UserEditDto.builder()
 			.email("testMember@naver.com")
 			.nickName("changedNickName")
 			.type("member")
 			.build();
 
-		UserEditParam userEditParamMerchant = UserEditParam.builder()
+		UserEditDto userEditParamMerchant = UserEditDto.builder()
 			.email("testMerchant@naver.com")
 			.nickName("changedNickNameMerchant")
 			.type("merchant")
 			.build();
 
-		UserParam userParamMember = UserParam.builder()
+		UserInfoDto userParamMember = UserInfoDto.builder()
 			.email("testMember@naver.com")
 			.type("member")
 			.build();
 
-		UserParam userParamMerchant = UserParam.builder()
+		UserInfoDto userParamMerchant = UserInfoDto.builder()
 			.email("testMerchant@naver.com")
 			.type("merchant")
 			.build();

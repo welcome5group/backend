@@ -5,8 +5,8 @@ import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.entity.Merchant;
 import fingerorder.webapp.dto.SignInDto;
 import fingerorder.webapp.dto.SignUpDto;
-import fingerorder.webapp.parameter.UserEditParam;
-import fingerorder.webapp.parameter.UserParam;
+import fingerorder.webapp.dto.UserEditDto;
+import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.repository.MemberRepository;
 import fingerorder.webapp.repository.MerchantRepository;
 import java.time.LocalDateTime;
@@ -65,20 +65,11 @@ public class UserServiceImpl implements UserService {
 
 	//유저 정보 가져오기
 	@Override
-	public UserDto getUserInfo(UserParam userParam) {
-		UserDto result = null;
+	public UserDto getUserInfo(UserInfoDto userInfoDto) {
+		Member findMember = this.memberRepository.findByEmail(userInfoDto.getEmail())
+			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
 
-		if (userParam.getType().equals("member")) {
-			Member findMember = this.memberRepository.findByEmail(userParam.getEmail())
-				.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
-			result = findMember.toUserDto();
-		} else {
-			Merchant findMerchant = this.merchantRepository.findByEmail(userParam.getEmail())
-				.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
-			result = findMerchant.toUserDto();
-		}
-
-		return result;
+		return findMember.toUserDto();
 	}
 
 	//roles 가져오기
@@ -95,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
 	// user 정보 수정(nickName 밖에 없음)
 	@Override
-	public UserDto editUserInfo(UserEditParam userEditParam) {
+	public UserDto editUserInfo(UserEditDto userEditParam) {
 		UserDto result = null;
 
 		if (userEditParam.getType().equals("member")) {

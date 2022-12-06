@@ -3,8 +3,8 @@ package fingerorder.webapp.controller;
 import fingerorder.webapp.service.UserService;
 import fingerorder.webapp.dto.SignInDto;
 import fingerorder.webapp.dto.SignUpDto;
-import fingerorder.webapp.parameter.UserEditParam;
-import fingerorder.webapp.parameter.UserParam;
+import fingerorder.webapp.dto.UserEditDto;
+import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.security.JwtTokenProvider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -40,15 +40,15 @@ public class UserController {
 
 	@GetMapping("/api/users")
 	@PreAuthorize("hasRole(MEMBER) or hasRole(MERCHANT)")
-	public ResponseEntity<?> userInfo(@RequestBody UserParam userParam) {
-		var result = this.userService.getUserInfo(userParam);
+	public ResponseEntity<?> userInfo(@RequestBody UserInfoDto userInfoDto) {
+		var result = this.userService.getUserInfo(userInfoDto);
 
 		return ResponseEntity.ok(result);
 	}
 
 	@PatchMapping("/api/users")
 	@PreAuthorize("hasRole(MEMBER) or hasRole(MERCHANT)")
-	public ResponseEntity<?> userInfoEdit(@RequestBody UserEditParam userEditParam) {
+	public ResponseEntity<?> userInfoEdit(@RequestBody UserEditDto userEditDto) {
 
 		return ResponseEntity.ok("222");
 	}

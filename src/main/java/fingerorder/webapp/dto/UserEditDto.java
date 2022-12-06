@@ -1,11 +1,11 @@
-package fingerorder.webapp.parameter;
+package fingerorder.webapp.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class UserEditParam {
+public class UserEditDto {
 	private String email;
 	private String nickName;
 	private String type;
