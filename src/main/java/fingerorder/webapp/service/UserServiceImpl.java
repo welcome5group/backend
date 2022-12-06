@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
-	private final MerchantRepository merchantRepository;
 
 	@Override
 	public UserDto signUp(SignUpDto signUpDto) {
@@ -86,26 +85,13 @@ public class UserServiceImpl implements UserService {
 
 	// user 정보 수정(nickName 밖에 없음)
 	@Override
-	public UserDto editUserInfo(UserEditDto userEditParam) {
-		UserDto result = null;
+	public UserDto editUserInfo(UserEditDto userEditDto) {
+		Member findMember =this.memberRepository.findByEmail(userEditDto.getEmail())
+			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
 
-		if (userEditParam.getType().equals("member")) {
-			Member findMember = this.memberRepository.findByEmail(userEditParam.getEmail())
-				.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+		findMember.editNickName(userEditDto.getNickName());
 
-			findMember.editNickName(userEditParam.getNickName());
-
-			result = this.memberRepository.save(findMember).toUserDto();
-		} else {
-			Merchant findMerchant = this.merchantRepository.findByEmail(userEditParam.getEmail())
-				.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
-
-			findMerchant.editNickName(userEditParam.getNickName());
-
-			result = this.merchantRepository.save(findMerchant).toUserDto();
-		}
-
-		return result;
+		return findMember.toUserDto();
 	}
 
 	// security 관련
