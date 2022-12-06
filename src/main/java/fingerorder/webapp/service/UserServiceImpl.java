@@ -3,7 +3,7 @@ package fingerorder.webapp.service;
 import fingerorder.webapp.dto.UserDto;
 import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.entity.Merchant;
-import fingerorder.webapp.parameter.SignInParam;
+import fingerorder.webapp.dto.SignInDto;
 import fingerorder.webapp.dto.SignUpDto;
 import fingerorder.webapp.parameter.UserEditParam;
 import fingerorder.webapp.parameter.UserParam;
@@ -50,27 +50,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDto authenticate(SignInParam signInParam) {
-		UserDto userDto = null;
-		String password = "";
+	public UserDto authenticate(SignInDto signInDto) {
+		Member findMember =this.memberRepository.findByEmail(signInDto.getEmail())
+			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
 
-		if (signInParam.getType().equals("member")) {
-			Member findMember = this.memberRepository.findByEmail(signInParam.getEmail())
-				.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
-			userDto = findMember.toUserDto();
-			password = findMember.getPassword();
-		} else {
-			Merchant findMerchant = this.merchantRepository.findByEmail(signInParam.getEmail())
-				.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
-			userDto = findMerchant.toUserDto();
-			password = findMerchant.getPassword();
-		}
+		String password = findMember.getPassword();
 
-		if (!this.passwordEncoder.matches(signInParam.getPassword(),password)) {
+		if (!this.passwordEncoder.matches(signInDto.getPassword(),password)) {
 			throw new RuntimeException("비밀번호가 일치하지 않습니다.");
 		}
 
-		return userDto;
+		return findMember.toUserDto();
 	}
 
 	//유저 정보 가져오기
@@ -93,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
 	//roles 가져오기
 	@Override
-	public List<String> getRoles(SignInParam signInParam) {
+	public List<String> getRoles(SignInDto signInParam) {
 		List<String> roles = new ArrayList<>();
 		roles.add("ROLE_MEMBER");
 		if (signInParam.getType().equals("merchant")) {

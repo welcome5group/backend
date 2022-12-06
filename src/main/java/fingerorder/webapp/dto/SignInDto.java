@@ -1,9 +1,9 @@
-package fingerorder.webapp.parameter;
+package fingerorder.webapp.dto;
 
 import lombok.Getter;
 
 @Getter
-public class SignInParam {
+public class SignInDto {
 	private String email;
 	private String password;
 	private String type;

@@ -1,7 +1,7 @@
 package fingerorder.webapp.controller;
 
 import fingerorder.webapp.service.UserService;
-import fingerorder.webapp.parameter.SignInParam;
+import fingerorder.webapp.dto.SignInDto;
 import fingerorder.webapp.dto.SignUpDto;
 import fingerorder.webapp.parameter.UserEditParam;
 import fingerorder.webapp.parameter.UserParam;
@@ -30,10 +30,10 @@ public class UserController {
 	}
 
 	@PostMapping("/api/auth/sign-in")
-	public ResponseEntity<?> signIn(@RequestBody SignInParam signInParam) {
-		var result = this.userService.authenticate(signInParam);
-		List<String> roles = this.userService.getRoles(signInParam);
-		var token = this.jwtTokenProvider.genToken(signInParam.getEmail(),roles);
+	public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
+		var result = this.userService.authenticate(signInDto);
+		List<String> roles = this.userService.getRoles(signInDto);
+		var token = this.jwtTokenProvider.genToken(signInDto.getEmail(),roles);
 
 		return ResponseEntity.ok(token);
 	}
