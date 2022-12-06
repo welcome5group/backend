@@ -47,37 +47,6 @@ public class UserServiceImpl implements UserService {
 			.build();
 
 		return this.memberRepository.save(newMember).toUserDto();
-//		boolean exists = false;
-//		if (signUpParam.getType().equals("member")) {
-//			exists = this.memberRepository.existsByEmail(signUpParam.getEmail());
-//		} else {
-//			exists = this.merchantRepository.existsByEmail(signUpParam.getEmail());
-//		}
-//
-//		if (exists) {
-//			throw new RuntimeException("이미 사용 중인 email 입니다.");
-//		}
-//
-//		if (signUpParam.getType().equals("member")) {
-//			Member newMember = Member.builder()
-//				.email(signUpParam.getEmail())
-//				.password(this.passwordEncoder.encode(signUpParam.getPassword()))
-//				.nickName(signUpParam.getNickName())
-//				.created_at(LocalDateTime.now())
-//				.updated_at(LocalDateTime.now())
-//				.build();
-//
-//			return this.memberRepository.save(newMember).toUserDto();
-//		} else {
-//			Merchant newMerchant = Merchant.builder()
-//				.email(signUpParam.getEmail())
-//				.password(this.passwordEncoder.encode(signUpParam.getPassword()))
-//				.nickName(signUpParam.getNickName())
-//				.created_at(LocalDateTime.now())
-//				.updated_at(LocalDateTime.now())
-//				.build();
-//			return this.merchantRepository.save(newMerchant).toUserDto();
-//		}
 	}
 
 	@Override
