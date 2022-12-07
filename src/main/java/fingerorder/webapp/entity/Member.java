@@ -39,6 +39,11 @@ public class Member {
         this.createdAt = LocalDateTime.now();
     }
 
+    public void resetPassword(String password) {
+        this.password = password;
+        this.createdAt = LocalDateTime.now();
+    }
+
     public UserDto toUserDto() {
         return UserDto.builder()
             .email(this.email)

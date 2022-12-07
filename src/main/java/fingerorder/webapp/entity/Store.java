@@ -1,6 +1,6 @@
 package fingerorder.webapp.entity;
 
-import fingerorder.webapp.dto.StoreDto;
+//import fingerorder.webapp.dto.StoreDto;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,13 +32,13 @@ public class Store {
 //    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
 //    private List<Menu> menus = new ArrayList<>();
 
-    public Store(StoreDto storeDto) {
-        this.name = storeDto.getName();
-        this.createdAt = showCreateAt();
-        this.updatedAt = showUpdatedAt();
-        this.tableCount = storeDto.getTableCount();
-        this.storeLocation = storeDto.getStoreLocation();
-    }
+//    public Store(StoreDto storeDto) {
+//        this.name = storeDto.getName();
+//        this.createdAt = showCreateAt();
+//        this.updatedAt = showUpdatedAt();
+//        this.tableCount = storeDto.getTableCount();
+//        this.storeLocation = storeDto.getStoreLocation();
+//    }
 
     public Store(String name, LocalDateTime createdAt, LocalDateTime updatedAt, int tableCount,
         String storeLocation) {
@@ -53,13 +53,13 @@ public class Store {
 
     }
 
-    public Store changeStore(StoreDto storeDto) {
-        this.name = storeDto.getName();
-        this.updatedAt = showUpdatedAt();
-        this.tableCount = storeDto.getTableCount();
-        this.storeLocation = storeDto.getStoreLocation();
-        return this;
-    }
+//    public Store changeStore(StoreDto storeDto) {
+//        this.name = storeDto.getName();
+//        this.updatedAt = showUpdatedAt();
+//        this.tableCount = storeDto.getTableCount();
+//        this.storeLocation = storeDto.getStoreLocation();
+//        return this;
+//    }
 
     public LocalDateTime showCreateAt() {
 

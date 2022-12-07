@@ -53,4 +53,11 @@ public class UserController {
 
 		return ResponseEntity.ok(result);
 	}
+
+	@PostMapping("/api/auth/password")
+	@PreAuthorize("hasRole(MEMBER) or hasRole(MERCHANT)")
+	public ResponseEntity<?> userPasswordInit(@RequestBody UserInfoDto userInfoDto) {
+		var result = this.userService.resetPassword(userInfoDto);
+		return ResponseEntity.ok(result);
+	}
 }
