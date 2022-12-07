@@ -39,8 +39,8 @@ public class UserServiceImpl implements UserService {
 			.password(this.passwordEncoder.encode(signUpDto.getPassword()))
 			.nickName(signUpDto.getNickName())
 			.userType(signUpDto.getType())
-			.created_at(LocalDateTime.now())
-			.updated_at(LocalDateTime.now())
+			.createdAt(LocalDateTime.now())
+			.updatedAt(LocalDateTime.now())
 			.build();
 
 		return this.memberRepository.save(newMember).toUserDto();

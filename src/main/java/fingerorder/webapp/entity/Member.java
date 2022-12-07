@@ -2,6 +2,7 @@ package fingerorder.webapp.entity;
 
 
 import fingerorder.webapp.dto.UserDto;
+import fingerorder.webapp.status.UserStatus;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +19,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Member{
+public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -26,15 +28,15 @@ public class Member{
     private String email;
     private String password;
     private String nickName;
-    private String status;
     private String userType;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
-    private LocalDateTime deleted_at;
+    private UserStatus status;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
 
     public void editNickName(String nickName) {
         this.nickName = nickName;
-        this.updated_at = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     public UserDto toUserDto() {
@@ -43,8 +45,8 @@ public class Member{
             .nickName(this.nickName)
             .userType(this.userType)
             .status(this.status)
-            .createdAt(this.created_at)
-            .updatedAt(this.updated_at)
+            .createdAt(this.createdAt)
+            .updatedAt(this.updatedAt)
             .build();
     }
 }

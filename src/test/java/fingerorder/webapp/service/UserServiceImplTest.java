@@ -31,16 +31,16 @@ class UserServiceImplTest {
 			.email("testMember@naver.com")
 			.nickName("testNickName")
 			.userType("member")
-			.updated_at(LocalDateTime.now())
-			.created_at(LocalDateTime.now())
+			.updatedAt(LocalDateTime.now())
+			.createdAt(LocalDateTime.now())
 			.build();
 
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
 			.userType("merchant")
-			.updated_at(LocalDateTime.now())
-			.created_at(LocalDateTime.now())
+			.updatedAt(LocalDateTime.now())
+			.createdAt(LocalDateTime.now())
 			.build();
 
 		UserInfoDto userParamMember = UserInfoDto.builder()
@@ -74,16 +74,16 @@ class UserServiceImplTest {
 			.email("testMember@naver.com")
 			.nickName("testNickName")
 			.userType("member")
-			.updated_at(LocalDateTime.now())
-			.created_at(LocalDateTime.now())
+			.updatedAt(LocalDateTime.now())
+			.createdAt(LocalDateTime.now())
 			.build();
 
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
 			.userType("merchant")
-			.updated_at(LocalDateTime.now())
-			.created_at(LocalDateTime.now())
+			.updatedAt(LocalDateTime.now())
+			.createdAt(LocalDateTime.now())
 			.build();
 
 		UserEditDto userEditParamMember = UserEditDto.builder()
