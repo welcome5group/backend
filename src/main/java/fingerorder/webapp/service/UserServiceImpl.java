@@ -85,7 +85,6 @@ public class UserServiceImpl implements UserService {
 		Member findMember = checkInvalidEmail(userEditDto.getEmail());
 
 		findMember.editNickName(userEditDto.getNickName());
-
 		return findMember.toUserDto();
 	}
 
