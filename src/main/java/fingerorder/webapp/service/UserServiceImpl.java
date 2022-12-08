@@ -7,6 +7,7 @@ import fingerorder.webapp.dto.SignUpDto;
 import fingerorder.webapp.dto.UserEditDto;
 import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.repository.MemberRepository;
+import fingerorder.webapp.status.UserStatus;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService {
 			.password(this.passwordEncoder.encode(signUpDto.getPassword()))
 			.nickName(signUpDto.getNickName())
 			.userType(signUpDto.getType())
+			.status(null)
 			.createdAt(LocalDateTime.now())
 			.updatedAt(LocalDateTime.now())
 			.build();
@@ -125,7 +127,6 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new UsernameNotFoundException("couldn't find user"+ email);
 		}
-
 		return new User(email,password,authorities);
 	}
 
@@ -136,9 +137,9 @@ public class UserServiceImpl implements UserService {
 
 	private String makeRandomPassword() {
 		int alphabetMin = 97;
-		int alpahbetMax = 122;
+		int alphabetMax = 122;
 		Random random = new Random();
-		String newPassword = random.ints(alphabetMin,alpahbetMax + 1)
+		String newPassword = random.ints(alphabetMin,alphabetMax + 1)
 			.limit(8)
 			.collect(StringBuilder::new, StringBuilder::appendCodePoint,StringBuilder::append)
 			.toString();

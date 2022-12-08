@@ -1,8 +1,8 @@
 package fingerorder.webapp.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class SignInDto {
 	private String email;
 	private String password;
