@@ -17,6 +17,7 @@ import lombok.Getter;
 @Getter
 @Table(name = "orders")
 public class Order {
+    //ci/cd test
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
