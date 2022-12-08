@@ -10,9 +10,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 public interface UserService extends UserDetailsService {
-	UserDto signUp(SignUpDto signUpParam);
-	UserDto authenticate(SignInDto signInParam);
-	UserDto getUserInfo(UserInfoDto userParam);
-	List<String> getRoles(SignInDto signInParam);
-	UserDto editUserInfo(UserEditDto userEditParam);
+	UserDto signUp(SignUpDto signUpDto);
+	UserDto authenticate(SignInDto signInDto);
+	UserDto getUserInfo(UserInfoDto userInfoDto);
+	List<String> getRoles(SignInDto signInDto);
+	UserDto editUserInfo(UserEditDto userEditDto);
+	String resetPassword(UserInfoDto userInfoDto);
 }

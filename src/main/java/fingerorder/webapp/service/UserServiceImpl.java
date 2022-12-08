@@ -7,10 +7,12 @@ import fingerorder.webapp.dto.SignUpDto;
 import fingerorder.webapp.dto.UserEditDto;
 import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.repository.MemberRepository;
+import fingerorder.webapp.status.UserStatus;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
 			.password(this.passwordEncoder.encode(signUpDto.getPassword()))
 			.nickName(signUpDto.getNickName())
 			.userType(signUpDto.getType())
+			.status(null)
 			.createdAt(LocalDateTime.now())
 			.updatedAt(LocalDateTime.now())
 			.build();
@@ -85,7 +88,23 @@ public class UserServiceImpl implements UserService {
 		Member findMember = checkInvalidEmail(userEditDto.getEmail());
 
 		findMember.editNickName(userEditDto.getNickName());
+
+		this.memberRepository.save(findMember);
+
 		return findMember.toUserDto();
+	}
+
+	@Override
+	public String resetPassword(UserInfoDto userInfoDto) {
+		Member findMember = checkInvalidEmail(userInfoDto.getEmail());
+
+		String newPassword = this.makeRandomPassword();
+
+		findMember.resetPassword(this.passwordEncoder.encode(newPassword));
+
+		this.memberRepository.save(findMember);
+
+		return newPassword;
 	}
 
 	// security 관련
@@ -108,12 +127,22 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new UsernameNotFoundException("couldn't find user"+ email);
 		}
-
 		return new User(email,password,authorities);
 	}
 
 	private Member checkInvalidEmail(String email) {
 		return this.memberRepository.findByEmail(email)
 			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+	}
+
+	private String makeRandomPassword() {
+		int alphabetMin = 97;
+		int alphabetMax = 122;
+		Random random = new Random();
+		String newPassword = random.ints(alphabetMin,alphabetMax + 1)
+			.limit(8)
+			.collect(StringBuilder::new, StringBuilder::appendCodePoint,StringBuilder::append)
+			.toString();
+		return newPassword;
 	}
 }
