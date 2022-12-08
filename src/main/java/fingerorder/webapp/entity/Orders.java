@@ -1,6 +1,6 @@
 package fingerorder.webapp.entity;
 
-import fingerorder.webapp.status.OrderStatus;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,24 +14,26 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class OrderMenu {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_menu_id")
+    @Column(name = "order_id")
     private Long id;
-    private OrderStatus orderStatus;
-    private String name;
-    private int count;
+    private LocalDateTime createdAt;
     private int totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Orders orders;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id")
-    private Menu menu;
+    @JoinColumn(name = "guest_id")
+    private Guest guest;
+
+//    @OneToMany(mappedBy = "order")
+//    private List<OrderMenu> orderMenus = new ArrayList<>();
+
 
 
 }
