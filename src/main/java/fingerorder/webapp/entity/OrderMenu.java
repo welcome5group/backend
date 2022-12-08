@@ -31,8 +31,9 @@ public class OrderMenu {
     private int totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Orders orders;
+    @JoinColumn(name = "orders_id")
+    private Order order;
+
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
