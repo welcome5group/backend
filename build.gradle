@@ -49,12 +49,15 @@ dependencies {
 	// Jasypt
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
-	//security dependency 추가
+	// security dependency 추가
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	//jwt dependency 추가
+	// jwt dependency 추가
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	implementation group: 'org.apache.commons',name: 'commons-collections4',version: '4.3'
+
+	// mail dependency 추가
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
