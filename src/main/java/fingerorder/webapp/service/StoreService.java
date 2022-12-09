@@ -15,11 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class StoreService {
 
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public StoreResponse registerStore(StoreCreateRequest storeCreateRequest) { // 가게 생성
 
         Store store = new Store(storeCreateRequest);
@@ -30,6 +32,7 @@ public class StoreService {
         return savedStore.toStoreRequestDto(savedStore);
     }
 
+    @Transactional
     public StoreResponse updateStore(StoreUpdateRequest storeUpdateRequest) {
 
         Long storeId = storeUpdateRequest.getStoreId();

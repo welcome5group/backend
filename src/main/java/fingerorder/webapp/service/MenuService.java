@@ -13,11 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MenuService {
 
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
 
+    @Transactional
     public MenuResponse registerMenu(MenuCreateRequest menuCreateRequest) { // 매장 내의 메뉴 등록
         Menu menu = new Menu(menuCreateRequest);
         Store store = storeRepository.findById(menuCreateRequest.getStoreId()).orElseThrow(()
@@ -28,6 +30,7 @@ public class MenuService {
         return savedMenu.toMenuResponse(savedMenu);
     }
 
+    @Transactional
     public MenuResponse updateMenu(MenuUpdateRequest menuUpdateRequest) { // 매장 내의 메뉴 수정
         Menu menu = menuRepository.findById(menuUpdateRequest.getMenuId()).orElseThrow(()
             -> new RuntimeException("존재하지 않는 매장입니다."));
@@ -35,7 +38,7 @@ public class MenuService {
         return menu.toMenuResponse(updatedMenu);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void deleteMenu(Long menuId) { //매장 내의 메뉴 삭제
         menuRepository.deleteById(menuId);
     }
@@ -48,6 +51,7 @@ public class MenuService {
 //        return menuRepository.findAll(pageRequest);
 //    }
 
+    @Transactional
     public void menuDisable(Long menuId) { //메뉴 품절로 상태 변경하기
         Menu menu = menuRepository.findById(menuId).orElseThrow(()
             -> new RuntimeException("존재하는 메뉴가 없습니다."));

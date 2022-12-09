@@ -1,31 +1,36 @@
 package fingerorder.webapp.entity;
 
-
+import fingerorder.webapp.dto.UserDto;
 import fingerorder.webapp.status.UserStatus;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Entity
 @Getter
+@Builder
+@AllArgsConstructor
+@Entity
 public class Member {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
     private String email;
     private String password;
-    private String nickname;
+    private String nickName;
     private UserStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -37,13 +42,12 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Store> stores = new ArrayList<>();
 
-
     @Builder
-    public Member(String email, String password, String nickname, UserStatus status,
+    public Member(String email, String password, String nickName, UserStatus status,
         UserType userType) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.nickName = nickName;
         this.status = status;
         this.userType = userType;
     }
@@ -56,5 +60,27 @@ public class Member {
         this.stores.add(store);
         store.changeMember(this);
 
+    }
+
+
+    public void editNickName(String nickName) {
+        this.nickName = nickName;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public void resetPassword(String password) {
+        this.password = password;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public UserDto toUserDto() {
+        return UserDto.builder()
+            .email(this.email)
+            .nickName(this.nickName)
+            .userType(this.userType)
+            .status(this.status)
+            .createdAt(this.createdAt)
+            .updatedAt(this.updatedAt)
+            .build();
     }
 }

@@ -1,23 +1,30 @@
 package fingerorder.webapp.service;
 
+import static fingerorder.webapp.entity.UserType.MERCHANT;
 import static fingerorder.webapp.status.MenuStatus.ABLE;
 import static fingerorder.webapp.status.MenuStatus.ENABLE;
+import static fingerorder.webapp.status.UserStatus.ACTIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import fingerorder.webapp.dto.MenuCreateRequest;
 import fingerorder.webapp.dto.MenuResponse;
 import fingerorder.webapp.dto.MenuUpdateRequest;
 import fingerorder.webapp.entity.Category;
+import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.entity.Menu;
 import fingerorder.webapp.entity.Store;
 import fingerorder.webapp.repository.CategoryRepository;
+import fingerorder.webapp.repository.MemberRepository;
 import fingerorder.webapp.repository.MenuRepository;
 import fingerorder.webapp.repository.StoreRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Optional;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -32,6 +39,8 @@ class MenuServiceTest {
     CategoryRepository categoryRepository;
     @Autowired
     MenuRepository menuRepository;
+    @Autowired
+    MemberRepository memberRepository;
 
     @Test
     void registerMenuTest() {
@@ -117,15 +126,35 @@ class MenuServiceTest {
 
 
     @Test
+    @Rollback(value = false)
     void deleteMenuTest() {
         //given
+        Member member = createMember();
+        Member savedMember = memberRepository.save(member);
+
+        Store store = createStore("서울시",10,"차이나");
+        Store savedStore = storeRepository.save(store);
+
+        member.addStore(savedStore);
         Menu menu = createMenu(20000, "탕수육입니다.", "aaa", "탕수육");
         Menu savedMenu = menuRepository.save(menu);
+        store.addMenu(savedMenu);
         //when
         menuService.deleteMenu(savedMenu.getId());
+        Optional<Menu> findMenu = menuRepository.findById(savedMenu.getId());
 
         //then
-        assertThat(savedMenu.getId()).isNull();
+        assertThat(findMenu).isEmpty();
+    }
+    private static Member createMember() {
+        return Member.builder()
+            .email("wlscww@kakao.com")
+            .nickName("suzhan")
+            .password("1234")
+            .userType(MERCHANT)
+            .status(ACTIVATE)
+            .stores(new ArrayList<>())
+            .build();
     }
 
     private static Menu createMenu(int price, String description, String imageUrl, String menuName) {

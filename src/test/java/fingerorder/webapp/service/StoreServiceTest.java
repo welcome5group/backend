@@ -1,5 +1,6 @@
 package fingerorder.webapp.service;
 
+import static fingerorder.webapp.entity.UserType.MEMBER;
 import static fingerorder.webapp.entity.UserType.MERCHANT;
 import static fingerorder.webapp.status.MenuStatus.ABLE;
 import static fingerorder.webapp.status.UserStatus.ACTIVATE;
@@ -14,14 +15,16 @@ import fingerorder.webapp.repository.CategoryRepository;
 import fingerorder.webapp.repository.MemberRepository;
 import fingerorder.webapp.repository.MenuRepository;
 import fingerorder.webapp.repository.StoreRepository;
-import fingerorder.webapp.status.MenuStatus;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.xml.catalog.Catalog;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -56,13 +59,14 @@ class StoreServiceTest {
         assertThat(savedMember.getId()).isEqualTo(storeCreateRequest.getMemberId());
     }
 
-    private static Member createMember() {
+    private static Member createMember() { //빌더 패턴은 new arrayList 초기화 안해줌 -> 트러블 슈팅에 넣기
         return Member.builder()
             .email("wlscww@kakao.com")
-            .nickname("suzhan")
+            .nickName("suzhan")
             .password("1234")
             .userType(MERCHANT)
             .status(ACTIVATE)
+            .stores(new ArrayList<>())
             .build();
     }
 
@@ -83,7 +87,6 @@ class StoreServiceTest {
         assertThat(updatedStore.getTableCount()).isEqualTo(10);
 //        assertThat(updatedStore.getCreatedAt()).isEqualTo(updatedStore.showCreateAt());
         //updateAt 이랑 createdAt test 코드 짜기
-
 
     }
 
@@ -141,12 +144,11 @@ class StoreServiceTest {
         Member savedMember = memberRepository.save(member);
 
         Store store1 = createStore("서울시", 10, "차이나");
-
         storeRepository.save(store1);
 
         Store store2 = createStore("수원시", 11, "홍콩 반점");
-
         storeRepository.save(store2);
+
         member.addStore(store1);
         member.addStore(store2);
 

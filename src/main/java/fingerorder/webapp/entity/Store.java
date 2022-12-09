@@ -32,9 +32,7 @@ public class Store {
     private int tableCount;
     private String storeLocation;
 
-    //    @ManyToOne
-//    @JoinColumn(name = "merchant_id")
-//    private Merchant merchant;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -72,6 +70,7 @@ public class Store {
         this.storeLocation = storeUpdateRequest.getStoreLocation();
         this.tableCount = storeUpdateRequest.getTableCount();
     }
+
 
     public LocalDateTime showCreateAt() {
 
