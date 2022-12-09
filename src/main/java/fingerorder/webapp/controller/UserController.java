@@ -1,8 +1,7 @@
 package fingerorder.webapp.controller;
 
-import fingerorder.webapp.dto.UserDto;
+
 import fingerorder.webapp.service.MailService;
-import fingerorder.webapp.service.MailServiceImpl;
 import fingerorder.webapp.service.UserService;
 import fingerorder.webapp.dto.SignInDto;
 import fingerorder.webapp.dto.SignUpDto;
