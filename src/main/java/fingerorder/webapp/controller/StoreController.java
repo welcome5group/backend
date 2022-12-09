@@ -23,7 +23,7 @@ public class StoreController {
 
     private final StoreService storeService;
 
-    @PostMapping("/1")//가게 생성 id : storeId
+    @PostMapping("/new")//가게 생성 id : storeId
     public ResponseEntity<StoreResponse> registerStore(
         @RequestBody StoreCreateRequest storeCreateRequest) {
         StoreResponse storeResponse = storeService.registerStore(storeCreateRequest);

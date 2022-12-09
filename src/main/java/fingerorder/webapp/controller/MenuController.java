@@ -22,20 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/store")
+@RequestMapping("/api/store/menu")
 public class MenuController {
 
     private final MenuService menuService;
     private final MenuQueryService menuQueryService;
 
-    @PostMapping("/menu") //메뉴 추가 id : menuId
+    @PostMapping //메뉴 추가 id : menuId
     public ResponseEntity<MenuResponse> createMenu(
         @RequestBody MenuCreateRequest menuCreateRequest) {
         MenuResponse menuResponse = menuService.registerMenu(menuCreateRequest);
         return new ResponseEntity<>(menuResponse, HttpStatus.OK);
     }
 
-    @PutMapping("/menu")  //메뉴 수정 id : menuId
+    @PutMapping  //메뉴 수정 id : menuId
     public ResponseEntity<MenuResponse> updateMenu(
         @RequestBody MenuUpdateRequest menuUpdateRequest) {
         MenuResponse menuResponse = menuService.updateMenu(menuUpdateRequest);
@@ -43,14 +43,14 @@ public class MenuController {
     }
 
     //메뉴 삭제
-    @DeleteMapping("/menu")  //메뉴 수정 id : menuId
+    @DeleteMapping  //메뉴 수정 id : menuId
     public ResponseEntity<?> deleteMenu(@RequestParam Long menuId) {
         menuService.deleteMenu(menuId);
         return ResponseEntity.ok("200");
     }
 
     //메뉴와 카테고리 넘겨주기 이제 해야함
-    @GetMapping("/menu")
+    @GetMapping
     public Result<?> findMenuAndCategory(@RequestParam Long storeId) {
         List<MenuAndCategory> menuAndCategory = menuQueryService.findMenuAndCategory(storeId);
         return new Result<>(menuAndCategory);
