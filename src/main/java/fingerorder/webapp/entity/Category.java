@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,11 +23,24 @@ public class Category {
     private Long id;
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 
-//    @OneToMany(mappedBy = "category")
-//    private List<Menu> menus = new ArrayList<>();
+    @OneToMany(mappedBy = "category")
+    private List<Menu> menus = new ArrayList<>();
 
+    protected Category() {
+
+    }
+
+    public void changeStore(Store store) {
+        this.store = store;
+        store.getCategories().add(this);
+
+    }
+
+    public Category(String name) {
+        this.name = name;
+    }
 }

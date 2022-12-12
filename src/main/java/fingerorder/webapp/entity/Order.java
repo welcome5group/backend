@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,6 +27,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "orders_id")
     private Long id;
 
     private int totalPrice;
@@ -32,11 +35,11 @@ public class Order {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 
@@ -56,6 +59,7 @@ public class Order {
     public static Order createOrder(Member member, Store store, List<OrderMenu> orderMenus) {
         return new Order(member, store, orderMenus);
     }
+
 
     private void addMenuItems(OrderMenu orderMenu) {
         orderMenu.addOrder(this);

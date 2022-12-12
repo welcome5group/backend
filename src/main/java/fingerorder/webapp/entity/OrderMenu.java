@@ -4,6 +4,7 @@ import static javax.persistence.FetchType.LAZY;
 
 import fingerorder.webapp.status.OrderStatus;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,11 +30,11 @@ public class OrderMenu {
 
     private int totalPrice;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "order_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orders_id")
     private Order order;
 
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
