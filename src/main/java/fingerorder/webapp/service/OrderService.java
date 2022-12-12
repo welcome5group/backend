@@ -29,10 +29,10 @@ public class OrderService {
     private final OrderMenuRepository orderMenuRepository;
 
     @Transactional
-    public Long save(final OrderRequestDto params) {
-        Member member = findMemberById(params.getMemberId());
-        Store store = findStoreById(params.getStoreId());
-        List<OrderMenu> orderMenus = createOrderMenus(params.getOrderMenus());
+    public Long save(final OrderRequestDto orderRequestDto) {
+        Member member = findMemberById(orderRequestDto.getMemberId());
+        Store store = findStoreById(orderRequestDto.getStoreId());
+        List<OrderMenu> orderMenus = createOrderMenus(orderRequestDto.getOrderMenus());
 
         Order order = Order.createOrder(member, store, orderMenus);
 
@@ -41,10 +41,10 @@ public class OrderService {
 
     private List<OrderMenu> createOrderMenus(List<OrderMenuRequestDto> orderMenusDto) {
         List<OrderMenu> orderMenus = new ArrayList<>();
-        for (int i = 0; i < orderMenusDto.size(); i++) {
-            OrderMenuRequestDto orderMenuRequestDto = orderMenusDto.get(i);
-            Menu menu = findMenuById(orderMenuRequestDto.getMenuId());
-            orderMenus.add(OrderMenu.createOrderMenu(menu, orderMenuRequestDto.getCount()));
+
+        for (OrderMenuRequestDto orderMenu : orderMenusDto) {
+            Menu menu = findMenuById(orderMenu.getMenuId());
+            orderMenus.add(OrderMenu.createOrderMenu(menu, orderMenu.getCount()));
         }
 
         return orderMenus;

@@ -17,7 +17,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/order")
-    public OrderResponseDto save(@RequestBody final OrderRequestDto params) {
-        return OrderResponseDto.saveOrderResponse(orderService.save(params));
+    public OrderResponseDto save(@RequestBody final OrderRequestDto orderRequestDto) {
+        return OrderResponseDto.saveOrderResponse(orderService.save(orderRequestDto));
     }
 }
