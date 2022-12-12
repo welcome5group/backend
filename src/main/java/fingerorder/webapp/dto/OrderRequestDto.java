@@ -1,8 +1,6 @@
 package fingerorder.webapp.dto;
 
-import fingerorder.webapp.entity.Member;
-import fingerorder.webapp.entity.Order;
-import fingerorder.webapp.entity.Store;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,14 +11,6 @@ public class OrderRequestDto {
     private Long memberId;
     private Long storeId;
 
-    private int totalPrice;
-
-    public Order toEntity(Member member, Store store) {
-        return Order.builder()
-            .member(member)
-            .store(store)
-            .totalPrice(totalPrice)
-            .build();
-    }
+    private List<OrderMenuRequestDto> orderMenus;
 
 }
