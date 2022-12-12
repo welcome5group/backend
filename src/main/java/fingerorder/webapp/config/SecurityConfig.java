@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						.antMatchers("/**/sign-up"
 							,"/**/sign-in"
 							,"/api/auth/password"
-							,"/api/auth/password/reset"
+							,"/findPassword"
 							).permitAll()
 				.and()
 					.addFilterBefore(this.authenticationFilter,

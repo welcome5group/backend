@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -99,23 +100,24 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String resetPassword(UserPasswordResetDto userPasswordResetDto) {
-		String hashValue = userPasswordResetDto.getHashValue();
-		String validHashValue = SHA256Utils.encrypt(this.SENDER_ADDRESS +"_"+ this.HASH_KEY);
+	public boolean resetPassword(
+		String uuid,
+		UserPasswordResetDto userPasswordResetDto) {
+		Optional<Member> optionalMember = this.memberRepository
+										.findByUuid(uuid);
 
-		if (!hashValue.equals(validHashValue)) {
-			throw new RuntimeException("Invalid CheckSum");
+		if (!optionalMember.isPresent()) {
+			return false;
 		}
 
-		Member findMember = checkInvalidEmail(userPasswordResetDto.getEmail());
-
+		Member findMember = optionalMember.get();
 		String newPassword = userPasswordResetDto.getPassword();
 
 		findMember.resetPassword(this.passwordEncoder.encode(newPassword));
 
 		this.memberRepository.save(findMember);
 
-		return newPassword;
+		return true;
 	}
 
 	// security 관련

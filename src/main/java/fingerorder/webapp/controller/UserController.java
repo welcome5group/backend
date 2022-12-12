@@ -9,6 +9,7 @@ import fingerorder.webapp.security.JwtTokenProvider;
 import fingerorder.webapp.service.MailService;
 import fingerorder.webapp.service.UserService;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -64,9 +66,11 @@ public class UserController {
 		return ResponseEntity.ok(userInfoDto.getEmail());
 	}
 
-	@PostMapping("/api/auth/password/reset")
-	public ResponseEntity<?> passwordReset(@RequestBody UserPasswordResetDto userPasswordResetDto) {
-		userService.resetPassword(userPasswordResetDto);
-		return ResponseEntity.ok(userPasswordResetDto.getEmail());
+	@PutMapping("/findPassword")
+	public ResponseEntity<?> passwordReset(
+		@RequestParam String uuid
+		,@RequestBody UserPasswordResetDto userPasswordResetDto)
+	{
+		return ResponseEntity.ok(userService.resetPassword(uuid,userPasswordResetDto));
 	}
 }

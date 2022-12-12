@@ -16,5 +16,5 @@ public interface UserService extends UserDetailsService {
 	UserDto getUserInfo(UserInfoDto userInfoDto);
 	List<String> getRoles(SignInDto signInDto);
 	UserDto editUserInfo(UserEditDto userEditDto);
-	String resetPassword(UserPasswordResetDto userPasswordResetDto);
+	boolean resetPassword(String uuid,UserPasswordResetDto userPasswordResetDto);
 }
