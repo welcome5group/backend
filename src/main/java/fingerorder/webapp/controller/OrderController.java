@@ -1,6 +1,7 @@
 package fingerorder.webapp.controller;
 
 import fingerorder.webapp.dto.OrderRequestDto;
+import fingerorder.webapp.dto.OrderResponseDto;
 import fingerorder.webapp.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/order")
-    public Long save(@RequestBody final OrderRequestDto params) {
-        return orderService.save(params);
+    public OrderResponseDto save(@RequestBody final OrderRequestDto params) {
+        return OrderResponseDto.saveOrderResponse(orderService.save(params));
     }
 }
