@@ -1,8 +1,12 @@
 package fingerorder.webapp.entity;
 
+<<<<<<< HEAD
 import fingerorder.webapp.dto.StoreCreateRequest;
 import fingerorder.webapp.dto.StoreResponse;
 import fingerorder.webapp.dto.StoreUpdateRequest;
+=======
+//import fingerorder.webapp.dto.StoreDto;
+>>>>>>> a420c83 (feat: 카테고리 CRUD 기능 구현 및 테스트)
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +19,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+<<<<<<< HEAD
 import lombok.Builder;
+=======
+>>>>>>> a420c83 (feat: 카테고리 CRUD 기능 구현 및 테스트)
 import lombok.Getter;
 
 @Entity
@@ -32,6 +39,7 @@ public class Store {
     private int tableCount;
     private String storeLocation;
 
+<<<<<<< HEAD
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -49,6 +57,27 @@ public class Store {
         this.updatedAt = showUpdatedAt();
         this.storeLocation = storeCreateRequest.getStoreLocation();
     }
+=======
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "merchant_id")
+    private Merchant merchant;
+
+    @OneToMany(mappedBy = "store")
+    private List<Category> categories = new ArrayList<>();
+
+
+
+//    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+//    private List<Menu> menus = new ArrayList<>();
+
+//    public Store(StoreDto storeDto) {
+//        this.name = storeDto.getName();
+//        this.createdAt = showCreateAt();
+//        this.updatedAt = showUpdatedAt();
+//        this.tableCount = storeDto.getTableCount();
+//        this.storeLocation = storeDto.getStoreLocation();
+//    }
+>>>>>>> a420c83 (feat: 카테고리 CRUD 기능 구현 및 테스트)
 
     @Builder
     public Store(String name, LocalDateTime createdAt, LocalDateTime updatedAt, int tableCount,
@@ -64,12 +93,22 @@ public class Store {
 
     }
 
+<<<<<<< HEAD
     public void changeStore(StoreUpdateRequest storeUpdateRequest) {
         this.name = storeUpdateRequest.getName();
         this.updatedAt = showUpdatedAt();
         this.storeLocation = storeUpdateRequest.getStoreLocation();
         this.tableCount = storeUpdateRequest.getTableCount();
     }
+=======
+//    public Store changeStore(StoreDto storeDto) {
+//        this.name = storeDto.getName();
+//        this.updatedAt = showUpdatedAt();
+//        this.tableCount = storeDto.getTableCount();
+//        this.storeLocation = storeDto.getStoreLocation();
+//        return this;
+//    }
+>>>>>>> a420c83 (feat: 카테고리 CRUD 기능 구현 및 테스트)
 
 
     public LocalDateTime showCreateAt() {
