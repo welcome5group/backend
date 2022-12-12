@@ -40,7 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 					.authorizeRequests()
-						.antMatchers("/**/sign-up","/**/sign-in").permitAll()
+						.antMatchers("/**/sign-up"
+							,"/**/sign-in"
+							,"/api/auth/password"
+							,"/api/auth/password/reset"
+							).permitAll()
 				.and()
 					.addFilterBefore(this.authenticationFilter,
 						UsernamePasswordAuthenticationFilter.class);

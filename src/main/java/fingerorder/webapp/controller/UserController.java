@@ -1,25 +1,22 @@
 package fingerorder.webapp.controller;
 
-import fingerorder.webapp.dto.UserDto;
-import fingerorder.webapp.service.MailService;
-import fingerorder.webapp.service.MailServiceImpl;
-import fingerorder.webapp.service.UserService;
 import fingerorder.webapp.dto.SignInDto;
 import fingerorder.webapp.dto.SignUpDto;
 import fingerorder.webapp.dto.UserEditDto;
 import fingerorder.webapp.dto.UserInfoDto;
+import fingerorder.webapp.dto.UserPasswordResetDto;
 import fingerorder.webapp.security.JwtTokenProvider;
+import fingerorder.webapp.service.MailService;
+import fingerorder.webapp.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -62,9 +59,15 @@ public class UserController {
 	}
 
 	@PostMapping("/api/auth/password")
-	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> userPasswordInit(@RequestBody UserInfoDto userInfoDto) {
-		//mailService.sendMail(userInfoDto);
+	//@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
+	public ResponseEntity<?> sendPasswordResetEmail(@RequestBody UserInfoDto userInfoDto) {
+		mailService.sendMail(userInfoDto);
 		return ResponseEntity.ok(userInfoDto.getEmail());
+	}
+
+	@PostMapping("/api/auth/password/reset")
+	public ResponseEntity<?> passwordReset(@RequestBody UserPasswordResetDto userPasswordResetDto) {
+		userService.resetPassword(userPasswordResetDto);
+		return ResponseEntity.ok(userPasswordResetDto.getEmail());
 	}
 }

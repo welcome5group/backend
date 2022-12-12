@@ -1,6 +1,7 @@
 package fingerorder.webapp.service;
 
 import fingerorder.webapp.dto.UserDto;
+import fingerorder.webapp.dto.UserPasswordResetDto;
 import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.dto.SignInDto;
 import fingerorder.webapp.dto.SignUpDto;
@@ -8,6 +9,7 @@ import fingerorder.webapp.dto.UserEditDto;
 import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.repository.MemberRepository;
 import fingerorder.webapp.status.UserStatus;
+import fingerorder.webapp.utils.SHA256Utils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,8 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
+	private static final String SENDER_ADDRESS = "mansa0805@gmail.com";
+	private static final String HASH_KEY = "fingerorder-manager";
 
 	@Override
 	public UserDto signUp(SignUpDto signUpDto) {
@@ -95,10 +99,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String resetPassword(UserInfoDto userInfoDto) {
-		Member findMember = checkInvalidEmail(userInfoDto.getEmail());
+	public String resetPassword(UserPasswordResetDto userPasswordResetDto) {
+		String hashValue = userPasswordResetDto.getHashValue();
+		String validHashValue = SHA256Utils.encrypt(this.SENDER_ADDRESS +"_"+ this.HASH_KEY);
 
-		String newPassword = this.makeRandomPassword();
+		if (!hashValue.equals(validHashValue)) {
+			throw new RuntimeException("Invalid CheckSum");
+		}
+
+		Member findMember = checkInvalidEmail(userPasswordResetDto.getEmail());
+
+		String newPassword = userPasswordResetDto.getPassword();
 
 		findMember.resetPassword(this.passwordEncoder.encode(newPassword));
 
@@ -135,14 +146,4 @@ public class UserServiceImpl implements UserService {
 			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
 	}
 
-	private String makeRandomPassword() {
-		int alphabetMin = 97;
-		int alphabetMax = 122;
-		Random random = new Random();
-		String newPassword = random.ints(alphabetMin,alphabetMax + 1)
-			.limit(8)
-			.collect(StringBuilder::new, StringBuilder::appendCodePoint,StringBuilder::append)
-			.toString();
-		return newPassword;
-	}
 }
