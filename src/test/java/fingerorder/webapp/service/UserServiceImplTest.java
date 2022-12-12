@@ -124,46 +124,4 @@ class UserServiceImplTest {
 		assertEquals(resultMember.getNickName(),checkMemberDto.getNickName());
 		assertEquals(resultMerchant.getNickName(),checkMerchantDto.getNickName());
 	}
-
-	@Test
-	@DisplayName("Test : Init User Password")
-	public void initPasswordTest() {
-		//given
-		Member member = Member.builder()
-			.email("testMember@naver.com")
-			.nickName("testNickName")
-			.userType("member")
-			.password(this.passwordEncoder.encode("memberPassword"))
-			.updatedAt(LocalDateTime.now())
-			.createdAt(LocalDateTime.now())
-			.build();
-
-		Member merchant = Member.builder()
-			.email("testMerchant@naver.com")
-			.nickName("testNickNameMerchant")
-			.userType("merchant")
-			.password(this.passwordEncoder.encode("merchantPassword"))
-			.updatedAt(LocalDateTime.now())
-			.createdAt(LocalDateTime.now())
-			.build();
-
-		UserInfoDto userParamMember = UserInfoDto.builder()
-			.email("testMember@naver.com")
-			.build();
-
-		UserInfoDto userParamMerchant = UserInfoDto.builder()
-			.email("testMerchant@naver.com")
-			.build();
-
-		//when
-		memberRepository.save(member);
-		memberRepository.save(merchant);
-
-		//then
-//		String resultMemberInitPassword = this.userService.resetPassword(userParamMember);
-//		String resultMerchantInitPassword = this.userService.resetPassword(userParamMerchant);
-
-//		assertNotEquals("memberPassword",resultMemberInitPassword);
-//		assertNotEquals("merchantPassword",resultMerchantInitPassword);
-	}
 }
