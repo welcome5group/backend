@@ -3,7 +3,6 @@ package fingerorder.webapp.service;
 import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.repository.MemberRepository;
-import fingerorder.webapp.utils.SHA256Utils;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 import javax.mail.MessagingException;

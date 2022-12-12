@@ -9,7 +9,6 @@ import fingerorder.webapp.security.JwtTokenProvider;
 import fingerorder.webapp.service.MailService;
 import fingerorder.webapp.service.UserService;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
