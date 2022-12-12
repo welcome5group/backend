@@ -59,7 +59,6 @@ public class UserController {
 	}
 
 	@PostMapping("/api/auth/password")
-	//@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
 	public ResponseEntity<?> sendPasswordResetEmail(@RequestBody UserInfoDto userInfoDto) {
 		mailService.sendMail(userInfoDto);
 		return ResponseEntity.ok(userInfoDto.getEmail());

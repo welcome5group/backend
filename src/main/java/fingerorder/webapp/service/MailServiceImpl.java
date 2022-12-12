@@ -1,6 +1,7 @@
 package fingerorder.webapp.service;
 
 import fingerorder.webapp.dto.UserInfoDto;
+import fingerorder.webapp.repository.MemberRepository;
 import fingerorder.webapp.utils.SHA256Utils;
 import java.io.UnsupportedEncodingException;
 import javax.mail.MessagingException;
@@ -13,12 +14,19 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class MailServiceImpl implements MailService{
+	private final MemberRepository memberRepository;
 	private JavaMailSender mailSender;
 	private static final String SENDER_ADDRESS = "mansa0805@gmail.com";
 	private static final String HASH_KEY = "fingerorder-manager";
 
 	@Override
 	public void sendMail(UserInfoDto userInfoDto) {
+		boolean exist = this.memberRepository.existsByEmail(userInfoDto.getEmail());
+
+		if (!exist) {
+			throw new RuntimeException("존재하지 않는 사용자 입니다.");
+		}
+
 		MimeMessage message = mailSender.createMimeMessage();
 
 		String subject = "[핑거오더] 비밀 번호 찾기 이메일 입니다.";
