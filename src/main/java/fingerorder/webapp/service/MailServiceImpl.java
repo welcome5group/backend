@@ -4,6 +4,7 @@ import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.repository.MemberRepository;
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 import java.util.UUID;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -21,9 +22,14 @@ public class MailServiceImpl implements MailService{
 	private static final String HASH_KEY = "fingerorder-manager";
 
 	@Override
-	public void sendMail(UserInfoDto userInfoDto) {
-		Member findMember = this.memberRepository.findByEmail(userInfoDto.getEmail())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 사용자 입니다."));
+	public boolean sendMail(UserInfoDto userInfoDto) {
+		Optional<Member> optionalMember = this.memberRepository.findByEmail(userInfoDto.getEmail());
+
+		if (optionalMember.isEmpty()) {
+			return false;
+		}
+
+		Member findMember = optionalMember.get();
 
 		String uuid = UUID.randomUUID().toString();
 		MimeMessage message = mailSender.createMimeMessage();
@@ -52,5 +58,7 @@ public class MailServiceImpl implements MailService{
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
+
+		return true;
 	}
 }
