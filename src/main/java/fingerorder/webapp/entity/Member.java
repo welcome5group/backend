@@ -1,6 +1,5 @@
 package fingerorder.webapp.entity;
 
-
 import fingerorder.webapp.dto.UserDto;
 import fingerorder.webapp.status.UserStatus;
 import java.time.LocalDateTime;
