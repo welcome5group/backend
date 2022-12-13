@@ -35,5 +35,4 @@ public class Review {
     private Store store;
 
 
-
 }

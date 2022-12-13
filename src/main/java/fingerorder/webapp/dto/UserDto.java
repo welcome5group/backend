@@ -1,5 +1,6 @@
 package fingerorder.webapp.dto;
 
+import fingerorder.webapp.entity.UserType;
 import fingerorder.webapp.status.UserStatus;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class UserDto {
 	private String email;
 	private String nickName;
 	private UserStatus status;
-	private String userType;
+	private UserType userType;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 }

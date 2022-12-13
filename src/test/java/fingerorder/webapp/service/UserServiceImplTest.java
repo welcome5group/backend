@@ -1,5 +1,7 @@
 package fingerorder.webapp.service;
 
+import static fingerorder.webapp.entity.UserType.MEMBER;
+import static fingerorder.webapp.entity.UserType.MERCHANT;
 import static org.junit.jupiter.api.Assertions.*;
 
 import fingerorder.webapp.dto.UserDto;
@@ -34,7 +36,7 @@ class UserServiceImplTest {
 		Member member = Member.builder()
 			.email("testMember@naver.com")
 			.nickName("testNickName")
-			.userType("member")
+			.userType(MEMBER)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -42,7 +44,7 @@ class UserServiceImplTest {
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
-			.userType("merchant")
+			.userType(MERCHANT)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -65,10 +67,10 @@ class UserServiceImplTest {
 
 		assertEquals(resultMember.getEmail(),"testMember@naver.com");
 		assertEquals(resultMember.getNickName(),"testNickName");
-		assertEquals(resultMember.getUserType(),"member");
+		assertEquals(resultMember.getUserType(),MEMBER);
 		assertEquals(resultMerchant.getEmail(),"testMerchant@naver.com");
 		assertEquals(resultMerchant.getNickName(), "testNickNameMerchant");
-		assertEquals(resultMerchant.getUserType(), "merchant");
+		assertEquals(resultMerchant.getUserType(), MERCHANT);
 	}
 
 	@Test
@@ -77,7 +79,7 @@ class UserServiceImplTest {
 		Member member = Member.builder()
 			.email("testMember@naver.com")
 			.nickName("testNickName")
-			.userType("member")
+			.userType(MEMBER)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -85,7 +87,7 @@ class UserServiceImplTest {
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
-			.userType("merchant")
+			.userType(MERCHANT)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -93,13 +95,13 @@ class UserServiceImplTest {
 		UserEditDto userEditParamMember = UserEditDto.builder()
 			.email("testMember@naver.com")
 			.nickName("changedNickName")
-			.type("member")
+			.type(MEMBER)
 			.build();
 
 		UserEditDto userEditParamMerchant = UserEditDto.builder()
 			.email("testMerchant@naver.com")
 			.nickName("changedNickNameMerchant")
-			.type("merchant")
+			.type(MERCHANT)
 			.build();
 
 		UserInfoDto userParamMember = UserInfoDto.builder()

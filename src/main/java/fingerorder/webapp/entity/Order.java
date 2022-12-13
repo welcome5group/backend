@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -33,9 +34,21 @@ public class Order {
     @JoinColumn(name = "guest_id")
     private Guest guest;
 
-//    @OneToMany(mappedBy = "order")
-//    private List<OrderMenu> orderMenus = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
 
+    @Builder
+    public Order(int totalPrice, Member member, Store store) {
+        this.totalPrice = totalPrice;
+        this.member = member;
+        this.store = store;
+    }
+
+    protected Order() {
+    }
+    //    @OneToMany(mappedBy = "order")
+//    private List<OrderMenu> orderMenus = new ArrayList<>();
 
 
 }
