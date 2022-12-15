@@ -1,4 +1,4 @@
-package fingerorder.webapp.dto;
+package fingerorder.webapp.domain.category.dto;
 
 import fingerorder.webapp.entity.Category;
 import lombok.Data;

@@ -1,17 +1,13 @@
-package fingerorder.webapp.service;
+package fingerorder.webapp.domain.category.service;
 
-import static fingerorder.webapp.status.CategoryStatus.CREATE;
-import static fingerorder.webapp.status.CategoryStatus.DELETE;
-import static fingerorder.webapp.status.CategoryStatus.READ;
-import static fingerorder.webapp.status.CategoryStatus.UPDATE;
-
+import fingerorder.webapp.domain.category.repository.CategoryQueryRepository;
+import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.category.repository.StoreRepository;
+import fingerorder.webapp.domain.category.status.CategoryStatus;
+import fingerorder.webapp.domain.category.vo.CategoriesVo;
+import fingerorder.webapp.domain.category.vo.CategoryVo;
 import fingerorder.webapp.entity.Category;
 import fingerorder.webapp.entity.Store;
-import fingerorder.webapp.repository.CategoryQueryRepository;
-import fingerorder.webapp.repository.CategoryRepository;
-import fingerorder.webapp.repository.StoreRepository;
-import fingerorder.webapp.vo.CategoriesVo;
-import fingerorder.webapp.vo.CategoryVo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -36,14 +32,14 @@ public class CategoryService {
 		category.setCategoryAndStore(store, category);
 		categoryRepository.save(category);
 
-		return new CategoryVo(categoryName, CREATE);
+		return new CategoryVo(categoryName, CategoryStatus.CREATE);
 	}
 
 	@Transactional(readOnly = true)
 	public CategoriesVo get(Long storeId) {
 		List<Category> categories = getCategories(storeId);
 		if(categories == null) {
-			return new CategoriesVo(null, READ);
+			return new CategoriesVo(null, CategoryStatus.READ);
 		}
 
 		List<String> categoryNames = new ArrayList<>();
@@ -52,7 +48,7 @@ public class CategoryService {
 			categoryNames.add(category.getName());
 		}
 
-		return new CategoriesVo(categoryNames, READ);
+		return new CategoriesVo(categoryNames, CategoryStatus.READ);
 	}
 
 	@Transactional
@@ -63,7 +59,7 @@ public class CategoryService {
 		Category category = getCategory(storeId, categoryName);
 		category.editName(updateName);
 
-		return new CategoryVo(updateName, UPDATE);
+		return new CategoryVo(updateName, CategoryStatus.UPDATE);
 	}
 
 	@Transactional
@@ -74,7 +70,7 @@ public class CategoryService {
 
 		categoryRepository.delete(category);
 
-		return new CategoryVo(categoryName, DELETE);
+		return new CategoryVo(categoryName, CategoryStatus.DELETE);
 	}
 
 	private List<Category> getCategories(Long storeId) {

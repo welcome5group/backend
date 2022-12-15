@@ -1,6 +1,6 @@
-package fingerorder.webapp.vo;
+package fingerorder.webapp.domain.category.vo;
 
-import fingerorder.webapp.status.CategoryStatus;
+import fingerorder.webapp.domain.category.status.CategoryStatus;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;

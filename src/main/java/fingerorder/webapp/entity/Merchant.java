@@ -1,5 +1,5 @@
 package fingerorder.webapp.entity;
-import fingerorder.webapp.status.UserStatus;
+import fingerorder.webapp.domain.category.status.UserStatus;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;

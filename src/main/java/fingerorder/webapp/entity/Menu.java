@@ -1,7 +1,7 @@
 package fingerorder.webapp.entity;
 
-import fingerorder.webapp.dto.MenuDto;
-import fingerorder.webapp.status.MenuStatus;
+import fingerorder.webapp.domain.category.dto.MenuDto;
+import fingerorder.webapp.domain.category.status.MenuStatus;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

@@ -1,6 +1,6 @@
 package fingerorder.webapp.entity;
 
-import fingerorder.webapp.status.OrderStatus;
+import fingerorder.webapp.domain.category.status.OrderStatus;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

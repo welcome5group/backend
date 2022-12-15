@@ -1,12 +1,12 @@
-package fingerorder.webapp.controller;
+package fingerorder.webapp.domain.category.controller;
 
-import fingerorder.webapp.dto.CreateCategoryDto;
-import fingerorder.webapp.dto.DeleteCategoryDto;
-import fingerorder.webapp.dto.GetCategoryDto;
-import fingerorder.webapp.dto.UpdateCategoryDto;
-import fingerorder.webapp.service.CategoryService;
-import fingerorder.webapp.vo.CategoriesVo;
-import fingerorder.webapp.vo.CategoryVo;
+import fingerorder.webapp.domain.category.dto.DeleteCategoryDto;
+import fingerorder.webapp.domain.category.dto.GetCategoryDto;
+import fingerorder.webapp.domain.category.dto.UpdateCategoryDto;
+import fingerorder.webapp.domain.category.vo.CategoriesVo;
+import fingerorder.webapp.domain.category.dto.CreateCategoryDto;
+import fingerorder.webapp.domain.category.service.CategoryService;
+import fingerorder.webapp.domain.category.vo.CategoryVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
