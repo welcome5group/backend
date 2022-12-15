@@ -88,4 +88,5 @@ public class Member {
             .updatedAt(this.updatedAt)
             .build();
     }
+
 }
