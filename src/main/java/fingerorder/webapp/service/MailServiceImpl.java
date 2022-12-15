@@ -15,13 +15,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class MailServiceImpl implements MailService{
+public class MailServiceImpl{
 	private final MemberRepository memberRepository;
 	private JavaMailSender mailSender;
 	private static final String SENDER_ADDRESS = "mansa0805@gmail.com";
 	private static final String HASH_KEY = "fingerorder-manager";
 
-	@Override
 	public boolean sendMail(UserInfoDto userInfoDto) {
 		Optional<Member> optionalMember = this.memberRepository.findByEmail(userInfoDto.getEmail());
 

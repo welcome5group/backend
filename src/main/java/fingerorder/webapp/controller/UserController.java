@@ -6,8 +6,8 @@ import fingerorder.webapp.dto.UserEditDto;
 import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.dto.UserPasswordResetDto;
 import fingerorder.webapp.security.JwtTokenProvider;
-import fingerorder.webapp.service.MailService;
-import fingerorder.webapp.service.UserService;
+import fingerorder.webapp.service.MailServiceImpl;
+import fingerorder.webapp.service.UserServiceImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-	private final MailService mailService;
-	private final UserService userService;
+	private final MailServiceImpl mailService;
+	private final UserServiceImpl userService;
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@PostMapping("/api/auth/sign-up")

@@ -1,6 +1,6 @@
 package fingerorder.webapp.security;
 
-import fingerorder.webapp.service.UserService;
+import fingerorder.webapp.service.UserServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -18,9 +18,10 @@ import org.springframework.util.StringUtils;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-	private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60;
+	// 토큰 만료시간
+	private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 5;
 
-	private final UserService userService;
+	private final UserServiceImpl userService;
 
 	@Value("{spring.jwt.secret}")
 	private String secretKey;

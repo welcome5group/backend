@@ -17,19 +17,19 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserDetailsService {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
 	private static final String SENDER_ADDRESS = "mansa0805@gmail.com";
 	private static final String HASH_KEY = "fingerorder-manager";
 
-	@Override
 	public UserDto signUp(SignUpDto signUpDto) {
 		boolean exists = this.memberRepository.existsByEmail(signUpDto.getEmail());
 
@@ -50,7 +50,6 @@ public class UserServiceImpl implements UserService {
 		return this.memberRepository.save(newMember).toUserDto();
 	}
 
-	@Override
 	public UserDto authenticate(SignInDto signInDto) {
 		Member findMember = checkInvalidEmail(signInDto.getEmail());
 
@@ -64,7 +63,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	//유저 정보 가져오기
-	@Override
 	public UserDto getUserInfo(UserInfoDto userInfoDto) {
 		Member findMember = checkInvalidEmail(userInfoDto.getEmail());
 
@@ -72,7 +70,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	//roles 가져오기
-	@Override
 	public List<String> getRoles(SignInDto signInParam) {
 		List<String> roles = new ArrayList<>();
 		roles.add("ROLE_MEMBER");
@@ -84,7 +81,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	// user 정보 수정(nickName 밖에 없음)
-	@Override
 	public UserDto editUserInfo(UserEditDto userEditDto) {
 		Member findMember = checkInvalidEmail(userEditDto.getEmail());
 
@@ -95,7 +91,6 @@ public class UserServiceImpl implements UserService {
 		return findMember.toUserDto();
 	}
 
-	@Override
 	public boolean resetPassword(
 		String uuid,
 		UserPasswordResetDto userPasswordResetDto) {
