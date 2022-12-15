@@ -1,5 +1,10 @@
 package fingerorder.webapp.domain.category.service;
 
+import fingerorder.webapp.domain.category.exception.CategoryNotFoundException;
+import fingerorder.webapp.domain.category.exception.NoMatchingCategoryException;
+import fingerorder.webapp.domain.category.exception.NoProperCategoryException;
+import fingerorder.webapp.domain.category.exception.NoUniqueCategoryException;
+import fingerorder.webapp.domain.category.exception.StoreNotFoundException;
 import fingerorder.webapp.domain.category.repository.CategoryQueryRepository;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
 import fingerorder.webapp.domain.category.repository.StoreRepository;
@@ -74,34 +79,31 @@ public class CategoryService {
 	}
 
 	private List<Category> getCategories(Long storeId) {
-		return storeRepository.findCategories(storeId).orElseThrow(() -> {
-			throw new IllegalArgumentException("생성된 카테고리명이 없습니다.");
-		});
+		return storeRepository.findCategories(storeId)
+			.orElseThrow(() -> new CategoryNotFoundException());
 	}
 
 	private Store getStore(Long storeId) {
-		return storeRepository.findById(storeId).orElseThrow(() -> {
-			throw new IllegalArgumentException("일치하는 가게 정보가 없습니다.");
-		});
+		return storeRepository.findById(storeId)
+			.orElseThrow(() -> new StoreNotFoundException());
 	}
 
 	private Category getCategory(Long storeId, String categoryName) {
-		return categoryQueryRepository.findCategory(storeId, categoryName).orElseThrow(() -> {
-			throw new IllegalArgumentException("일치하는 카테고리명이 없습니다.");
-		});
+		return categoryQueryRepository.findCategory(storeId, categoryName)
+			.orElseThrow(() -> new NoMatchingCategoryException());
 	}
 
 	private void validateName(String categoryName) {
 		if (categoryName == null || categoryName.equals("")) {
-			throw new IllegalArgumentException("카테고리명을 정확히 입력해주세요.");
+			throw new NoProperCategoryException();
 		} else if (!Pattern.matches("^[a-zA-Z가-힣0-9 ()]*$", categoryName)) {
-			throw new IllegalArgumentException("카테고리명을 정확히 입력해주세요.");
+			throw new NoProperCategoryException();
 		}
 	}
 
 	private void isUnique(String categoryName) {
 		if (categoryRepository.findByName(categoryName).isPresent()) {
-			throw new IllegalArgumentException("이미 존재하는 카테고리명입니다.");
+			throw new NoUniqueCategoryException();
 		}
 	}
 

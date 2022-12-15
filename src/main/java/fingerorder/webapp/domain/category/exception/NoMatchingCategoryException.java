@@ -2,7 +2,7 @@ package fingerorder.webapp.domain.category.exception;
 
 public class NoMatchingCategoryException extends CategoryException {
 
-	protected NoMatchingCategoryException() {
+	public NoMatchingCategoryException() {
 		super(CategoryErrorCode.NO_MATCHING_CATEGORY);
 	}
 }
