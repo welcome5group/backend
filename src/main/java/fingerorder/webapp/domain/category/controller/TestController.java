@@ -1,4 +1,4 @@
-package fingerorder.webapp.controller;
+package fingerorder.webapp.domain.category.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

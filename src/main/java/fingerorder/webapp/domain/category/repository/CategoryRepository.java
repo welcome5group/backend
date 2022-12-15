@@ -1,4 +1,4 @@
-package fingerorder.webapp.repository;
+package fingerorder.webapp.domain.category.repository;
 
 import fingerorder.webapp.entity.Category;
 import java.util.Optional;

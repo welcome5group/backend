@@ -1,14 +1,13 @@
-package fingerorder.webapp.dto;
+package fingerorder.webapp.domain.category.dto;
 
-import fingerorder.webapp.status.CategoryStatus;
+import fingerorder.webapp.domain.category.status.CategoryStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
-public class UpdateCategoryDto {
-	private final String categoryName;
-	private final String updateName;
+public class CreateCategoryDto {
+	private final String name;
 	private final CategoryStatus result;
 }

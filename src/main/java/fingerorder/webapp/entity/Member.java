@@ -1,7 +1,11 @@
 package fingerorder.webapp.entity;
 
+<<<<<<< HEAD
 import fingerorder.webapp.dto.UserDto;
 import fingerorder.webapp.status.UserStatus;
+=======
+import fingerorder.webapp.domain.category.status.UserStatus;
+>>>>>>> e14231d (feat: Category 예외처리 및 패키지 구조 변경)
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

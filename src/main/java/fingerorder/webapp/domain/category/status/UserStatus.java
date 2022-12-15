@@ -1,4 +1,4 @@
-package fingerorder.webapp.status;
+package fingerorder.webapp.domain.category.status;
 
 public enum UserStatus {
 

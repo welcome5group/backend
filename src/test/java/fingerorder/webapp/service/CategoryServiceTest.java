@@ -1,17 +1,18 @@
 package fingerorder.webapp.service;
 
-import static fingerorder.webapp.status.CategoryStatus.CREATE;
-import static fingerorder.webapp.status.CategoryStatus.DELETE;
-import static fingerorder.webapp.status.CategoryStatus.READ;
-import static fingerorder.webapp.status.CategoryStatus.UPDATE;
+import static fingerorder.webapp.domain.category.status.CategoryStatus.CREATE;
+import static fingerorder.webapp.domain.category.status.CategoryStatus.DELETE;
+import static fingerorder.webapp.domain.category.status.CategoryStatus.READ;
+import static fingerorder.webapp.domain.category.status.CategoryStatus.UPDATE;
 
+import fingerorder.webapp.domain.category.service.CategoryService;
 import fingerorder.webapp.entity.Category;
 import fingerorder.webapp.entity.Store;
-import fingerorder.webapp.repository.CategoryQueryRepository;
-import fingerorder.webapp.repository.CategoryRepository;
-import fingerorder.webapp.repository.StoreRepository;
-import fingerorder.webapp.vo.CategoriesVo;
-import fingerorder.webapp.vo.CategoryVo;
+import fingerorder.webapp.domain.category.repository.CategoryQueryRepository;
+import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.category.repository.StoreRepository;
+import fingerorder.webapp.domain.category.vo.CategoriesVo;
+import fingerorder.webapp.domain.category.vo.CategoryVo;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.assertj.core.api.Assertions;

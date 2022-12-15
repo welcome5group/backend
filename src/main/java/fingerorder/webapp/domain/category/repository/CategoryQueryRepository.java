@@ -1,4 +1,4 @@
-package fingerorder.webapp.repository;
+package fingerorder.webapp.domain.category.repository;
 
 import static fingerorder.webapp.entity.QCategory.category;
 import static fingerorder.webapp.entity.QStore.store;

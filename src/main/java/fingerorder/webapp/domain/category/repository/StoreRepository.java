@@ -1,4 +1,4 @@
-package fingerorder.webapp.repository;
+package fingerorder.webapp.domain.category.repository;
 
 <<<<<<< HEAD
 import fingerorder.webapp.entity.Store;
