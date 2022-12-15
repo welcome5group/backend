@@ -19,9 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class UserServiceImplTest {
+class UserServiceTest {
 	@Autowired
-	UserServiceImpl userService;
+	UserService userService;
 
 	@Autowired
 	MemberRepository memberRepository;

@@ -36,7 +36,7 @@ spring:
 
   redis:
     host: localhost
-    port: 6479
+    port: 6379
 
 logging.level:
   org.hibernate.SQL: debug
