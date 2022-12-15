@@ -1,18 +1,17 @@
 package fingerorder.webapp.service;
 
-import fingerorder.webapp.dto.UserDto;
-import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.dto.SignInDto;
 import fingerorder.webapp.dto.SignUpDto;
+import fingerorder.webapp.dto.UserDto;
 import fingerorder.webapp.dto.UserEditDto;
 import fingerorder.webapp.dto.UserInfoDto;
+import fingerorder.webapp.dto.UserPasswordResetDto;
+import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.repository.MemberRepository;
-import fingerorder.webapp.status.UserStatus;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,6 +26,8 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
+	private static final String SENDER_ADDRESS = "mansa0805@gmail.com";
+	private static final String HASH_KEY = "fingerorder-manager";
 
 	@Override
 	public UserDto signUp(SignUpDto signUpDto) {
@@ -95,16 +96,24 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String resetPassword(UserInfoDto userInfoDto) {
-		Member findMember = checkInvalidEmail(userInfoDto.getEmail());
+	public boolean resetPassword(
+		String uuid,
+		UserPasswordResetDto userPasswordResetDto) {
+		Optional<Member> optionalMember = this.memberRepository
+										.findByUuid(uuid);
 
-		String newPassword = this.makeRandomPassword();
+		if (!optionalMember.isPresent()) {
+			return false;
+		}
+
+		Member findMember = optionalMember.get();
+		String newPassword = userPasswordResetDto.getPassword();
 
 		findMember.resetPassword(this.passwordEncoder.encode(newPassword));
 
 		this.memberRepository.save(findMember);
 
-		return newPassword;
+		return true;
 	}
 
 	// security 관련
@@ -135,14 +144,4 @@ public class UserServiceImpl implements UserService {
 			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
 	}
 
-	private String makeRandomPassword() {
-		int alphabetMin = 97;
-		int alphabetMax = 122;
-		Random random = new Random();
-		String newPassword = random.ints(alphabetMin,alphabetMax + 1)
-			.limit(8)
-			.collect(StringBuilder::new, StringBuilder::appendCodePoint,StringBuilder::append)
-			.toString();
-		return newPassword;
-	}
 }

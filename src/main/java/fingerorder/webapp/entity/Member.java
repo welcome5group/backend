@@ -28,6 +28,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
+    private String uuid;
     private String email;
     private String password;
     private String nickName;
@@ -70,7 +71,11 @@ public class Member {
 
     public void resetPassword(String password) {
         this.password = password;
-        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void giveUUID(String uuid) {
+        this.uuid = uuid;
     }
 
     public UserDto toUserDto() {
