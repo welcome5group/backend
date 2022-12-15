@@ -1,14 +1,21 @@
 package fingerorder.webapp.entity;
 
-import fingerorder.webapp.dto.StoreDto;
+import fingerorder.webapp.dto.StoreCreateRequest;
+import fingerorder.webapp.dto.StoreResponse;
+import fingerorder.webapp.dto.StoreUpdateRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -25,21 +32,25 @@ public class Store {
     private int tableCount;
     private String storeLocation;
 
-    @ManyToOne
-    @JoinColumn(name = "merchant_id")
-    private Merchant merchant;
 
-//    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
-//    private List<Menu> menus = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    public Store(StoreDto storeDto) {
-        this.name = storeDto.getName();
+    @OneToMany(mappedBy = "store")
+    private List<Menu> menus = new ArrayList<>();
+
+    @OneToMany(mappedBy = "store")
+    private List<Category> categories = new ArrayList<>();
+
+    public Store(StoreCreateRequest storeCreateRequest) {
+        this.name = storeCreateRequest.getName();
         this.createdAt = showCreateAt();
         this.updatedAt = showUpdatedAt();
-        this.tableCount = storeDto.getTableCount();
-        this.storeLocation = storeDto.getStoreLocation();
+        this.storeLocation = storeCreateRequest.getStoreLocation();
     }
 
+    @Builder
     public Store(String name, LocalDateTime createdAt, LocalDateTime updatedAt, int tableCount,
         String storeLocation) {
         this.name = name;
@@ -53,13 +64,13 @@ public class Store {
 
     }
 
-    public Store changeStore(StoreDto storeDto) {
-        this.name = storeDto.getName();
+    public void changeStore(StoreUpdateRequest storeUpdateRequest) {
+        this.name = storeUpdateRequest.getName();
         this.updatedAt = showUpdatedAt();
-        this.tableCount = storeDto.getTableCount();
-        this.storeLocation = storeDto.getStoreLocation();
-        return this;
+        this.storeLocation = storeUpdateRequest.getStoreLocation();
+        this.tableCount = storeUpdateRequest.getTableCount();
     }
+
 
     public LocalDateTime showCreateAt() {
 
@@ -72,4 +83,25 @@ public class Store {
         return LocalDateTime.now();
 
     }
+
+    public StoreResponse toStoreRequestDto(Store store) {
+        return new StoreResponse(store.getId(), store.getName(), store.getStoreLocation());
+
+    }
+
+    public void changeMember(Member member) {
+        this.member = member;
+    }
+
+    public void addMenu(Menu menu) {
+        this.menus.add(menu);
+        menu.changeStore(this);
+    }
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
+        category.changeStore(this);
+    }
+
+
 }

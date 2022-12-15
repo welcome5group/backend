@@ -1,12 +1,17 @@
 package fingerorder.webapp.dto;
 
+import fingerorder.webapp.entity.UserType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEditDto {
 	private String email;
 	private String nickName;
-	private String type;
+	private UserType type;
 }

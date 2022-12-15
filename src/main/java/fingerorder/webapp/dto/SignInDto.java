@@ -1,10 +1,11 @@
 package fingerorder.webapp.dto;
 
-import lombok.Getter;
+import fingerorder.webapp.entity.UserType;
+import lombok.Data;
 
-@Getter
+@Data
 public class SignInDto {
 	private String email;
 	private String password;
-	private String type;
+	private UserType type;
 }
