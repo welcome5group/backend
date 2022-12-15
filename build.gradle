@@ -63,6 +63,9 @@ dependencies {
 
 	 //mail dependency 추가
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// redis depndency 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {
