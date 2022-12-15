@@ -11,10 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-<<<<<<< HEAD
 import lombok.Builder;
-=======
->>>>>>> a420c83 (feat: 카테고리 CRUD 기능 구현 및 테스트)
 import lombok.Getter;
 
 @Entity
@@ -53,9 +50,5 @@ public class Order {
     //    @OneToMany(mappedBy = "order")
 //    private List<OrderMenu> orderMenus = new ArrayList<>();
 
-<<<<<<< HEAD
+}
 
-}
-=======
-}
->>>>>>> a420c83 (feat: 카테고리 CRUD 기능 구현 및 테스트)

@@ -26,11 +26,7 @@ public class OrderMenu {
     private int totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-<<<<<<< HEAD
     @JoinColumn(name = "orders_id")
-=======
-    @JoinColumn(name = "order_id")
->>>>>>> a420c83 (feat: 카테고리 CRUD 기능 구현 및 테스트)
     private Order order;
 
     @OneToOne(fetch = FetchType.LAZY)

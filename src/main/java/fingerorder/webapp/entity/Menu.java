@@ -1,14 +1,8 @@
 package fingerorder.webapp.entity;
 
-<<<<<<< HEAD
 import fingerorder.webapp.dto.MenuCreateRequest;
-import fingerorder.webapp.dto.MenuResponse;
 import fingerorder.webapp.dto.MenuUpdateRequest;
 import fingerorder.webapp.status.MenuStatus;
-=======
-import fingerorder.webapp.domain.category.dto.MenuDto;
-import fingerorder.webapp.domain.category.status.MenuStatus;
->>>>>>> e14231d (feat: Category 예외처리 및 패키지 구조 변경)
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
