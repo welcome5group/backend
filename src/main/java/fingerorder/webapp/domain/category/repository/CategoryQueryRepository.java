@@ -4,7 +4,7 @@ import static fingerorder.webapp.entity.QCategory.category;
 import static fingerorder.webapp.entity.QStore.store;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import fingerorder.webapp.entity.Category;
+import fingerorder.webapp.domain.category.entity.Category;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;

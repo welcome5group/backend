@@ -7,12 +7,12 @@ import fingerorder.webapp.domain.category.exception.NoUniqueCategoryException;
 import fingerorder.webapp.domain.category.exception.StoreNotFoundException;
 import fingerorder.webapp.domain.category.repository.CategoryQueryRepository;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
-import fingerorder.webapp.domain.category.repository.StoreRepository;
+import fingerorder.webapp.domain.store.repository.StoreRepository;
 import fingerorder.webapp.domain.category.status.CategoryStatus;
 import fingerorder.webapp.domain.category.vo.CategoriesVo;
 import fingerorder.webapp.domain.category.vo.CategoryVo;
-import fingerorder.webapp.entity.Category;
-import fingerorder.webapp.entity.Store;
+import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.store.entity.Store;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -34,7 +34,7 @@ public class CategoryService {
 
 		Category category = new Category(categoryName);
 		Store store = getStore(storeId);
-		category.setCategoryAndStore(store, category);
+		category.setCategoryAndStore(store);
 		categoryRepository.save(category);
 
 		return new CategoryVo(categoryName, CategoryStatus.CREATE);

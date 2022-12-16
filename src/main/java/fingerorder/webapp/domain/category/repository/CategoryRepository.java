@@ -1,6 +1,6 @@
 package fingerorder.webapp.domain.category.repository;
 
-import fingerorder.webapp.entity.Category;
+import fingerorder.webapp.domain.category.entity.Category;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

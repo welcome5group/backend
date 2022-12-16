@@ -6,11 +6,11 @@ import static fingerorder.webapp.domain.category.status.CategoryStatus.READ;
 import static fingerorder.webapp.domain.category.status.CategoryStatus.UPDATE;
 
 import fingerorder.webapp.domain.category.service.CategoryService;
-import fingerorder.webapp.entity.Category;
-import fingerorder.webapp.entity.Store;
+import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.category.repository.CategoryQueryRepository;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
-import fingerorder.webapp.domain.category.repository.StoreRepository;
+import fingerorder.webapp.domain.store.repository.StoreRepository;
 import fingerorder.webapp.domain.category.vo.CategoriesVo;
 import fingerorder.webapp.domain.category.vo.CategoryVo;
 import java.time.LocalDateTime;

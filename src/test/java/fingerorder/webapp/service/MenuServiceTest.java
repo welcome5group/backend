@@ -1,26 +1,30 @@
 package fingerorder.webapp.service;
 
-import static fingerorder.webapp.entity.UserType.MERCHANT;
-import static fingerorder.webapp.status.MenuStatus.ABLE;
-import static fingerorder.webapp.status.MenuStatus.ENABLE;
-import static fingerorder.webapp.status.UserStatus.ACTIVATE;
+import static fingerorder.webapp.domain.member.status.UserStatus.ACTIVATE;
+import static fingerorder.webapp.domain.member.status.UserType.MERCHANT;
+import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
+import static fingerorder.webapp.domain.menu.status.MenuStatus.ENABLE;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-import fingerorder.webapp.dto.MenuCreateRequest;
-import fingerorder.webapp.dto.MenuResponse;
-import fingerorder.webapp.dto.MenuUpdateRequest;
-import fingerorder.webapp.entity.Category;
-import fingerorder.webapp.entity.Member;
-import fingerorder.webapp.entity.Menu;
-import fingerorder.webapp.entity.Store;
-import fingerorder.webapp.repository.CategoryRepository;
-import fingerorder.webapp.repository.MemberRepository;
-import fingerorder.webapp.repository.MenuRepository;
-import fingerorder.webapp.repository.StoreRepository;
+import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
+import fingerorder.webapp.domain.menu.dto.MenuResponse;
+import fingerorder.webapp.domain.menu.service.MenuService;
+
+import fingerorder.webapp.domain.menu.dto.MenuUpdateRequest;
+import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.menu.entity.Menu;
+import fingerorder.webapp.domain.store.entity.Store;
+
+import fingerorder.webapp.domain.member.repository.MemberRepository;
+import fingerorder.webapp.domain.menu.repository.MenuRepository;
+
+import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 class MenuServiceTest {
 
     @Autowired
-    MenuService menuService;
+	MenuService menuService;
     @Autowired
     StoreRepository storeRepository;
     @Autowired
@@ -98,7 +102,7 @@ class MenuServiceTest {
         Category savedCategory = categoryRepository.save(category);
 
         store.addMenu(savedMenu);
-        store.addCategory(savedCategory);
+//        store.addCategory(savedCategory);
 
         MenuUpdateRequest menuUpdateRequest = MenuUpdateRequest
             .builder()
