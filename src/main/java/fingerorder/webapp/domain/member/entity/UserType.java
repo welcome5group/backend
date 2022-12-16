@@ -1,4 +1,4 @@
-package fingerorder.webapp.entity;
+package fingerorder.webapp.domain.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

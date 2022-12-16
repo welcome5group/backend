@@ -1,5 +1,6 @@
 package fingerorder.webapp.entity;
 
+import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.dto.StoreCreateRequest;
 import fingerorder.webapp.dto.StoreResponse;
 import fingerorder.webapp.dto.StoreUpdateRequest;

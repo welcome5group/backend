@@ -1,11 +1,11 @@
-package fingerorder.webapp.entity;
+package fingerorder.webapp.domain.member.entity;
 
-import fingerorder.webapp.dto.UserDto;
-import fingerorder.webapp.status.UserStatus;
+import fingerorder.webapp.domain.member.dto.UserDto;
+import fingerorder.webapp.domain.member.status.UserStatus;
+import fingerorder.webapp.entity.Store;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

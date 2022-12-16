@@ -1,6 +1,6 @@
-package fingerorder.webapp.repository;
+package fingerorder.webapp.domain.member.repository;
 
-import fingerorder.webapp.entity.Member;
+import fingerorder.webapp.domain.member.entity.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

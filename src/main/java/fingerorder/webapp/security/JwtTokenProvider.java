@@ -1,15 +1,11 @@
 package fingerorder.webapp.security;
 
-import fingerorder.webapp.dto.SignInDto;
-import fingerorder.webapp.dto.TokenDto;
-import fingerorder.webapp.service.UserService;
+import fingerorder.webapp.domain.member.dto.TokenDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;

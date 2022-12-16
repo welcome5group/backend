@@ -1,7 +1,7 @@
-package fingerorder.webapp.dto;
+package fingerorder.webapp.domain.member.dto;
 
-import fingerorder.webapp.entity.UserType;
-import fingerorder.webapp.status.UserStatus;
+import fingerorder.webapp.domain.member.entity.UserType;
+import fingerorder.webapp.domain.member.status.UserStatus;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

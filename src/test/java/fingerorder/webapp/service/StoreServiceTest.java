@@ -1,18 +1,17 @@
 package fingerorder.webapp.service;
 
-import static fingerorder.webapp.entity.UserType.MEMBER;
-import static fingerorder.webapp.entity.UserType.MERCHANT;
+import static fingerorder.webapp.domain.member.entity.UserType.MERCHANT;
 import static fingerorder.webapp.status.MenuStatus.ABLE;
-import static fingerorder.webapp.status.UserStatus.ACTIVATE;
+import static fingerorder.webapp.domain.member.status.UserStatus.ACTIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import fingerorder.webapp.dto.StoreCreateRequest;
 import fingerorder.webapp.dto.StoreUpdateRequest;
 import fingerorder.webapp.entity.Category;
-import fingerorder.webapp.entity.Member;
+import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.entity.Menu;
 import fingerorder.webapp.entity.Store;
 import fingerorder.webapp.repository.CategoryRepository;
-import fingerorder.webapp.repository.MemberRepository;
+import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.repository.MenuRepository;
 import fingerorder.webapp.repository.StoreRepository;
 
@@ -24,7 +23,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest

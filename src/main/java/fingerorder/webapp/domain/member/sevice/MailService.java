@@ -1,8 +1,8 @@
-package fingerorder.webapp.service;
+package fingerorder.webapp.domain.member.sevice;
 
-import fingerorder.webapp.dto.UserInfoDto;
-import fingerorder.webapp.entity.Member;
-import fingerorder.webapp.repository.MemberRepository;
+import fingerorder.webapp.domain.member.dto.UserInfoDto;
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.member.repository.MemberRepository;
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 import java.util.UUID;

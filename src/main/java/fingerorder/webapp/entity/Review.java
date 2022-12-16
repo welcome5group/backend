@@ -1,5 +1,6 @@
 package fingerorder.webapp.entity;
 
+import fingerorder.webapp.domain.member.entity.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;

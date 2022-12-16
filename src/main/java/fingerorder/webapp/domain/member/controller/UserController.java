@@ -1,16 +1,15 @@
-package fingerorder.webapp.controller;
+package fingerorder.webapp.domain.member.controller;
 
-import fingerorder.webapp.dto.SignInDto;
-import fingerorder.webapp.dto.SignOutDto;
-import fingerorder.webapp.dto.SignUpDto;
-import fingerorder.webapp.dto.TokenDto;
-import fingerorder.webapp.dto.UserEditDto;
-import fingerorder.webapp.dto.UserInfoDto;
-import fingerorder.webapp.dto.UserPasswordResetDto;
+import fingerorder.webapp.domain.member.dto.SignInDto;
+import fingerorder.webapp.domain.member.dto.SignOutDto;
+import fingerorder.webapp.domain.member.dto.SignUpDto;
+import fingerorder.webapp.domain.member.dto.TokenDto;
+import fingerorder.webapp.domain.member.dto.UserEditDto;
+import fingerorder.webapp.domain.member.dto.UserInfoDto;
+import fingerorder.webapp.domain.member.dto.UserPasswordResetDto;
 import fingerorder.webapp.security.JwtTokenProvider;
-import fingerorder.webapp.service.MailService;
-import fingerorder.webapp.service.UserService;
-import java.util.List;
+import fingerorder.webapp.domain.member.sevice.MailService;
+import fingerorder.webapp.domain.member.sevice.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

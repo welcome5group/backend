@@ -1,4 +1,4 @@
-package fingerorder.webapp.dto;
+package fingerorder.webapp.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
