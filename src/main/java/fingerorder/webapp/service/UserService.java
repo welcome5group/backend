@@ -10,6 +10,7 @@ import fingerorder.webapp.dto.UserEditDto;
 import fingerorder.webapp.dto.UserInfoDto;
 import fingerorder.webapp.dto.UserPasswordResetDto;
 import fingerorder.webapp.entity.Member;
+import fingerorder.webapp.entity.UserType;
 import fingerorder.webapp.repository.MemberRepository;
 import fingerorder.webapp.security.JwtTokenProvider;
 import java.time.LocalDateTime;
@@ -98,11 +99,7 @@ public class UserService implements UserDetailsService {
 		redisTemplate.opsForValue()
 			.set(signOutDto.getAccessToken(),"logout",expiration,TimeUnit.MICROSECONDS);
 
-		SignOutResponseDto signOutResponseDto = SignOutResponseDto.builder()
-																	.email(email)
-																	.build();
-
-		return signOutResponseDto;
+		return SignOutResponseDto.builder().email(email).build();
 	}
 
 	public UserDto authenticate(SignInDto signInDto) {
@@ -148,8 +145,7 @@ public class UserService implements UserDetailsService {
 	public boolean resetPassword(
 		String uuid,
 		UserPasswordResetDto userPasswordResetDto) {
-		Optional<Member> optionalMember = this.memberRepository
-										.findByUuid(uuid);
+		Optional<Member> optionalMember = this.memberRepository.findByUuid(uuid);
 
 		if (!optionalMember.isPresent()) {
 			return false;
@@ -179,7 +175,7 @@ public class UserService implements UserDetailsService {
 			Member member = optionalMember.get();
 			password = member.getPassword();
 
-			if (member.getUserType().equals("merchant")) {
+			if (member.getUserType() == UserType.MERCHANT) {
 				authorities.add(new SimpleGrantedAuthority("ROLE_MERCHANT"));
 			}
 		} else {
