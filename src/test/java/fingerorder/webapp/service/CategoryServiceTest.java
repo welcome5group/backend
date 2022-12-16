@@ -1,9 +1,7 @@
 package fingerorder.webapp.service;
 
-import static fingerorder.webapp.domain.category.status.CategoryStatus.CREATE;
-import static fingerorder.webapp.domain.category.status.CategoryStatus.DELETE;
-import static fingerorder.webapp.domain.category.status.CategoryStatus.READ;
-import static fingerorder.webapp.domain.category.status.CategoryStatus.UPDATE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import fingerorder.webapp.domain.category.service.CategoryService;
 import fingerorder.webapp.domain.category.entity.Category;
@@ -45,15 +43,14 @@ class CategoryServiceTest {
 	void createCategory_success() {
 	    //given
 		Store store = createStore();
-		CategoryVo categoryVo = categoryService.create(store.getId(), categoryName);
+		CategoryVo categoryVo = categoryService.createCategory(store.getId(), categoryName);
 
 		// when
 		Category createdCategory = categoryQueryRepository.findCategory(store.getId(), categoryName).get();
 
 	    // then
-		Assertions.assertThat(createdCategory.getName()).isEqualTo(categoryName);
-		Assertions.assertThat(categoryVo.getName()).isEqualTo(categoryName);
-		Assertions.assertThat(categoryVo.getResult()).isEqualTo(CREATE);
+		assertThat(createdCategory.getName()).isEqualTo(categoryName);
+		assertThat(categoryVo.getName()).isEqualTo(categoryName);
 	}
 
 	@Test
@@ -66,8 +63,8 @@ class CategoryServiceTest {
 		// when
 
 		// then
-		org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			categoryService.create(store.getId(), null);
+		assertThrows(IllegalArgumentException.class, () -> {
+			categoryService.createCategory(store.getId(), null);
 		});
 	}
 
@@ -81,8 +78,8 @@ class CategoryServiceTest {
 		// when
 
 		// then
-		org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			categoryService.create(store.getId(), "");
+		assertThrows(IllegalArgumentException.class, () -> {
+			categoryService.createCategory(store.getId(), "");
 		});
 	}
 
@@ -96,8 +93,8 @@ class CategoryServiceTest {
 		// when
 
 		// then
-		org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			categoryService.create(store.getId(), "ㅁ");
+		assertThrows(IllegalArgumentException.class, () -> {
+			categoryService.createCategory(store.getId(), "ㅁ");
 		});
 	}
 
@@ -107,15 +104,13 @@ class CategoryServiceTest {
 	void getCategory_success() {
 		//given
 		Store store = createStore();
-		categoryService.create(store.getId(), categoryName);
+		categoryService.createCategory(store.getId(), categoryName);
 
 		// when
-		CategoriesVo categoriesVo = categoryService.get(store.getId());
-		categoriesVo.getNames().stream().forEach(System.out::println);
+		CategoriesVo categoriesVo = categoryService.getCategory(store.getId());
 
 		// then
-		Assertions.assertThat(categoriesVo.getNames().get(0)).isEqualTo(categoryName);
-		Assertions.assertThat(categoriesVo.getResult()).isEqualTo(READ);
+		assertThat(categoriesVo.getNames().get(0)).isEqualTo(categoryName);
 	}
 
 	@Test
@@ -125,11 +120,10 @@ class CategoryServiceTest {
 		Store store = createStore();
 
 		// when
-		CategoriesVo categoriesVo = categoryService.get(store.getId());
+		CategoriesVo categoriesVo = categoryService.getCategory(store.getId());
 
 		// then
-		Assertions.assertThat(categoriesVo.getNames()).isEmpty();
-		Assertions.assertThat(categoriesVo.getResult()).isEqualTo(READ);
+		assertThat(categoriesVo.getNames()).isEmpty();
 	}
 
 	@Test
@@ -138,16 +132,15 @@ class CategoryServiceTest {
 	void updateCategory() {
 		//given
 		Store store = createStore();
-		categoryService.create(store.getId(), categoryName);
+		categoryService.createCategory(store.getId(), categoryName);
 
 		// when
-		CategoryVo categoryVo = categoryService.update(store.getId(), categoryName, updateName);
+		CategoryVo categoryVo = categoryService.updateCategory(store.getId(), categoryName, updateName);
 		List<Category> categories = storeRepository.findCategories(store.getId()).get();
 
 		// then
-		Assertions.assertThat(categories.get(0).getName()).isEqualTo(updateName);
-		Assertions.assertThat(categoryVo.getName()).isEqualTo(updateName);
-		Assertions.assertThat(categoryVo.getResult()).isEqualTo(UPDATE);
+		assertThat(categories.get(0).getName()).isEqualTo(updateName);
+		assertThat(categoryVo.getName()).isEqualTo(updateName);
 	}
 
 	@Test
@@ -156,15 +149,14 @@ class CategoryServiceTest {
 	void deleteCategory_success() {
 		//given
 		Store store = createStore();
-		categoryService.create(store.getId(), categoryName);
+		categoryService.createCategory(store.getId(), categoryName);
 
 		// when
-		CategoryVo categoryVo = categoryService.delete(store.getId(), categoryName);
+		CategoryVo categoryVo = categoryService.deleteCategory(store.getId(), categoryName);
 
 		// then
-		Assertions.assertThat(categoryRepository.findAll().size()).isEqualTo(0);
-		Assertions.assertThat(categoryVo.getName()).isEqualTo(categoryName);
-		Assertions.assertThat(categoryVo.getResult()).isEqualTo(DELETE);
+		assertThat(categoryRepository.findAll().size()).isEqualTo(0);
+		assertThat(categoryVo.getName()).isEqualTo(categoryName);
 	}
 
 	@Test
@@ -173,13 +165,13 @@ class CategoryServiceTest {
 	void deleteCategory_fail() {
 		//given
 		Store store = createStore();
-		categoryService.create(store.getId(), categoryName);
+		categoryService.createCategory(store.getId(), categoryName);
 
 		// when
 
 		// then
-		org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			categoryService.delete(store.getId(), "categoryName");
+		assertThrows(IllegalArgumentException.class, () -> {
+			categoryService.deleteCategory(store.getId(), "categoryName");
 		});
 	}
 
@@ -189,13 +181,13 @@ class CategoryServiceTest {
 	void deleteCategory_fail_empty() {
 		//given
 		Store store = createStore();
-		categoryService.create(store.getId(), categoryName);
+		categoryService.createCategory(store.getId(), categoryName);
 
 		// when
 
 		// then
-		org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			categoryService.delete(store.getId(), "");
+		assertThrows(IllegalArgumentException.class, () -> {
+			categoryService.deleteCategory(store.getId(), "");
 		});
 	}
 
@@ -205,13 +197,13 @@ class CategoryServiceTest {
 	void deleteCategory_fail_null() {
 		//given
 		Store store = createStore();
-		categoryService.create(store.getId(), categoryName);
+		categoryService.createCategory(store.getId(), categoryName);
 
 		// when
 
 		// then
-		org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			categoryService.delete(store.getId(), null);
+		assertThrows(IllegalArgumentException.class, () -> {
+			categoryService.deleteCategory(store.getId(), null);
 		});
 	}
 

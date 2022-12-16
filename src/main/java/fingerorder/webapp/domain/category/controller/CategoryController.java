@@ -8,6 +8,8 @@ import fingerorder.webapp.domain.category.dto.CreateCategoryDto;
 import fingerorder.webapp.domain.category.service.CategoryService;
 import fingerorder.webapp.domain.category.vo.CategoryVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,35 +27,37 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	@GetMapping("/{storeId}/category")
-	public GetCategoryDto category(@PathVariable Long storeId) {
+	public ResponseEntity<GetCategoryDto> getCategory(@PathVariable Long storeId) {
 
-		CategoriesVo categoriesVo = categoryService.get(storeId);
+		CategoriesVo categoriesVo = categoryService.getCategory(storeId);
 
-		return new GetCategoryDto(categoriesVo.getNames(), categoriesVo.getResult());
+		return new ResponseEntity<>(new GetCategoryDto(categoriesVo.getNames()), HttpStatus.OK);
+
 	}
 
 	@PostMapping("/{storeId}/category")
-	public CreateCategoryDto createCategory(@PathVariable Long storeId, @RequestBody CreateCategoryDto createCategoryDto) {
+	public ResponseEntity<CreateCategoryDto> createCategory(@PathVariable Long storeId, @RequestBody CreateCategoryDto createCategoryDto) {
 
-		CategoryVo categoryVo = categoryService.create(storeId, createCategoryDto.getName());
+		CategoryVo categoryVo = categoryService.createCategory(storeId, createCategoryDto.getName());
 
-		return new CreateCategoryDto(categoryVo.getName(), categoryVo.getResult());
+		return new ResponseEntity<>(new CreateCategoryDto(categoryVo.getName()), HttpStatus.OK);
 	}
 
 	@PutMapping("/{storeId}/category")
-	public UpdateCategoryDto updateCategory(@PathVariable Long storeId, @RequestBody UpdateCategoryDto updateCategoryDto) {
+	public ResponseEntity<UpdateCategoryDto> updateCategory(@PathVariable Long storeId, @RequestBody UpdateCategoryDto updateCategoryDto) {
 
-		CategoryVo categoryVo = categoryService.update(storeId, updateCategoryDto.getCategoryName(), updateCategoryDto.getUpdateName());
+		CategoryVo categoryVo = categoryService.updateCategory(storeId, updateCategoryDto.getCategoryName(), updateCategoryDto.getUpdateName());
 
-		return new UpdateCategoryDto(categoryVo.getName(), categoryVo.getName(), categoryVo.getResult());
+
+		return new ResponseEntity<>(new UpdateCategoryDto(categoryVo.getName(), categoryVo.getName()), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{storeId}/category")
-	public DeleteCategoryDto deleteCategory(@PathVariable Long storeId, @RequestBody DeleteCategoryDto deleteCategoryDto) {
+	public ResponseEntity<DeleteCategoryDto> deleteCategory(@PathVariable Long storeId, @RequestBody DeleteCategoryDto deleteCategoryDto) {
 
-		CategoryVo categoryVo = categoryService.delete(storeId, deleteCategoryDto.getName());
+		CategoryVo categoryVo = categoryService.deleteCategory(storeId, deleteCategoryDto.getName());
 
-		return new DeleteCategoryDto(categoryVo.getName(), categoryVo.getResult());
+		return new ResponseEntity<>(new DeleteCategoryDto(categoryVo.getName()), HttpStatus.OK);
 	}
 
 }

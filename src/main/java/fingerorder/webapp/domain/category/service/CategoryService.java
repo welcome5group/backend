@@ -8,7 +8,6 @@ import fingerorder.webapp.domain.category.exception.StoreNotFoundException;
 import fingerorder.webapp.domain.category.repository.CategoryQueryRepository;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
-import fingerorder.webapp.domain.category.status.CategoryStatus;
 import fingerorder.webapp.domain.category.vo.CategoriesVo;
 import fingerorder.webapp.domain.category.vo.CategoryVo;
 import fingerorder.webapp.domain.category.entity.Category;
@@ -16,36 +15,32 @@ import fingerorder.webapp.domain.store.entity.Store;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
+@RequiredArgsConstructor
 public class CategoryService {
 	private final CategoryRepository categoryRepository;
 	private final StoreRepository storeRepository;
 	private final CategoryQueryRepository categoryQueryRepository;
 
-	public CategoryVo create(Long storeId, String categoryName) {
+	public CategoryVo createCategory(Long storeId, String categoryName) {
 		validateName(categoryName);
 		isUnique(categoryName);
 
 		Category category = new Category(categoryName);
-		Store store = getStore(storeId);
+		Store store = findStore(storeId);
 		category.setCategoryAndStore(store);
 		categoryRepository.save(category);
 
-		return new CategoryVo(categoryName, CategoryStatus.CREATE);
+		return new CategoryVo(categoryName);
 	}
 
 	@Transactional(readOnly = true)
-	public CategoriesVo get(Long storeId) {
-		List<Category> categories = getCategories(storeId);
-		if(categories == null) {
-			return new CategoriesVo(null, CategoryStatus.READ);
-		}
+	public CategoriesVo getCategory(Long storeId) {
+		List<Category> categories = findCategories(storeId);
 
 		List<String> categoryNames = new ArrayList<>();
 
@@ -53,44 +48,44 @@ public class CategoryService {
 			categoryNames.add(category.getName());
 		}
 
-		return new CategoriesVo(categoryNames, CategoryStatus.READ);
+		return new CategoriesVo(categoryNames);
 	}
 
 	@Transactional
-	public CategoryVo update(Long storeId, String categoryName, String updateName) {
+	public CategoryVo updateCategory(Long storeId, String categoryName, String updateName) {
 		validateName(updateName);
 		isUnique(updateName);
 
-		Category category = getCategory(storeId, categoryName);
+		Category category = findCategory(storeId, categoryName);
 		category.editName(updateName);
 
-		return new CategoryVo(updateName, CategoryStatus.UPDATE);
+		return new CategoryVo(updateName);
 	}
 
 	@Transactional
-	public CategoryVo delete(Long storeId, String categoryName) {
+	public CategoryVo deleteCategory(Long storeId, String categoryName) {
 		validateName(categoryName);
 
-		Category category = getCategory(storeId, categoryName);
+		Category category = findCategory(storeId, categoryName);
 
 		categoryRepository.delete(category);
 
-		return new CategoryVo(categoryName, CategoryStatus.DELETE);
+		return new CategoryVo(categoryName);
 	}
 
-	private List<Category> getCategories(Long storeId) {
+	private List<Category> findCategories(Long storeId) {
 		return storeRepository.findCategories(storeId)
-			.orElseThrow(() -> new CategoryNotFoundException());
+			.orElseThrow(CategoryNotFoundException::new);
 	}
 
-	private Store getStore(Long storeId) {
+	private Store findStore(Long storeId) {
 		return storeRepository.findById(storeId)
-			.orElseThrow(() -> new StoreNotFoundException());
+			.orElseThrow(StoreNotFoundException::new);
 	}
 
-	private Category getCategory(Long storeId, String categoryName) {
+	private Category findCategory(Long storeId, String categoryName) {
 		return categoryQueryRepository.findCategory(storeId, categoryName)
-			.orElseThrow(() -> new NoMatchingCategoryException());
+			.orElseThrow(NoMatchingCategoryException::new);
 	}
 
 	private void validateName(String categoryName) {

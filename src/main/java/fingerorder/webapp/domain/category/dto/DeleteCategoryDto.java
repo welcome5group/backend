@@ -1,13 +1,14 @@
 package fingerorder.webapp.domain.category.dto;
 
-import fingerorder.webapp.domain.category.status.CategoryStatus;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor
+@AllArgsConstructor
 public class DeleteCategoryDto {
-	private final String name;
-	private final CategoryStatus result;
+	private String name;
 }
