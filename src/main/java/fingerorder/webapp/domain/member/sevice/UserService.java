@@ -10,7 +10,7 @@ import fingerorder.webapp.domain.member.dto.UserEditDto;
 import fingerorder.webapp.domain.member.dto.UserInfoDto;
 import fingerorder.webapp.domain.member.dto.UserPasswordResetDto;
 import fingerorder.webapp.domain.member.entity.Member;
-import fingerorder.webapp.domain.member.entity.UserType;
+import fingerorder.webapp.domain.member.status.UserType;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.security.JwtTokenProvider;
 import java.time.LocalDateTime;

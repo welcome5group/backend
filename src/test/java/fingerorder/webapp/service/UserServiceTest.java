@@ -1,7 +1,7 @@
 package fingerorder.webapp.service;
 
-import static fingerorder.webapp.domain.member.entity.UserType.MEMBER;
-import static fingerorder.webapp.domain.member.entity.UserType.MERCHANT;
+import static fingerorder.webapp.domain.member.status.UserType.MEMBER;
+import static fingerorder.webapp.domain.member.status.UserType.MERCHANT;
 import static org.junit.jupiter.api.Assertions.*;
 
 import fingerorder.webapp.domain.member.dto.UserDto;

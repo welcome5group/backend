@@ -1,6 +1,6 @@
 package fingerorder.webapp.domain.member.dto;
 
-import fingerorder.webapp.domain.member.entity.UserType;
+import fingerorder.webapp.domain.member.status.UserType;
 import lombok.Data;
 
 @Data

@@ -2,7 +2,8 @@ package fingerorder.webapp.domain.member.entity;
 
 import fingerorder.webapp.domain.member.dto.UserDto;
 import fingerorder.webapp.domain.member.status.UserStatus;
-import fingerorder.webapp.entity.Store;
+import fingerorder.webapp.domain.member.status.UserType;
+import fingerorder.webapp.domain.store.entity.Store;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
