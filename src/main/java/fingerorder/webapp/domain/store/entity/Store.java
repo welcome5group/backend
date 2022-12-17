@@ -35,7 +35,6 @@ public class Store {
     private int tableCount;
     private String storeLocation;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -74,7 +73,6 @@ public class Store {
         this.tableCount = storeUpdateRequest.getTableCount();
     }
 
-
     public LocalDateTime showCreateAt() {
 
         return LocalDateTime.now();
@@ -101,10 +99,10 @@ public class Store {
         menu.changeStore(this);
     }
 
-    public void addCategory(Category category) {
-        this.categories.add(category);
-        category.changeStore(this);
-    }
+//    public void addCategory(Category category) {
+//        this.categories.add(category);
+//        category.changeStore(this);
+//    }
 
 
 }

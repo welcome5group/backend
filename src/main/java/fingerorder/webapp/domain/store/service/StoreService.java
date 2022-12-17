@@ -1,12 +1,12 @@
 package fingerorder.webapp.domain.store.service;
 
+import fingerorder.webapp.domain.store.repository.StoreRepository;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
-import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package fingerorder.webapp.domain.member.sevice;
+package fingerorder.webapp.domain.member.service;
 
 import fingerorder.webapp.domain.member.dto.UserInfoDto;
 import fingerorder.webapp.domain.member.entity.Member;

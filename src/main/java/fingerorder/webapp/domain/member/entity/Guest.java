@@ -1,4 +1,4 @@
-package fingerorder.webapp.domain.member.dto;
+package fingerorder.webapp.domain.member.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -5,7 +5,7 @@ import static fingerorder.webapp.domain.member.status.UserType.MERCHANT;
 import static org.junit.jupiter.api.Assertions.*;
 
 import fingerorder.webapp.domain.member.dto.UserDto;
-import fingerorder.webapp.domain.member.sevice.UserService;
+import fingerorder.webapp.domain.member.service.UserService;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.dto.UserEditDto;
 import fingerorder.webapp.domain.member.dto.UserInfoDto;

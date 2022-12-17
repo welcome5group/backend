@@ -2,7 +2,6 @@ package fingerorder.webapp.service;
 
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
 import static org.assertj.core.api.Assertions.assertThat;
-
 import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuAndCategory;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.menu.entity.Menu;
@@ -23,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 class MenuQueryServiceTest {
 
     @Autowired
-    MenuQueryService menuQueryService;
+	MenuQueryService menuQueryService;
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
