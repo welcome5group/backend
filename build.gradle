@@ -49,6 +49,8 @@ dependencies {
 	// Jasypt
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
+	// H2 Database
+	implementation 'com.h2database:h2'
 
 	runtimeOnly 'com.h2database:h2'
 
