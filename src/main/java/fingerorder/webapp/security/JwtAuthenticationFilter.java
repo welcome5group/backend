@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String token = this.resolveTokenFromRequest(request);
 
 		// 로그아웃된 사용자인지 확인
-		if (isBlocked(token)) {
+		if (StringUtils.hasText(token) && isBlocked(token)) {
 			throw new RuntimeException("로그아웃된 사용자 입니다.");
 		}
 

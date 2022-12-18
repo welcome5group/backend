@@ -10,6 +10,7 @@ import fingerorder.webapp.domain.member.dto.MemberEditDto;
 import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.member.status.MemberStatus;
 import fingerorder.webapp.domain.member.status.MemberType;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.security.JwtTokenProvider;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +44,14 @@ public class UserService implements UserDetailsService {
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 	public MemberDto signUp(SignUpDto signUpDto) {
+		if (!checkInvalidEmail(signUpDto.getEmail())) {
+			throw new RuntimeException("잘못된 이메일 형식");
+		}
+
+		if (!checkInvalidPassword(signUpDto.getPassword())) {
+			throw new RuntimeException("잘못된 비밀번호 형식");
+		}
+
 		boolean exists = this.memberRepository.existsByEmail(signUpDto.getEmail());
 
 		if (exists) {
@@ -53,7 +63,7 @@ public class UserService implements UserDetailsService {
 			.password(this.passwordEncoder.encode(signUpDto.getPassword()))
 			.nickName(signUpDto.getNickName())
 			.memberType(signUpDto.getType())
-			.status(null)
+			.status(MemberStatus.ACTIVATE)
 			.createdAt(LocalDateTime.now())
 			.updatedAt(LocalDateTime.now())
 			.build();
@@ -62,6 +72,14 @@ public class UserService implements UserDetailsService {
 	}
 
 	public TokenDto signIn(SignInDto signInDto) {
+		if (!checkInvalidEmail(signInDto.getEmail())) {
+			throw new RuntimeException("잘못된 이메일 형식");
+		}
+
+		if (!checkInvalidPassword(signInDto.getPassword())) {
+			throw new RuntimeException("잘못된 비밀번호 형식");
+		}
+
 		boolean exist = this.memberRepository.existsByEmail(signInDto.getEmail());
 
 		if (!exist) {
@@ -102,18 +120,6 @@ public class UserService implements UserDetailsService {
 		return SignOutResponseDto.builder().email(email).build();
 	}
 
-	public MemberDto authenticate(SignInDto signInDto) {
-		Member findMember = checkInvalidEmail(signInDto.getEmail());
-
-		String password = findMember.getPassword();
-
-		if (!this.passwordEncoder.matches(signInDto.getPassword(),password)) {
-			throw new RuntimeException("비밀번호가 일치하지 않습니다.");
-		}
-
-		return findMember.toUserDto();
-	}
-
 	// refresh 토큰 redis에 저장
 	public void saveTokenToRedis(String email, TokenDto tokenDto) {
 		// ExpirationTime 설정을 통해 해당 시간이 만료되면 Redis에서 자동 삭제
@@ -126,14 +132,14 @@ public class UserService implements UserDetailsService {
 
 	//유저 정보 가져오기
 	public MemberDto getMemberInfo(MemberInfoDto memberInfoDto) {
-		Member findMember = checkInvalidEmail(memberInfoDto.getEmail());
+		Member findMember = checkInvalidMember(memberInfoDto.getEmail());
 
 		return findMember.toUserDto();
 	}
 
 	// user 정보 수정(nickName 밖에 없음)
 	public MemberDto editMemberInfo(MemberEditDto userEditDto) {
-		Member findMember = checkInvalidEmail(userEditDto.getEmail());
+		Member findMember = checkInvalidMember(userEditDto.getEmail());
 
 		findMember.editNickName(userEditDto.getNickName());
 
@@ -145,13 +151,13 @@ public class UserService implements UserDetailsService {
 	public boolean resetPassword(
 		String uuid,
 		MemberPasswordResetDto memberPasswordResetDto) {
-		Optional<Member> optionalMember = this.memberRepository.findByUuid(uuid);
-
-		if (!optionalMember.isPresent()) {
-			return false;
+		if (!checkInvalidPassword(memberPasswordResetDto.getPassword())) {
+			throw new RuntimeException("잘못된 비밀빈호 형식");
 		}
 
-		Member findMember = optionalMember.get();
+		Member findMember = this.memberRepository.findByUuid(uuid)
+			.orElseThrow(() -> new RuntimeException("인증되지 않은 사용자 입니다."));
+
 		String newPassword = memberPasswordResetDto.getPassword();
 
 		findMember.resetPassword(this.passwordEncoder.encode(newPassword));
@@ -184,8 +190,16 @@ public class UserService implements UserDetailsService {
 		return new User(email,password,authorities);
 	}
 
-	private Member checkInvalidEmail(String email) {
+	private Member checkInvalidMember(String email) {
 		return this.memberRepository.findByEmail(email)
 			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+	}
+
+	private boolean checkInvalidEmail(String email) {
+		return Pattern.matches("[a-zA-Z.].+[@][a-zA-Z].+[.][a-zA-Z]{2,4}$",email);
+	}
+
+	private boolean checkInvalidPassword(String password) {
+		return Pattern.matches("^[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣~!@#$%^&*()-_=+,.?]*$",password);
 	}
 }
