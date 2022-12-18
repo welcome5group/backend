@@ -1,10 +1,13 @@
 package fingerorder.webapp.service;
 
+import fingerorder.webapp.dto.OrderResponseDto;
+import fingerorder.webapp.dto.PayResponseDto;
 import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.entity.Order;
 import fingerorder.webapp.repository.MemberRepository;
 import fingerorder.webapp.repository.OrderMenuRepository;
 import fingerorder.webapp.repository.OrderRepository;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,12 +22,17 @@ public class PayService {
     private final OrderMenuRepository orderMenuRepository;
 
     @Transactional
-    public void findPayList(Long memberId) {
+    public List<PayResponseDto> findPayList(Long memberId) {
         Member member = findMemberById(memberId);
 
         List<Order> orders = orderRepository.findAllByMember(member);
-        // response에 넣기
 
+        List<PayResponseDto> pays = new ArrayList<>();
+        for (Order order : orders) {
+            pays.add(PayResponseDto.createPayResponse(order));
+        }
+
+        return pays;
     }
 
     private Member findMemberById(Long memberId) {
