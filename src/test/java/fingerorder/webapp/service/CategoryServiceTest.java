@@ -44,7 +44,7 @@ class CategoryServiceTest {
 	}
 
 	@Test
-	@Transactional(rollbackFor = Exception.class)
+//	@Transactional(rollbackFor = Exception.class)
 	@DisplayName("고유값 예외처리")
 	void exception(){
 		Store store = createStore();
@@ -53,10 +53,10 @@ class CategoryServiceTest {
 			CategoryVo categoryVo1 = categoryService.createCategory(store.getId(), categoryName);
 			CategoryVo categoryVo2 = categoryService.createCategory(store.getId(), "categoryName");
 			CategoryVo categoryVo3 = categoryService.updateCategory(store.getId(), categoryName, "categoryName");
-			CategoriesVo categoryVo = categoryService.getCategory(store.getId());
-		} catch (Exception e) {
+		} catch (DataIntegrityViolationException e) {
 			System.err.println(e);
 		}
+//			CategoriesVo categoryVo = categoryService.getCategory(store.getId());
 
 
 	}

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,14 +32,14 @@ public class CategoryService {
 	private final CategoryQueryRepository categoryQueryRepository;
 
 	public CategoryVo createCategory(Long storeId, String categoryName) {
-		validateName(categoryName);
+//		validateName(categoryName);
 //		isUnique(categoryName);
 
 		try{
 			Category category = new Category(categoryName);
 			Store store = findStore(storeId);
 			category.setCategoryAndStore(store);
-			categoryRepository.save(category);
+			categoryRepository.save(category);	// 추상화된 Repository -> 스프링 예외
 		} catch (DataIntegrityViolationException e) {
 			throw new NoUniqueCategoryException();
 		}
@@ -62,26 +63,30 @@ public class CategoryService {
 //	@Transactional(rollbackFor = Exception.class)
 	@Transactional
 	public CategoryVo updateCategory(Long storeId, String categoryName, String updateName) {
-		validateName(updateName);
+//		validateName(updateName);
 //		isUnique(updateName);
 
-		try{
+//		try{
 			Category category = findCategory(storeId, categoryName);
 			category.editName(updateName);
-		} catch (DataIntegrityViolationException e) {
-			System.out.println("===============일번===============");
-			throw new NoUniqueCategoryException();
-		} catch (Exception e) {
-			System.out.println("===============이번===============");
-			System.err.println(e);
-		}
+//			em.flush();
+//			System.out.println();
+//		}
+//		catch (PersistenceException e) {	// 더티체킹 -> JPA용 예외
+////		catch (DataIntegrityViolationException e) {
+//			System.out.println("===============일번===============");
+//			throw new NoUniqueCategoryException();
+//		} catch (Exception e) {
+//			System.out.println("===============이번===============");
+//			System.err.println(e);
+//		}
 
 		return new CategoryVo(updateName);
 	}
 
 	@Transactional
 	public CategoryVo deleteCategory(Long storeId, String categoryName) {
-		validateName(categoryName);
+//		validateName(categoryName);
 
 		Category category = findCategory(storeId, categoryName);
 
@@ -105,13 +110,13 @@ public class CategoryService {
 			.orElseThrow(NoMatchingCategoryException::new);
 	}
 
-	private void validateName(String categoryName) {
-		if (categoryName == null || categoryName.equals("")) {
-			throw new NoProperCategoryException();
-		} else if (!Pattern.matches("^[a-zA-Z가-힣0-9 ()]*$", categoryName)) {
-			throw new NoProperCategoryException();
-		}
-	}
+//	private void validateName(String categoryName) {
+//		if (categoryName == null || categoryName.equals("")) {
+//			throw new NoProperCategoryException();
+//		} else if (!Pattern.matches("^[a-zA-Z가-힣0-9 ()]*$", categoryName)) {
+//			throw new NoProperCategoryException();
+//		}
+//	}
 
 //	private void isUnique(String categoryName) {
 //		if (categoryRepository.findByName(categoryName).isPresent()) {
