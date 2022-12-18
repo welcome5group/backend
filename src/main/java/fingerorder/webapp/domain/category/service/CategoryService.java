@@ -15,25 +15,33 @@ import fingerorder.webapp.domain.store.entity.Store;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
+	private final EntityManager em;
 	private final CategoryRepository categoryRepository;
 	private final StoreRepository storeRepository;
 	private final CategoryQueryRepository categoryQueryRepository;
 
 	public CategoryVo createCategory(Long storeId, String categoryName) {
 		validateName(categoryName);
-		isUnique(categoryName);
+//		isUnique(categoryName);
 
-		Category category = new Category(categoryName);
-		Store store = findStore(storeId);
-		category.setCategoryAndStore(store);
-		categoryRepository.save(category);
+		try{
+			Category category = new Category(categoryName);
+			Store store = findStore(storeId);
+			category.setCategoryAndStore(store);
+			categoryRepository.save(category);
+		} catch (DataIntegrityViolationException e) {
+			throw new NoUniqueCategoryException();
+		}
 
 		return new CategoryVo(categoryName);
 	}
@@ -51,13 +59,22 @@ public class CategoryService {
 		return new CategoriesVo(categoryNames);
 	}
 
+//	@Transactional(rollbackFor = Exception.class)
 	@Transactional
 	public CategoryVo updateCategory(Long storeId, String categoryName, String updateName) {
 		validateName(updateName);
-		isUnique(updateName);
+//		isUnique(updateName);
 
-		Category category = findCategory(storeId, categoryName);
-		category.editName(updateName);
+		try{
+			Category category = findCategory(storeId, categoryName);
+			category.editName(updateName);
+		} catch (DataIntegrityViolationException e) {
+			System.out.println("===============일번===============");
+			throw new NoUniqueCategoryException();
+		} catch (Exception e) {
+			System.out.println("===============이번===============");
+			System.err.println(e);
+		}
 
 		return new CategoryVo(updateName);
 	}
@@ -83,7 +100,7 @@ public class CategoryService {
 			.orElseThrow(StoreNotFoundException::new);
 	}
 
-	private Category findCategory(Long storeId, String categoryName) {
+	public Category findCategory(Long storeId, String categoryName) {
 		return categoryQueryRepository.findCategory(storeId, categoryName)
 			.orElseThrow(NoMatchingCategoryException::new);
 	}
@@ -96,10 +113,10 @@ public class CategoryService {
 		}
 	}
 
-	private void isUnique(String categoryName) {
-		if (categoryRepository.findByName(categoryName).isPresent()) {
-			throw new NoUniqueCategoryException();
-		}
-	}
+//	private void isUnique(String categoryName) {
+//		if (categoryRepository.findByName(categoryName).isPresent()) {
+//			throw new NoUniqueCategoryException();
+//		}
+//	}
 
 }

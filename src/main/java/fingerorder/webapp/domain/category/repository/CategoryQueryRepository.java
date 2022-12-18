@@ -1,7 +1,7 @@
 package fingerorder.webapp.domain.category.repository;
 
-import static fingerorder.webapp.entity.QCategory.category;
-import static fingerorder.webapp.entity.QStore.store;
+import static fingerorder.webapp.domain.category.entity.QCategory.category;
+import static fingerorder.webapp.domain.store.entity.QStore.store;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import fingerorder.webapp.domain.category.entity.Category;

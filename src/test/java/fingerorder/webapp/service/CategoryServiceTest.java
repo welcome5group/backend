@@ -13,11 +13,15 @@ import fingerorder.webapp.domain.category.vo.CategoriesVo;
 import fingerorder.webapp.domain.category.vo.CategoryVo;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -29,12 +33,32 @@ class CategoryServiceTest {
 	@Autowired private StoreRepository storeRepository;
 	@Autowired private CategoryService categoryService;
 
+	@Autowired private EntityManager em;
+
 	private final String categoryName = "메인 메뉴";
 	private final String updateName = "서브 메뉴";
 
 	Store createStore() {
 		return storeRepository.save(new Store("가게", LocalDateTime.now(), LocalDateTime.now(),
 			10, "강남"));
+	}
+
+	@Test
+	@Transactional(rollbackFor = Exception.class)
+	@DisplayName("고유값 예외처리")
+	void exception(){
+		Store store = createStore();
+
+		try{
+			CategoryVo categoryVo1 = categoryService.createCategory(store.getId(), categoryName);
+			CategoryVo categoryVo2 = categoryService.createCategory(store.getId(), "categoryName");
+			CategoryVo categoryVo3 = categoryService.updateCategory(store.getId(), categoryName, "categoryName");
+			CategoriesVo categoryVo = categoryService.getCategory(store.getId());
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+
+
 	}
 
 	@Test
