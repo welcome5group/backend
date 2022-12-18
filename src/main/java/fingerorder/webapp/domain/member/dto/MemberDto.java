@@ -1,7 +1,7 @@
 package fingerorder.webapp.domain.member.dto;
 
-import fingerorder.webapp.domain.member.status.UserType;
-import fingerorder.webapp.domain.member.status.UserStatus;
+import fingerorder.webapp.domain.member.status.MemberType;
+import fingerorder.webapp.domain.member.status.MemberStatus;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class MemberDto {
 	private String email;
 	private String nickName;
-	private UserStatus status;
-	private UserType userType;
+	private MemberStatus status;
+	private MemberType memberType;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 }

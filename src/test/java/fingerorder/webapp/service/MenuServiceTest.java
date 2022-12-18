@@ -1,7 +1,7 @@
 package fingerorder.webapp.service;
 
-import static fingerorder.webapp.domain.member.status.UserStatus.ACTIVATE;
-import static fingerorder.webapp.domain.member.status.UserType.MERCHANT;
+import static fingerorder.webapp.domain.member.status.MemberStatus.ACTIVATE;
+import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ENABLE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -151,7 +151,7 @@ class MenuServiceTest {
             .email("wlscww@kakao.com")
             .nickName("suzhan")
             .password("1234")
-            .userType(MERCHANT)
+            .memberType(MERCHANT)
             .status(ACTIVATE)
             .stores(new ArrayList<>())
             .build();

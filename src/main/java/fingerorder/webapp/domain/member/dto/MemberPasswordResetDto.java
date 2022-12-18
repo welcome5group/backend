@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserPasswordResetDto {
+public class MemberPasswordResetDto {
 	private String password;
 }

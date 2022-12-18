@@ -1,6 +1,6 @@
 package fingerorder.webapp.domain.member.service;
 
-import fingerorder.webapp.domain.member.dto.UserInfoDto;
+import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import java.io.UnsupportedEncodingException;
@@ -8,19 +8,19 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MailService {
 	private final MemberRepository memberRepository;
-	private JavaMailSender mailSender;
+	private final JavaMailSender mailSender;
 
-	public boolean sendMail(UserInfoDto userInfoDto) {
-		Optional<Member> optionalMember = this.memberRepository.findByEmail(userInfoDto.getEmail());
+	public boolean sendMail(MemberInfoDto memberInfoDto) {
+		Optional<Member> optionalMember = this.memberRepository.findByEmail(memberInfoDto.getEmail());
 
 		if (optionalMember.isEmpty()) {
 			return false;
@@ -45,7 +45,7 @@ public class MailService {
 				new MimeMessageHelper(message,true,"UTF-8");
 
 			messageHelper.setSubject(subject);
-			messageHelper.setTo(userInfoDto.getEmail());
+			messageHelper.setTo(memberInfoDto.getEmail());
 			messageHelper.setFrom("mansa0805@gmail.com","핑거오더");
 			messageHelper.setText(htmlContent,true);
 			mailSender.send(message);

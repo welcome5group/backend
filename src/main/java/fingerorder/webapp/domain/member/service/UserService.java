@@ -5,12 +5,12 @@ import fingerorder.webapp.domain.member.dto.SignOutDto;
 import fingerorder.webapp.domain.member.dto.SignOutResponseDto;
 import fingerorder.webapp.domain.member.dto.SignUpDto;
 import fingerorder.webapp.domain.member.dto.TokenDto;
-import fingerorder.webapp.domain.member.dto.UserDto;
-import fingerorder.webapp.domain.member.dto.UserEditDto;
-import fingerorder.webapp.domain.member.dto.UserInfoDto;
-import fingerorder.webapp.domain.member.dto.UserPasswordResetDto;
+import fingerorder.webapp.domain.member.dto.MemberDto;
+import fingerorder.webapp.domain.member.dto.MemberEditDto;
+import fingerorder.webapp.domain.member.dto.MemberInfoDto;
+import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.entity.Member;
-import fingerorder.webapp.domain.member.status.UserType;
+import fingerorder.webapp.domain.member.status.MemberType;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.security.JwtTokenProvider;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,7 +33,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-	public UserDto signUp(SignUpDto signUpDto) {
+	public MemberDto signUp(SignUpDto signUpDto) {
 		boolean exists = this.memberRepository.existsByEmail(signUpDto.getEmail());
 
 		if (exists) {
@@ -52,7 +52,7 @@ public class UserService implements UserDetailsService {
 			.email(signUpDto.getEmail())
 			.password(this.passwordEncoder.encode(signUpDto.getPassword()))
 			.nickName(signUpDto.getNickName())
-			.userType(signUpDto.getType())
+			.memberType(signUpDto.getType())
 			.status(null)
 			.createdAt(LocalDateTime.now())
 			.updatedAt(LocalDateTime.now())
@@ -102,7 +102,7 @@ public class UserService implements UserDetailsService {
 		return SignOutResponseDto.builder().email(email).build();
 	}
 
-	public UserDto authenticate(SignInDto signInDto) {
+	public MemberDto authenticate(SignInDto signInDto) {
 		Member findMember = checkInvalidEmail(signInDto.getEmail());
 
 		String password = findMember.getPassword();
@@ -125,14 +125,14 @@ public class UserService implements UserDetailsService {
 	}
 
 	//유저 정보 가져오기
-	public UserDto getUserInfo(UserInfoDto userInfoDto) {
-		Member findMember = checkInvalidEmail(userInfoDto.getEmail());
+	public MemberDto getMemberInfo(MemberInfoDto memberInfoDto) {
+		Member findMember = checkInvalidEmail(memberInfoDto.getEmail());
 
 		return findMember.toUserDto();
 	}
 
 	// user 정보 수정(nickName 밖에 없음)
-	public UserDto editUserInfo(UserEditDto userEditDto) {
+	public MemberDto editMemberInfo(MemberEditDto userEditDto) {
 		Member findMember = checkInvalidEmail(userEditDto.getEmail());
 
 		findMember.editNickName(userEditDto.getNickName());
@@ -144,7 +144,7 @@ public class UserService implements UserDetailsService {
 
 	public boolean resetPassword(
 		String uuid,
-		UserPasswordResetDto userPasswordResetDto) {
+		MemberPasswordResetDto memberPasswordResetDto) {
 		Optional<Member> optionalMember = this.memberRepository.findByUuid(uuid);
 
 		if (!optionalMember.isPresent()) {
@@ -152,7 +152,7 @@ public class UserService implements UserDetailsService {
 		}
 
 		Member findMember = optionalMember.get();
-		String newPassword = userPasswordResetDto.getPassword();
+		String newPassword = memberPasswordResetDto.getPassword();
 
 		findMember.resetPassword(this.passwordEncoder.encode(newPassword));
 
@@ -175,7 +175,7 @@ public class UserService implements UserDetailsService {
 			Member member = optionalMember.get();
 			password = member.getPassword();
 
-			if (member.getUserType() == UserType.MERCHANT) {
+			if (member.getMemberType() == MemberType.MERCHANT) {
 				authorities.add(new SimpleGrantedAuthority("ROLE_MERCHANT"));
 			}
 		} else {
