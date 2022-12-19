@@ -26,10 +26,12 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
-    private final OrderMenuRepository orderMenuRepository;
 
     @Transactional
     public Long save(final OrderRequestDto orderRequestDto) {
+
+        checkEmptyOrderMenus(orderRequestDto.getOrderMenus());
+
         Member member = findMemberById(orderRequestDto.getMemberId());
         Store store = findStoreById(orderRequestDto.getStoreId());
         List<OrderMenu> orderMenus = createOrderMenus(orderRequestDto.getOrderMenus());
@@ -63,6 +65,12 @@ public class OrderService {
     private Member findMemberById(Long id) {
         return memberRepository.findById(id)
             .orElseThrow(() -> new RuntimeException());
+    }
+
+    private void checkEmptyOrderMenus(List<OrderMenuRequestDto> orderMenus) {
+        if (orderMenus.isEmpty()) {
+            throw new RuntimeException("주문한 메뉴가 없습니다.");
+        }
     }
 
 }
