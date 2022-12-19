@@ -76,7 +76,6 @@ public class CategoryController {
 
 	public void validateCategoryName(BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			System.out.println("에러발생했다!!!!!!!");
 			throw new NoProperCategoryException();
 		}
 	}

@@ -53,8 +53,8 @@ class CategoryServiceTest {
 			CategoryVo categoryVo1 = categoryService.createCategory(store.getId(), categoryName);
 			CategoryVo categoryVo2 = categoryService.createCategory(store.getId(), "categoryName");
 			CategoryVo categoryVo3 = categoryService.updateCategory(store.getId(), categoryName, "categoryName");
-		} catch (DataIntegrityViolationException e) {
-			System.err.println(e);
+		} catch (Exception e) {
+			System.err.println("===================" + e);
 		}
 //			CategoriesVo categoryVo = categoryService.getCategory(store.getId());
 

@@ -66,9 +66,13 @@ public class CategoryService {
 //		validateName(updateName);
 //		isUnique(updateName);
 
-//		try{
+		try {
 			Category category = findCategory(storeId, categoryName);
 			category.editName(updateName);
+			categoryRepository.save(category);
+		} catch (Exception e){
+			System.err.println("================" + e);
+		}
 //			em.flush();
 //			System.out.println();
 //		}
