@@ -1,8 +1,8 @@
-package fingerorder.webapp.controller;
+package fingerorder.webapp.domain.order.controller;
 
-import fingerorder.webapp.dto.OrderRequestDto;
-import fingerorder.webapp.dto.OrderResponseDto;
-import fingerorder.webapp.service.OrderService;
+import fingerorder.webapp.domain.order.dto.OrderRequestDto;
+import fingerorder.webapp.domain.order.dto.OrderResponseDto;
+import fingerorder.webapp.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

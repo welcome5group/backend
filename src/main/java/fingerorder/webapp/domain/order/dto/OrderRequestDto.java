@@ -1,4 +1,4 @@
-package fingerorder.webapp.dto;
+package fingerorder.webapp.domain.order.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

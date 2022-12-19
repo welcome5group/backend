@@ -1,6 +1,6 @@
-package fingerorder.webapp.dto;
+package fingerorder.webapp.domain.order.dto;
 
-import fingerorder.webapp.entity.Order;
+import fingerorder.webapp.domain.order.entity.Order;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
