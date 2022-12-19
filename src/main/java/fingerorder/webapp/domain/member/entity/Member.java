@@ -1,6 +1,7 @@
 package fingerorder.webapp.domain.member.entity;
 
 import fingerorder.webapp.domain.member.dto.MemberDto;
+import fingerorder.webapp.domain.member.status.MemberSignUpType;
 import fingerorder.webapp.domain.member.status.MemberStatus;
 import fingerorder.webapp.domain.member.status.MemberType;
 import fingerorder.webapp.domain.store.entity.Store;
@@ -34,6 +35,7 @@ public class Member {
     private String password;
     private String nickName;
     private MemberStatus status;
+    private MemberSignUpType memberSignUpType;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;

@@ -10,17 +10,41 @@ import fingerorder.webapp.domain.member.dto.MemberEditDto;
 import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.member.exception.AlreadyAuthorizedException;
+import fingerorder.webapp.domain.member.exception.AlreadyUsageEmailException;
+import fingerorder.webapp.domain.member.exception.AlreadyUsageNickNameException;
+import fingerorder.webapp.domain.member.exception.InvalidEmailFormatException;
+import fingerorder.webapp.domain.member.exception.InvalidPasswordFormatException;
+import fingerorder.webapp.domain.member.exception.KaKaoAuthException;
+import fingerorder.webapp.domain.member.exception.LoginInfoErrorException;
+import fingerorder.webapp.domain.member.exception.MemberException;
+import fingerorder.webapp.domain.member.exception.NoExistMemberException;
+import fingerorder.webapp.domain.member.exception.UnauthorizedMemberException;
+import fingerorder.webapp.domain.member.status.MemberSignUpType;
 import fingerorder.webapp.domain.member.status.MemberStatus;
 import fingerorder.webapp.domain.member.status.MemberType;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.security.JwtTokenProvider;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.InvalidClassException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import javax.security.auth.login.LoginException;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -44,24 +68,25 @@ public class UserService implements UserDetailsService {
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 	public MemberDto signUp(SignUpDto signUpDto) {
-		if (!checkInvalidEmail(signUpDto.getEmail())) {
-			throw new RuntimeException("잘못된 이메일 형식");
+		if (checkInvalidEmail(signUpDto.getEmail())) {
+			throw new InvalidEmailFormatException();
 		}
 
-		if (!checkInvalidPassword(signUpDto.getPassword())) {
-			throw new RuntimeException("잘못된 비밀번호 형식");
+		if (checkInvalidPassword(signUpDto.getPassword())) {
+			throw new InvalidPasswordFormatException();
 		}
 
 		boolean exists = this.memberRepository.existsByEmail(signUpDto.getEmail());
 
 		if (exists) {
-			throw new RuntimeException("이미 사용 중인 email 입니다.");
+			throw new AlreadyUsageEmailException();
 		}
 
 		Member newMember = Member.builder()
 			.email(signUpDto.getEmail())
 			.password(this.passwordEncoder.encode(signUpDto.getPassword()))
 			.nickName(signUpDto.getNickName())
+			.memberSignUpType(MemberSignUpType.NORMAL)
 			.memberType(signUpDto.getType())
 			.status(MemberStatus.ACTIVATE)
 			.createdAt(LocalDateTime.now())
@@ -72,38 +97,116 @@ public class UserService implements UserDetailsService {
 	}
 
 	public TokenDto signIn(SignInDto signInDto) {
-		if (!checkInvalidEmail(signInDto.getEmail())) {
-			throw new RuntimeException("잘못된 이메일 형식");
+		if (checkInvalidEmail(signInDto.getEmail())) {
+			throw new InvalidEmailFormatException();
 		}
 
-		if (!checkInvalidPassword(signInDto.getPassword())) {
-			throw new RuntimeException("잘못된 비밀번호 형식");
+		if (checkInvalidPassword(signInDto.getPassword())) {
+			throw new InvalidPasswordFormatException();
 		}
 
 		boolean exist = this.memberRepository.existsByEmail(signInDto.getEmail());
 
 		if (!exist) {
-			throw new RuntimeException("존재하지 않는 사용자 입니다.");
+			throw new NoExistMemberException();
 		}
 
-		// 인증 여부를 확인하기 위한 객체 생성
-		UsernamePasswordAuthenticationToken authenticationToken
-			= new UsernamePasswordAuthenticationToken(signInDto.getEmail(),signInDto.getPassword());
+		TokenDto tokenDto = null;
 
-		// 위에서 생성한 객체는 아직 인증이 되지 않은 객체가 만들어진것
-		// 아래 authenticationManagerBuilder 가 실제 검증을 진행 해줌
-		// 검증하기 위한 데이터가 Repository 에 제대로 들어가 있는지 확인 한 후, 위에서 만들어진 객체와 비교 할
-		// 정답 객체를 생성 -> 이 작업을 loadUserByUsername 메소드가 해 준다.
-		Authentication authentication =
-			authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		try {
+			// 인증 여부를 확인하기 위한 객체 생성
+			UsernamePasswordAuthenticationToken authenticationToken
+				= new UsernamePasswordAuthenticationToken(signInDto.getEmail(),signInDto.getPassword());
 
-		// 검증이 완료 되었으니 토큰을 만들어 준다.
-		TokenDto tokenDto = this.jwtTokenProvider.getToken(authentication);
+			// 위에서 생성한 객체는 아직 인증이 되지 않은 객체가 만들어진것
+			// 아래 authenticationManagerBuilder 가 실제 검증을 진행 해줌
+			// 검증하기 위한 데이터가 Repository 에 제대로 들어가 있는지 확인 한 후, 위에서 만들어진 객체와 비교 할
+			// 정답 객체를 생성 -> 이 작업을 loadUserByUsername 메소드가 해 준다.
+			Authentication authentication =
+				authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-		// 만들어진 토큰을 Redis 에 담는다.
-		this.saveTokenToRedis(signInDto.getEmail(),tokenDto);
+			// 검증이 완료 되었으니 토큰을 만들어 준다.
+			tokenDto = this.jwtTokenProvider.getToken(authentication);
 
+			// 만들어진 토큰을 Redis 에 담는다.
+			this.saveTokenToRedis(signInDto.getEmail(),tokenDto);
+		}catch (Exception e) {
+			throw new LoginInfoErrorException();
+		}
 		return tokenDto;
+	}
+
+	public TokenDto kakaoSignIn(String code) {
+		String accessToken = "";
+		String refreshToken = "";
+		Integer expirationTime = 0;
+		SignInDto tempSignInDto = null;
+		String email = "";
+		String reqURL = "https://kauth.kakao.com/oauth/token";
+
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+			conn.setRequestMethod("POST");
+			conn.setDoOutput(true);
+
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+			StringBuilder sb = new StringBuilder();
+			sb.append("grant_type=authorization_code");
+			sb.append("&client_id=43b7585079d42f271bc7c481ffca8f03");
+			sb.append("&redirect_uri=http://localhost:8080/kakao_callback");
+			sb.append("&code="+code);
+			bw.write(sb.toString());
+			bw.flush();
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String brLine = "";
+			String result = "";
+
+			while ((brLine = br.readLine()) != null) {
+				result += brLine;
+			}
+
+			JSONParser parser = new JSONParser();
+			JSONObject elem = (JSONObject) parser.parse(result);
+
+			accessToken = elem.get("access_token").toString();
+
+			MemberDto memberDto = getEmailByKakaoAccessToken(accessToken);
+			boolean exist = memberRepository.existsByEmail(memberDto.getEmail());
+
+			if (exist) {
+				throw new AlreadyAuthorizedException();
+			} else {
+				Member newMember = Member.builder()
+					.email(memberDto.getEmail())
+					.password(this.passwordEncoder.encode("kakao"))
+					.nickName(memberDto.getNickName())
+					.memberType(MemberType.MEMBER)
+					.memberSignUpType(MemberSignUpType.KAKAO)
+					.status(MemberStatus.ACTIVATE)
+					.createdAt(LocalDateTime.now())
+					.updatedAt(LocalDateTime.now())
+					.build();
+				memberRepository.save(newMember);
+
+				tempSignInDto = SignInDto.builder()
+					.email(memberDto.getEmail())
+					.type(MemberType.MEMBER)
+					.password("kakao")
+					.build();
+			}
+
+		} catch (MalformedURLException e) {
+			throw new KaKaoAuthException();
+		} catch (IOException e) {
+			throw new KaKaoAuthException();
+		} catch (ParseException e) {
+			throw new KaKaoAuthException();
+		}
+
+		return this.signIn(tempSignInDto);
 	}
 
 	public SignOutResponseDto signOut(SignOutDto signOutDto) {
@@ -152,11 +255,11 @@ public class UserService implements UserDetailsService {
 		String uuid,
 		MemberPasswordResetDto memberPasswordResetDto) {
 		if (!checkInvalidPassword(memberPasswordResetDto.getPassword())) {
-			throw new RuntimeException("잘못된 비밀빈호 형식");
+			throw new InvalidPasswordFormatException();
 		}
 
 		Member findMember = this.memberRepository.findByUuid(uuid)
-			.orElseThrow(() -> new RuntimeException("인증되지 않은 사용자 입니다."));
+			.orElseThrow(() -> new UnauthorizedMemberException());
 
 		String newPassword = memberPasswordResetDto.getPassword();
 
@@ -185,21 +288,71 @@ public class UserService implements UserDetailsService {
 				authorities.add(new SimpleGrantedAuthority("ROLE_MERCHANT"));
 			}
 		} else {
-			throw new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."+ email);
+			throw new NoExistMemberException();
 		}
 		return new User(email,password,authorities);
 	}
 
 	private Member checkInvalidMember(String email) {
 		return this.memberRepository.findByEmail(email)
-			.orElseThrow(() -> new RuntimeException("등록되지 않은 사용자 입니다."));
+			.orElseThrow(() -> new NoExistMemberException());
 	}
 
 	private boolean checkInvalidEmail(String email) {
-		return Pattern.matches("[a-zA-Z.].+[@][a-zA-Z].+[.][a-zA-Z]{2,4}$",email);
+		return !Pattern.matches("^[a-zA-Z.].+[@][a-zA-Z].+[.][a-zA-Z]{2,4}$",email);
 	}
 
 	private boolean checkInvalidPassword(String password) {
-		return Pattern.matches("^[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣~!@#$%^&*()-_=+,.?]*$",password);
+		return Pattern.matches("^[^0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣~!@#$%^&*()-_=+,.?]$",password);
+	}
+
+	private MemberDto getEmailByKakaoAccessToken(String kakaoToken) {
+		String reqURL = "https://kapi.kakao.com/v2/user/me";
+		String nickName = "";
+		String email = "";
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+
+			conn.setRequestProperty("Authorization", "Bearer " + kakaoToken);
+			int responseCode = conn.getResponseCode();
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+			String brLine = "";
+			String result = "";
+
+			while ((brLine = br.readLine()) != null) {
+				result += brLine;
+			}
+
+			JSONParser parser = new JSONParser();
+			JSONObject elem = (JSONObject) parser.parse(result);
+			JSONObject properties = (JSONObject) elem.get("properties");
+			JSONObject kakaoAccount = (JSONObject) elem.get("kakao_account");
+
+			nickName = properties.get("nickname").toString();
+			email = kakaoAccount.get("email").toString();
+
+			boolean existByNickName = memberRepository.existsByNickName(nickName);
+			List<Member> members = memberRepository.findAll();
+
+			if (existByNickName) {
+				String defaultNickName = "fingerOrder" + Integer.toString(members.size());
+				nickName = defaultNickName;
+			}
+		} catch (MalformedURLException e) {
+			throw new KaKaoAuthException();
+		} catch (IOException e) {
+			throw new KaKaoAuthException();
+		} catch (ParseException e) {
+			throw new KaKaoAuthException();
+		}
+
+		return MemberDto.builder()
+			.email(email)
+			.nickName(nickName)
+			.build();
 	}
 }

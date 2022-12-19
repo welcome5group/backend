@@ -1,5 +1,6 @@
 package fingerorder.webapp.security;
 
+import fingerorder.webapp.domain.member.exception.SignOutMemberException;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -31,20 +32,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		// 요청으로부터 토큰을 복호화 하고
 		String token = this.resolveTokenFromRequest(request);
 
-		// 로그아웃된 사용자인지 확인
-		if (StringUtils.hasText(token) && isBlocked(token)) {
-			throw new RuntimeException("로그아웃된 사용자 입니다.");
-		}
-
 		// 들어온 access 토큰이 logout 된 사용자인지 확인
 		// 토큰이 존재(즉, 클라이언트로 부터의 요청에 토큰이 있는지 확인하고)하고
 		// 토큰의 유효성 검증
 		// 후 해당 토큰의 인증 정보를 가져와서 SecurityContext에 전달
 		if (StringUtils.hasText(token) && this.jwtTokenProvider.validateToken(token)) {
-			// 토큰 인증 정보를 만들어 낸다.
-			Authentication auth = this.jwtTokenProvider.getAuthentication(token);
-			// SecurityContext 에 전달해서 인증
-			SecurityContextHolder.getContext().setAuthentication(auth);
+			// 로그아웃된 사용자 확인
+			String isLogout = (String) redisTemplate.opsForValue().get(token);
+			if (ObjectUtils.isEmpty(isLogout)) {
+				// 토큰 인증 정보를 만들어 낸다.
+				Authentication auth = this.jwtTokenProvider.getAuthentication(token);
+				// SecurityContext 에 전달해서 인증
+				SecurityContextHolder.getContext().setAuthentication(auth);
+			} else {
+				throw new SignOutMemberException();
+			}
 		}
 
 

@@ -1,9 +1,16 @@
 package fingerorder.webapp.domain.member.dto;
 
 import fingerorder.webapp.domain.member.status.MemberType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SignInDto {
 	private String email;
 	private String password;

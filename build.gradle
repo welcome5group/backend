@@ -68,6 +68,9 @@ dependencies {
 
 	// redis depndency 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// json 파싱을 위한 dependency 추가
+	implementation group: 'com.googlecode.json-simple',name: 'json-simple',version: '1.1.1'
 }
 
 tasks.named('test') {

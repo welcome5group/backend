@@ -1,6 +1,7 @@
 package fingerorder.webapp.security;
 
 import fingerorder.webapp.domain.member.dto.TokenDto;
+import fingerorder.webapp.domain.member.exception.NoAuthorizedInfoTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -29,8 +30,6 @@ public class JwtTokenProvider {
 	// REFRESH 토큰 만료시간
 	private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000;
 
-	//private final UserService userService;
-
 	@Value("{spring.jwt.secret}")
 	private String secretKey;
 
@@ -54,13 +53,6 @@ public class JwtTokenProvider {
 			.setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME))
 			.signWith(SignatureAlgorithm.HS512,this.secretKey)
 			.compact();
-
-//		return Jwts.builder()
-//			.setClaims(claims)
-//			.setIssuedAt(now)
-//			.setExpiration(expiredDate)
-//			.signWith(SignatureAlgorithm.HS512,this.secretKey)
-//			.compact();
 
 		return TokenDto.builder()
 			.grantType(this.BEARER_TYPE)
@@ -111,7 +103,7 @@ public class JwtTokenProvider {
 
 		// 권한 정보 존재 확인
 		if (claims.get("roles") == null) {
-			throw new RuntimeException("권한 정보가 없는 토큰 입니다.");
+			throw new NoAuthorizedInfoTokenException();
 		}
 
 		// 권한 정보들을 가져온다.

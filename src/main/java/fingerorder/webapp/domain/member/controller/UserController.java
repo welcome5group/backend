@@ -10,6 +10,7 @@ import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.service.MailService;
 import fingerorder.webapp.domain.member.service.UserService;
 import fingerorder.webapp.security.JwtTokenProvider;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,10 +39,6 @@ public class UserController {
 
 	@PostMapping("/api/auth/sign-in")
 	public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
-//		var result = this.userService.authenticate(signInDto);
-//		List<String> roles = this.userService.getRoles(signInDto);
-//		var token = this.jwtTokenProvider.getToken(signInDto.getEmail(),roles);
-
 		TokenDto tokenDto = this.userService.signIn(signInDto);
 		return ResponseEntity.ok(tokenDto);
 	}

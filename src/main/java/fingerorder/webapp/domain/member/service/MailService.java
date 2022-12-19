@@ -3,6 +3,8 @@ package fingerorder.webapp.domain.member.service;
 import fingerorder.webapp.domain.member.dto.MailSendResultDto;
 import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.member.exception.InvalidEmailFormatException;
+import fingerorder.webapp.domain.member.exception.NoExistMemberException;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
@@ -23,11 +25,11 @@ public class MailService {
 
 	public MailSendResultDto sendMail(MemberInfoDto memberInfoDto) {
 		if (checkInvalidEmail(memberInfoDto.getEmail())) {
-			throw new RuntimeException("잘못된 이메일 형식입니다.");
+			throw new InvalidEmailFormatException();
 		}
 
 		Member findMember = this.memberRepository.findByEmail(memberInfoDto.getEmail())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 사용자 입니다."));
+			.orElseThrow(() -> new NoExistMemberException());
 
 		String uuid = UUID.randomUUID().toString();
 		MimeMessage message = mailSender.createMimeMessage();
@@ -63,6 +65,6 @@ public class MailService {
 	}
 
 	private boolean checkInvalidEmail(String email) {
-		return Pattern.matches("[a-zA-Z.].+[@][a-zA-Z].+[.][a-zA-Z]{2,4}$",email);
+		return !Pattern.matches("^[a-zA-Z.].+[@][a-zA-Z].+[.][a-zA-Z]{2,4}$",email);
 	}
 }
