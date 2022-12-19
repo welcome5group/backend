@@ -1,5 +1,7 @@
 package fingerorder.webapp.entity;
 
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.store.entity.Store;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,7 +35,6 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
-
 
 
 }

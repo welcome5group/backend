@@ -1,12 +1,15 @@
 package fingerorder.webapp.service;
 
+import static fingerorder.webapp.domain.member.status.UserType.MEMBER;
+import static fingerorder.webapp.domain.member.status.UserType.MERCHANT;
 import static org.junit.jupiter.api.Assertions.*;
 
-import fingerorder.webapp.dto.UserDto;
-import fingerorder.webapp.entity.Member;
-import fingerorder.webapp.dto.UserEditDto;
-import fingerorder.webapp.dto.UserInfoDto;
-import fingerorder.webapp.repository.MemberRepository;
+import fingerorder.webapp.domain.member.dto.UserDto;
+import fingerorder.webapp.domain.member.service.UserService;
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.member.dto.UserEditDto;
+import fingerorder.webapp.domain.member.dto.UserInfoDto;
+import fingerorder.webapp.domain.member.repository.MemberRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +37,7 @@ class UserServiceImplTest {
 		Member member = Member.builder()
 			.email("testMember@naver.com")
 			.nickName("testNickName")
-			.userType("member")
+			.userType(MEMBER)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -42,7 +45,7 @@ class UserServiceImplTest {
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
-			.userType("merchant")
+			.userType(MERCHANT)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -65,10 +68,10 @@ class UserServiceImplTest {
 
 		assertEquals(resultMember.getEmail(),"testMember@naver.com");
 		assertEquals(resultMember.getNickName(),"testNickName");
-		assertEquals(resultMember.getUserType(),"member");
+		assertEquals(resultMember.getUserType(),MEMBER);
 		assertEquals(resultMerchant.getEmail(),"testMerchant@naver.com");
 		assertEquals(resultMerchant.getNickName(), "testNickNameMerchant");
-		assertEquals(resultMerchant.getUserType(), "merchant");
+		assertEquals(resultMerchant.getUserType(), MERCHANT);
 	}
 
 	@Test
@@ -77,7 +80,7 @@ class UserServiceImplTest {
 		Member member = Member.builder()
 			.email("testMember@naver.com")
 			.nickName("testNickName")
-			.userType("member")
+			.userType(MEMBER)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -85,7 +88,7 @@ class UserServiceImplTest {
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
-			.userType("merchant")
+			.userType(MERCHANT)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -93,13 +96,13 @@ class UserServiceImplTest {
 		UserEditDto userEditParamMember = UserEditDto.builder()
 			.email("testMember@naver.com")
 			.nickName("changedNickName")
-			.type("member")
+			.type(MEMBER)
 			.build();
 
 		UserEditDto userEditParamMerchant = UserEditDto.builder()
 			.email("testMerchant@naver.com")
 			.nickName("changedNickNameMerchant")
-			.type("merchant")
+			.type(MERCHANT)
 			.build();
 
 		UserInfoDto userParamMember = UserInfoDto.builder()
@@ -123,47 +126,5 @@ class UserServiceImplTest {
 
 		assertEquals(resultMember.getNickName(),checkMemberDto.getNickName());
 		assertEquals(resultMerchant.getNickName(),checkMerchantDto.getNickName());
-	}
-
-	@Test
-	@DisplayName("Test : Init User Password")
-	public void initPasswordTest() {
-		//given
-		Member member = Member.builder()
-			.email("testMember@naver.com")
-			.nickName("testNickName")
-			.userType("member")
-			.password(this.passwordEncoder.encode("memberPassword"))
-			.updatedAt(LocalDateTime.now())
-			.createdAt(LocalDateTime.now())
-			.build();
-
-		Member merchant = Member.builder()
-			.email("testMerchant@naver.com")
-			.nickName("testNickNameMerchant")
-			.userType("merchant")
-			.password(this.passwordEncoder.encode("merchantPassword"))
-			.updatedAt(LocalDateTime.now())
-			.createdAt(LocalDateTime.now())
-			.build();
-
-		UserInfoDto userParamMember = UserInfoDto.builder()
-			.email("testMember@naver.com")
-			.build();
-
-		UserInfoDto userParamMerchant = UserInfoDto.builder()
-			.email("testMerchant@naver.com")
-			.build();
-
-		//when
-		memberRepository.save(member);
-		memberRepository.save(merchant);
-
-		//then
-		String resultMemberInitPassword = this.userService.resetPassword(userParamMember);
-		String resultMerchantInitPassword = this.userService.resetPassword(userParamMerchant);
-
-		assertNotEquals("memberPassword",resultMemberInitPassword);
-		assertNotEquals("merchantPassword",resultMerchantInitPassword);
 	}
 }

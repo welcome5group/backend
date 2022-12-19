@@ -1,9 +1,9 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(CztzqxSLFEErm8ai3L/9PUolFtb1kEzKrwKoF0W+7zNvQnELroa54o00hppDiRuSqmPtgamn2npCWnYo0zmRNOvjZqMBGTP+TtP+u2DZ0YrJtyaNtGX2Pdn+q6tVgds3CaVi50VFtIw2kHZehnSmDg==)
-    username: ENC(Kyw5+LeCsi1ibPD+tQ4+Jq4o7uxvozoQ)
-    password: ENC(zUyRWn5EZnIuuRoFAdC69lESB/kXsuSD)
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MySQL;
+    username: sa
+    password:
 
   jpa:
     hibernate:
