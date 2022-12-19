@@ -1,11 +1,9 @@
 package fingerorder.webapp.service;
 
-import fingerorder.webapp.dto.OrderResponseDto;
 import fingerorder.webapp.dto.PayResponseDto;
 import fingerorder.webapp.entity.Member;
 import fingerorder.webapp.entity.Order;
 import fingerorder.webapp.repository.MemberRepository;
-import fingerorder.webapp.repository.OrderMenuRepository;
 import fingerorder.webapp.repository.OrderRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,6 @@ public class PayService {
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
-    private final OrderMenuRepository orderMenuRepository;
 
     @Transactional
     public List<PayResponseDto> findPayList(Long memberId) {
@@ -39,6 +36,5 @@ public class PayService {
         return memberRepository.findById(memberId)
             .orElseThrow(() -> new RuntimeException());
     }
-
 
 }
