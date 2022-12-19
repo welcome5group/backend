@@ -88,7 +88,7 @@ class UserServiceImplTest {
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
-			.userType(MERCHANT)
+			.userType("merchant")
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -96,13 +96,13 @@ class UserServiceImplTest {
 		UserEditDto userEditParamMember = UserEditDto.builder()
 			.email("testMember@naver.com")
 			.nickName("changedNickName")
-			.type(MEMBER)
+			.type("member")
 			.build();
 
 		UserEditDto userEditParamMerchant = UserEditDto.builder()
 			.email("testMerchant@naver.com")
 			.nickName("changedNickNameMerchant")
-			.type(MERCHANT)
+			.type("merchant")
 			.build();
 
 		UserInfoDto userParamMember = UserInfoDto.builder()
