@@ -63,7 +63,7 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	implementation group: 'org.apache.commons',name: 'commons-collections4',version: '4.3'
 
-	 //mail dependency 추가
+	//mail dependency 추가
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	// redis depndency 추가
