@@ -1,27 +1,25 @@
 package fingerorder.webapp.service;
 
-import static fingerorder.webapp.domain.member.status.UserStatus.ACTIVATE;
-import static fingerorder.webapp.domain.member.status.UserType.MERCHANT;
+import static fingerorder.webapp.domain.member.status.MemberStatus.ACTIVATE;
+import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
-import fingerorder.webapp.domain.store.repository.StoreRepository;
-import fingerorder.webapp.domain.store.service.StoreService;
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.member.repository.MemberRepository;
+import fingerorder.webapp.domain.menu.entity.Menu;
+import fingerorder.webapp.domain.menu.repository.MenuRepository;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
-import fingerorder.webapp.domain.category.entity.Category;
-import fingerorder.webapp.domain.member.entity.Member;
-import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.domain.member.repository.MemberRepository;
-import fingerorder.webapp.domain.menu.repository.MenuRepository;
-
+import fingerorder.webapp.domain.store.repository.StoreRepository;
+import fingerorder.webapp.domain.store.service.StoreService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -64,7 +62,7 @@ class StoreServiceTest {
             .email("wlscww@kakao.com")
             .nickName("suzhan")
             .password("1234")
-            .userType(MERCHANT)
+            .memberType(MERCHANT)
             .status(ACTIVATE)
             .stores(new ArrayList<>())
             .build();

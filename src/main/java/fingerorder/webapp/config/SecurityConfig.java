@@ -37,17 +37,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//권한 주는 페이지
 		http.httpBasic().disable()
 			.csrf().disable()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
-					.authorizeRequests()
-						.antMatchers("/**/sign-up"
-							,"/**/sign-in"
-							,"/api/auth/password"
-							,"/findPassword"
-							).permitAll()
-				.and()
-					.addFilterBefore(this.authenticationFilter,
-						UsernamePasswordAuthenticationFilter.class);
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.authorizeRequests()
+			.antMatchers("/**/sign-up"
+				,"/**/sign-in"
+				,"/api/auth/password"
+				,"/findPassword"
+				,"/**/kakao_callback"
+			).permitAll()
+			.and()
+			.addFilterBefore(this.authenticationFilter,
+				UsernamePasswordAuthenticationFilter.class);
 		super.configure(http);
 	}
 }

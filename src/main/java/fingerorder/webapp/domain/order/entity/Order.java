@@ -69,7 +69,8 @@ public class Order {
         }
     }
 
-    public static Order createOrder(Member member, Store store, OrderStatus orderStatus,  List<OrderMenu> orderMenus) {
+    public static Order createOrder(Member member, Store store, OrderStatus orderStatus,
+        List<OrderMenu> orderMenus) {
         return new Order(member, store, orderMenus, orderStatus);
     }
 

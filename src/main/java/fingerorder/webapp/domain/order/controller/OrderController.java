@@ -1,7 +1,6 @@
 package fingerorder.webapp.domain.order.controller;
 
 import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
-import fingerorder.webapp.domain.order.dto.SaveOrderResponse;
 import fingerorder.webapp.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

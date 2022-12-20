@@ -1,6 +1,6 @@
 package fingerorder.webapp.domain.member.dto;
 
-import fingerorder.webapp.domain.member.status.UserType;
+import fingerorder.webapp.domain.member.status.MemberType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEditDto {
+public class MemberEditDto {
 	private String email;
 	private String nickName;
-	private UserType type;
+	private MemberType type;
 }

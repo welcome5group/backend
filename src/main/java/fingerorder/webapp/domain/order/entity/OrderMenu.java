@@ -1,7 +1,6 @@
 package fingerorder.webapp.domain.order.entity;
 
 import fingerorder.webapp.domain.menu.entity.Menu;
-import fingerorder.webapp.domain.order.status.OrderStatus;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
