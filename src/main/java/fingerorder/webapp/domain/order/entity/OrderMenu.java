@@ -1,7 +1,7 @@
 package fingerorder.webapp.domain.order.entity;
 
-import fingerorder.webapp.domain.order.status.OrderStatus;
 import fingerorder.webapp.domain.menu.entity.Menu;
+import fingerorder.webapp.domain.order.status.OrderStatus;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,6 +29,7 @@ public class OrderMenu {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orders_id")
     private Order order;
+
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")

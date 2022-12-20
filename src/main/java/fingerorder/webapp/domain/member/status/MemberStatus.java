@@ -1,7 +1,8 @@
 package fingerorder.webapp.domain.member.status;
 
-public enum UserType {
+public enum MemberStatus {
 
-    MERCHANT, MEMBER, GUEST
+    ACTIVATE,
+    DELETED
 
 }

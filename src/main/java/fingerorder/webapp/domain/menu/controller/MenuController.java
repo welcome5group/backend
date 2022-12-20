@@ -1,7 +1,7 @@
 package fingerorder.webapp.domain.menu.controller;
 
 import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
-import fingerorder.webapp.dto.MenuResponse;
+import fingerorder.webapp.domain.menu.dto.MenuResponse;
 import fingerorder.webapp.domain.menu.dto.MenuUpdateRequest;
 import fingerorder.webapp.core.dto.Result;
 import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuAndCategory;
