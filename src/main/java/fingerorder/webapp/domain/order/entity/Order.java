@@ -1,14 +1,8 @@
 package fingerorder.webapp.domain.order.entity;
 
-<<<<<<< HEAD:src/main/java/fingerorder/webapp/domain/order/entity/Order.java
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.member.entity.Guest;
 import fingerorder.webapp.domain.member.entity.Member;
-=======
-import fingerorder.webapp.domain.member.entity.Member;
-import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.domain.member.entity.Guest;
->>>>>>> feature:src/main/java/fingerorder/webapp/entity/Order.java
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;

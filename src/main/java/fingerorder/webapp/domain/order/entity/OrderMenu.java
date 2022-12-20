@@ -1,12 +1,7 @@
 package fingerorder.webapp.domain.order.entity;
 
-<<<<<<< HEAD:src/main/java/fingerorder/webapp/domain/order/entity/OrderMenu.java
 import fingerorder.webapp.domain.order.status.OrderStatus;
 import fingerorder.webapp.domain.menu.entity.Menu;
-=======
-import fingerorder.webapp.domain.menu.entity.Menu;
-import fingerorder.webapp.domain.order.status.OrderStatus;
->>>>>>> feature:src/main/java/fingerorder/webapp/entity/OrderMenu.java
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
