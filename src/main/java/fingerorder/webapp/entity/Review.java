@@ -1,8 +1,7 @@
-package fingerorder.webapp.domain.order.entity;
+package fingerorder.webapp.entity;
 
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.domain.member.entity.Guest;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,46 +11,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "orders")
-public class Order {
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "orders_id")
+    @Column(name = "review_id")
     private Long id;
+
+    @Column(length = 1000)
+    private String content;
     private LocalDateTime createdAt;
-    private int totalPrice;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guest_id")
-    private Guest guest;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @Builder
-    public Order(int totalPrice, Member member, Store store) {
-        this.totalPrice = totalPrice;
-        this.member = member;
-        this.store = store;
-    }
-
-    protected Order() {
-    }
-    //    @OneToMany(mappedBy = "order")
-//    private List<OrderMenu> orderMenus = new ArrayList<>();
 
 }
-

@@ -109,8 +109,8 @@ public class JwtTokenProvider {
 		// 권한 정보들을 가져온다.
 		List<GrantedAuthority> authorities =
 			Arrays.stream(claims.get("roles").toString().split(","))
-				.map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toList());
+			.map(SimpleGrantedAuthority::new)
+			.collect(Collectors.toList());
 
 		// UserDetails 객체를 만들어 인증 정보 리턴
 		UserDetails userDetails = new User(claims.getSubject(),"",authorities);
