@@ -1,6 +1,7 @@
 package fingerorder.webapp.domain.order.entity;
 
 import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.order.status.OrderStatus;
 import fingerorder.webapp.domain.store.entity.Store;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,6 +40,9 @@ public class Order {
 
     private int totalPrice;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -52,23 +58,29 @@ public class Order {
     private List<OrderMenu> orderMenus = new ArrayList<>();
 
 
-    private Order(Member member, Store store, List<OrderMenu> orderMenus) {
+    private Order(Member member, Store store, List<OrderMenu> orderMenus, OrderStatus orderStatus) {
         this.member = member;
         this.store = store;
+        this.orderStatus = orderStatus;
 
         for (OrderMenu orderMenu : orderMenus) {
+            makeTotalPrice(orderMenu.getTotalPrice());
             addMenuItems(orderMenu);
         }
     }
 
-    public static Order createOrder(Member member, Store store, List<OrderMenu> orderMenus) {
-        return new Order(member, store, orderMenus);
+    public static Order createOrder(Member member, Store store, OrderStatus orderStatus,  List<OrderMenu> orderMenus) {
+        return new Order(member, store, orderMenus, orderStatus);
     }
 
 
     private void addMenuItems(OrderMenu orderMenu) {
         orderMenu.addOrder(this);
         this.orderMenus.add(orderMenu);
+    }
+
+    private void makeTotalPrice(int price) {
+        this.totalPrice += price;
     }
 
 }

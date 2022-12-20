@@ -24,8 +24,6 @@ public class OrderMenu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private OrderStatus orderStatus;
-
     private int count;
 
     private int totalPrice;
@@ -38,21 +36,22 @@ public class OrderMenu {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    @Builder
     private OrderMenu(Menu menu, int count) {
         this.menu = menu;
         this.count = count;
+        makeTotalPrice(menu.getPrice(), count);
     }
 
     public static OrderMenu createOrderMenu(Menu menu, int count) {
-        return OrderMenu.builder()
-            .menu(menu)
-            .count(count)
-            .build();
+        return new OrderMenu(menu, count);
     }
 
     public void addOrder(Order order) {
         this.order = order;
+    }
+
+    private void makeTotalPrice(int price, int count) {
+        this.totalPrice = price * count;
     }
 
 }

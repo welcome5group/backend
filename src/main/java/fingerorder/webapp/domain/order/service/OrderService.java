@@ -4,16 +4,19 @@ import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
-import fingerorder.webapp.domain.order.dto.OrderMenuRequestDto;
-import fingerorder.webapp.domain.order.dto.OrderRequestDto;
+import fingerorder.webapp.domain.order.dto.OrderMenuDto;
+import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
 import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.entity.OrderMenu;
 import fingerorder.webapp.domain.order.repository.OrderRepository;
+import fingerorder.webapp.domain.order.status.OrderStatus;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,25 +30,28 @@ public class OrderService {
     private final MenuRepository menuRepository;
 
     @Transactional
-    public Long save(final OrderRequestDto orderRequestDto) {
+    public ResponseEntity<?> save(final SaveOrderRequest saveOrderRequest) {
 
-        checkEmptyOrderMenus(orderRequestDto.getOrderMenus());
+        checkEmptyOrderMenus(saveOrderRequest.getOrderMenus());
 
-        Member member = findMemberById(orderRequestDto.getMemberId());
-        Store store = findStoreById(orderRequestDto.getStoreId());
-        List<OrderMenu> orderMenus = createOrderMenus(orderRequestDto.getOrderMenus());
+        Member member = findMemberById(saveOrderRequest.getMemberId());
+        Store store = findStoreById(saveOrderRequest.getStoreId());
+        List<OrderMenu> orderMenus = createOrderMenus(
+            saveOrderRequest.getOrderMenus());
 
-        Order order = Order.createOrder(member, store, orderMenus);
+        Order order = Order.createOrder(member, store, OrderStatus.INCOMP, orderMenus);
 
-        return orderRepository.save(order).getId();
+        orderRepository.save(order);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private List<OrderMenu> createOrderMenus(List<OrderMenuRequestDto> orderMenusDto) {
+    private List<OrderMenu> createOrderMenus(List<OrderMenuDto> orderMenusDto) {
         List<OrderMenu> orderMenus = new ArrayList<>();
 
-        for (OrderMenuRequestDto orderMenu : orderMenusDto) {
-            Menu menu = findMenuById(orderMenu.getMenuId());
-            orderMenus.add(OrderMenu.createOrderMenu(menu, orderMenu.getCount()));
+        for (OrderMenuDto orderMenuDto : orderMenusDto) {
+            Menu menu = findMenuById(orderMenuDto.getMenuId());
+            orderMenus.add(OrderMenu.createOrderMenu(menu, orderMenuDto.getCount()));
         }
 
         return orderMenus;
@@ -66,7 +72,7 @@ public class OrderService {
             .orElseThrow(() -> new RuntimeException());
     }
 
-    private void checkEmptyOrderMenus(List<OrderMenuRequestDto> orderMenus) {
+    private void checkEmptyOrderMenus(List<OrderMenuDto> orderMenus) {
         if (orderMenus.isEmpty()) {
             throw new RuntimeException("주문한 메뉴가 없습니다.");
         }

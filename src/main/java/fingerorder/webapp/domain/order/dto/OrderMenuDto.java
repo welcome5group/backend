@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class OrderMenuRequestDto {
+public class OrderMenuDto {
 
     private Long menuId;
     private int count;

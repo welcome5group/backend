@@ -6,11 +6,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class OrderRequestDto {
+public class SaveOrderRequest {
 
     private Long memberId;
     private Long storeId;
 
-    private List<OrderMenuRequestDto> orderMenus;
+    private List<OrderMenuDto> orderMenus;
 
 }
