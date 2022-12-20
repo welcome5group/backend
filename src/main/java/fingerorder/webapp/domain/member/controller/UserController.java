@@ -72,7 +72,6 @@ public class UserController {
 	}
 
 	@PutMapping("/api/auth/resetPassword")
-	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCAHNT')")
 	public ResponseEntity<?> passwordReset(
 		@RequestParam String uuid
 		,@RequestBody MemberPasswordResetDto memberPasswordResetDto)
