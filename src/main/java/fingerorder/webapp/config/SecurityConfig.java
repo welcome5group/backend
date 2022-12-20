@@ -41,12 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 					.authorizeRequests()
 						.antMatchers(
-//							"/**/sign-up"
-//							,"/**/sign-in"
-//							,"/api/auth/password"
-//							,"/findPassword"
-//							,"/**/kakao_callback"
-							"/**"
+							"/**/sign-up"
+							,"/**/sign-in"
+							,"/api/auth/password"
+							,"/findPassword"
+							,"/**/kakao_callback"
 							).permitAll()
 				.and()
 					.addFilterBefore(this.authenticationFilter,

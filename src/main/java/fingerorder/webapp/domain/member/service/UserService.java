@@ -76,10 +76,13 @@ public class UserService implements UserDetailsService {
 			throw new InvalidPasswordFormatException();
 		}
 
-		boolean exists = this.memberRepository.existsByEmail(signUpDto.getEmail());
+		boolean existsEmail = this.memberRepository.existsByEmail(signUpDto.getEmail());
+		boolean existsNickName = this.memberRepository.existsByNickName(signUpDto.getNickName());
 
-		if (exists) {
+		if (existsEmail) {
 			throw new AlreadyUsageEmailException();
+		} else if (existsNickName){
+			throw new AlreadyUsageNickNameException();
 		}
 
 		Member newMember = Member.builder()
@@ -254,7 +257,7 @@ public class UserService implements UserDetailsService {
 	public boolean resetPassword(
 		String uuid,
 		MemberPasswordResetDto memberPasswordResetDto) {
-		if (!checkInvalidPassword(memberPasswordResetDto.getPassword())) {
+		if (checkInvalidPassword(memberPasswordResetDto.getPassword())) {
 			throw new InvalidPasswordFormatException();
 		}
 
