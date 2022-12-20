@@ -1,9 +1,10 @@
 package fingerorder.webapp.domain.member.entity;
 
-import fingerorder.webapp.domain.member.dto.UserDto;
-import fingerorder.webapp.domain.member.status.UserStatus;
+import fingerorder.webapp.domain.member.dto.MemberDto;
+import fingerorder.webapp.domain.member.status.MemberSignUpType;
+import fingerorder.webapp.domain.member.status.MemberStatus;
+import fingerorder.webapp.domain.member.status.MemberType;
 import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.domain.member.status.UserType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,25 +34,26 @@ public class Member {
     private String email;
     private String password;
     private String nickName;
-    private UserStatus status;
+    private MemberStatus status;
+    private MemberSignUpType memberSignUpType;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
     @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private MemberType memberType;
 
     @OneToMany(mappedBy = "member")
     private List<Store> stores = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String nickName, UserStatus status,
-        UserType userType) {
+    public Member(String email, String password, String nickName, MemberStatus status,
+        MemberType memberType) {
         this.email = email;
         this.password = password;
         this.nickName = nickName;
         this.status = status;
-        this.userType = userType;
+        this.memberType = memberType;
     }
 
     protected Member() {
@@ -63,7 +65,6 @@ public class Member {
         store.changeMember(this);
 
     }
-
 
     public void editNickName(String nickName) {
         this.nickName = nickName;
@@ -79,11 +80,11 @@ public class Member {
         this.uuid = uuid;
     }
 
-    public UserDto toUserDto() {
-        return UserDto.builder()
+    public MemberDto toUserDto() {
+        return MemberDto.builder()
             .email(this.email)
             .nickName(this.nickName)
-            .userType(this.userType)
+            .memberType(this.memberType)
             .status(this.status)
             .createdAt(this.createdAt)
             .updatedAt(this.updatedAt)

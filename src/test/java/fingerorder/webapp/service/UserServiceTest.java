@@ -1,13 +1,15 @@
 package fingerorder.webapp.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static fingerorder.webapp.domain.member.status.MemberType.MEMBER;
+import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
+import static org.junit.jupiter.api.Assertions.*;
+
 import fingerorder.webapp.domain.member.dto.MemberDto;
+import fingerorder.webapp.domain.member.service.UserService;
+import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.dto.MemberEditDto;
 import fingerorder.webapp.domain.member.dto.MemberInfoDto;
-import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
-import fingerorder.webapp.domain.member.service.UserService;
-import fingerorder.webapp.domain.member.status.MemberType;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class UserServiceImplTest {
+class UserServiceTest {
 	@Autowired
 	UserService userService;
 
@@ -35,7 +37,7 @@ class UserServiceImplTest {
 		Member member = Member.builder()
 			.email("testMember@naver.com")
 			.nickName("testNickName")
-			.memberType(MemberType.MEMBER)
+			.memberType(MEMBER)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -43,7 +45,7 @@ class UserServiceImplTest {
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
-			.memberType(MemberType.MERCHANT)
+			.memberType(MERCHANT)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -66,10 +68,10 @@ class UserServiceImplTest {
 
 		assertEquals(resultMember.getEmail(),"testMember@naver.com");
 		assertEquals(resultMember.getNickName(),"testNickName");
-		assertEquals(resultMember.getMemberType(),MemberType.MEMBER);
+		assertEquals(resultMember.getMemberType(),MEMBER);
 		assertEquals(resultMerchant.getEmail(),"testMerchant@naver.com");
 		assertEquals(resultMerchant.getNickName(), "testNickNameMerchant");
-		assertEquals(resultMerchant.getMemberType(), MemberType.MERCHANT);
+		assertEquals(resultMerchant.getMemberType(), MERCHANT);
 	}
 
 	@Test
@@ -78,7 +80,7 @@ class UserServiceImplTest {
 		Member member = Member.builder()
 			.email("testMember@naver.com")
 			.nickName("testNickName")
-			.memberType(MemberType.MEMBER)
+			.memberType(MEMBER)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -86,7 +88,7 @@ class UserServiceImplTest {
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
-			.memberType(MemberType.MERCHANT)
+			.memberType(MERCHANT)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -94,13 +96,13 @@ class UserServiceImplTest {
 		MemberEditDto userEditParamMember = MemberEditDto.builder()
 			.email("testMember@naver.com")
 			.nickName("changedNickName")
-			.type(MemberType.MEMBER)
+			.type(MEMBER)
 			.build();
 
 		MemberEditDto userEditParamMerchant = MemberEditDto.builder()
 			.email("testMerchant@naver.com")
 			.nickName("changedNickNameMerchant")
-			.type(MemberType.MEMBER)
+			.type(MERCHANT)
 			.build();
 
 		MemberInfoDto userParamMember = MemberInfoDto.builder()

@@ -1,14 +1,15 @@
 package fingerorder.webapp.domain.member.controller;
 
+import fingerorder.webapp.domain.member.dto.MemberEditDto;
+import fingerorder.webapp.domain.member.dto.MemberInfoDto;
+import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.dto.SignInDto;
+import fingerorder.webapp.domain.member.dto.SignOutDto;
 import fingerorder.webapp.domain.member.dto.SignUpDto;
-import fingerorder.webapp.domain.member.dto.UserEditDto;
-import fingerorder.webapp.domain.member.dto.UserInfoDto;
-import fingerorder.webapp.domain.member.dto.UserPasswordResetDto;
-import fingerorder.webapp.security.JwtTokenProvider;
+import fingerorder.webapp.domain.member.dto.TokenDto;
 import fingerorder.webapp.domain.member.service.MailService;
 import fingerorder.webapp.domain.member.service.UserService;
-import java.util.List;
+import fingerorder.webapp.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,47 +29,50 @@ public class UserController {
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@PostMapping("/api/auth/sign-up")
-	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpParam) {
-		var result = this.userService.signUp(signUpParam);
+	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpDto) {
+		var result = this.userService.signUp(signUpDto);
 
 		return ResponseEntity.ok(result);
 	}
 
 	@PostMapping("/api/auth/sign-in")
 	public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
-		var result = this.userService.authenticate(signInDto);
-		List<String> roles = this.userService.getRoles(signInDto);
-		var token = this.jwtTokenProvider.genToken(signInDto.getEmail(),roles);
+		TokenDto tokenDto = this.userService.signIn(signInDto);
+		return ResponseEntity.ok(tokenDto);
+	}
 
-		return ResponseEntity.ok(token);
+	@PostMapping("/api/auth/sign-out")
+	public ResponseEntity<?> signOut(@RequestBody SignOutDto signOutDto) {
+		var result = this.userService.signOut(signOutDto);
+		return ResponseEntity.ok(result);
 	}
 
 	@GetMapping("/api/users")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> userInfo(@ModelAttribute UserInfoDto userInfoDto) {
-		var result = this.userService.getUserInfo(userInfoDto);
+	public ResponseEntity<?> memberInfo(@ModelAttribute MemberInfoDto memberInfoDto) {
+		var result = this.userService.getMemberInfo(memberInfoDto);
 
 		return ResponseEntity.ok(result);
 	}
 
 	@PutMapping("/api/users")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> userInfoEdit(@RequestBody UserEditDto userEditDto) {
-		var result = this.userService.editUserInfo(userEditDto);
+	public ResponseEntity<?> memberInfoEdit(@RequestBody MemberEditDto memberEditDto) {
+		var result = this.userService.editMemberInfo(memberEditDto);
 
 		return ResponseEntity.ok(result);
 	}
 
 	@PostMapping("/api/auth/password")
-	public ResponseEntity<?> sendPasswordResetEmail(@RequestBody UserInfoDto userInfoDto) {
-		return ResponseEntity.ok(mailService.sendMail(userInfoDto));
+	public ResponseEntity<?> sendPasswordResetEmail(@RequestBody MemberInfoDto memberInfoDto) {
+		return ResponseEntity.ok(mailService.sendMail(memberInfoDto));
 	}
 
 	@PutMapping("/findPassword")
 	public ResponseEntity<?> passwordReset(
 		@RequestParam String uuid
-		,@RequestBody UserPasswordResetDto userPasswordResetDto)
+		,@RequestBody MemberPasswordResetDto memberPasswordResetDto)
 	{
-		return ResponseEntity.ok(userService.resetPassword(uuid,userPasswordResetDto));
+		return ResponseEntity.ok(userService.resetPassword(uuid,memberPasswordResetDto));
 	}
 }

@@ -1,11 +1,20 @@
 package fingerorder.webapp.domain.menu.entity;
 
+<<<<<<< HEAD
 import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
 import fingerorder.webapp.domain.menu.dto.MenuResponse;
 import fingerorder.webapp.domain.menu.dto.MenuUpdateRequest;
 import fingerorder.webapp.domain.menu.status.MenuStatus;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.category.entity.Category;
+=======
+import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
+import fingerorder.webapp.domain.menu.dto.MenuResponse;
+import fingerorder.webapp.domain.menu.dto.MenuUpdateRequest;
+import fingerorder.webapp.domain.store.entity.Store;
+import fingerorder.webapp.domain.menu.status.MenuStatus;
+>>>>>>> feature
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

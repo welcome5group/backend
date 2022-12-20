@@ -2,6 +2,7 @@ package fingerorder.webapp.service;
 
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
 import static org.assertj.core.api.Assertions.assertThat;
+<<<<<<< HEAD
 
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
 import fingerorder.webapp.domain.menu.service.MenuQueryService;
@@ -9,6 +10,14 @@ import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuAndCategory;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.store.entity.Store;
+=======
+import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuAndCategory;
+import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.menu.entity.Menu;
+import fingerorder.webapp.domain.menu.service.MenuQueryService;
+import fingerorder.webapp.domain.store.entity.Store;
+import fingerorder.webapp.domain.category.repository.CategoryRepository;
+>>>>>>> feature
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.time.LocalDateTime;
