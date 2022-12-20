@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 							,"/**/sign-in"
 							,"/api/auth/password"
 							,"/findPassword"
+							,"/**/kakao_callback"
 							).permitAll()
 				.and()
 					.addFilterBefore(this.authenticationFilter,
