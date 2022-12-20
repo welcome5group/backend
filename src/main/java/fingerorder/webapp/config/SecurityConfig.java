@@ -40,11 +40,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 					.authorizeRequests()
-						.antMatchers("/**/sign-up"
-							,"/**/sign-in"
-							,"/api/auth/password"
-							,"/findPassword"
-							,"/**/kakao_callback"
+						.antMatchers(
+//							"/**/sign-up"
+//							,"/**/sign-in"
+//							,"/api/auth/password"
+//							,"/findPassword"
+//							,"/**/kakao_callback"
+							"/**"
 							).permitAll()
 				.and()
 					.addFilterBefore(this.authenticationFilter,

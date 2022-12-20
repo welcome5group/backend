@@ -303,7 +303,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	private boolean checkInvalidPassword(String password) {
-		return Pattern.matches("^[^0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣~!@#$%^&*()-_=+,.?]$",password);
+		return Pattern.matches("^[^0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣~!@#$%^&*()-_=+,.?]{8,}$",password);
 	}
 
 	private MemberDto getEmailByKakaoAccessToken(String kakaoToken) {

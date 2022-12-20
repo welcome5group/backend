@@ -4,6 +4,8 @@ import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.member.entity.Guest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Builder;
@@ -27,6 +30,7 @@ public class Order {
     @Column(name = "orders_id")
     private Long id;
     private LocalDateTime createdAt;
+    private int tableNum;
     private int totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,8 +54,9 @@ public class Order {
 
     protected Order() {
     }
-    //    @OneToMany(mappedBy = "order")
-//    private List<OrderMenu> orderMenus = new ArrayList<>();
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderMenu> orderMenus = new ArrayList<>();
 
 }
 
