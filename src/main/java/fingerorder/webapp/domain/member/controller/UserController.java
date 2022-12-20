@@ -86,7 +86,7 @@ public class UserController {
 		loginUrl.append("https://kauth.kakao.com/oauth/authorize?client_id=");
 		loginUrl.append("43b7585079d42f271bc7c481ffca8f03");
 		loginUrl.append("&redirect_uri=");
-		loginUrl.append("http://localhost:8080/kakao_callback");
+		loginUrl.append("https://www.fingerorder.ga/kakao_callback");
 		loginUrl.append("&response_type=code");
 
 		return "redirect:"+loginUrl.toString();
