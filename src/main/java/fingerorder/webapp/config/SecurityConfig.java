@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 							"/**/sign-up"
 							,"/**/sign-in"
 							,"/api/auth/password"
-							,"/findPassword"
+							,"/api/auth/resetPassword"
 							,"/**/kakao_callback"
 							).permitAll()
 				.and()

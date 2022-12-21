@@ -1,6 +1,7 @@
 package fingerorder.webapp.security;
 
 import fingerorder.webapp.domain.member.dto.TokenDto;
+import fingerorder.webapp.domain.member.exception.ExpiredTokenException;
 import fingerorder.webapp.domain.member.exception.NoAuthorizedInfoTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -26,7 +27,7 @@ import org.springframework.util.StringUtils;
 public class JwtTokenProvider {
 	private static final String BEARER_TYPE = "Bearer";
 	// ACCESS 토큰 만료시간
-	private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 5;
+	private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 7 * 24;
 	// REFRESH 토큰 만료시간
 	private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000;
 
@@ -55,8 +56,9 @@ public class JwtTokenProvider {
 			.compact();
 
 		return TokenDto.builder()
-			.grantType(this.BEARER_TYPE)
+			.grantType(BEARER_TYPE)
 			.accessToken(accessToken)
+			.accessTokenTokenExpirationTime(TOKEN_EXPIRE_TIME)
 			.refreshToken(refreshToken)
 			.refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
 			.build();
@@ -80,6 +82,10 @@ public class JwtTokenProvider {
 		if(!StringUtils.hasText(token)) return false;
 
 		var claims = this.parserClaims(token);
+		boolean checkExpired = !claims.getExpiration().before(new Date());
+		if (!checkExpired) {
+			throw new ExpiredTokenException();
+		}
 		return !claims.getExpiration().before(new Date());
 	}
 
