@@ -38,6 +38,8 @@ public class Order {
     @Column(name = "orders_id")
     private Long id;
 
+    private int tableNum;
+
     private int totalPrice;
 
     @Enumerated(EnumType.STRING)

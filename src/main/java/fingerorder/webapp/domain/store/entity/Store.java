@@ -1,11 +1,11 @@
 package fingerorder.webapp.domain.store.entity;
 
-import fingerorder.webapp.domain.category.entity.Category;
-import fingerorder.webapp.domain.member.entity.Member;
-import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
+import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.menu.entity.Menu;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

@@ -49,15 +49,8 @@ dependencies {
 	// Jasypt
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
-	// H2 Database
-//	implementation 'com.h2database:h2'
-//
-//	runtimeOnly 'com.h2database:h2'
-
-
 	// security dependency 추가
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-
 
 	// jwt dependency 추가
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
@@ -71,6 +64,9 @@ dependencies {
 
 	// json 파싱을 위한 dependency 추가
 	implementation group: 'com.googlecode.json-simple',name: 'json-simple',version: '1.1.1'
+	
+	// Bean Validation dependency 추가
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.7.5'
 }
 
 tasks.named('test') {

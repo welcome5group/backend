@@ -1,5 +1,28 @@
 package fingerorder.webapp.service;
 
+<<<<<<< HEAD
+import static fingerorder.webapp.domain.member.status.UserStatus.ACTIVATE;
+import static fingerorder.webapp.domain.member.status.UserType.MERCHANT;
+import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
+import static fingerorder.webapp.domain.menu.status.MenuStatus.ENABLE;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
+import fingerorder.webapp.domain.menu.dto.MenuResponse;
+import fingerorder.webapp.domain.menu.service.MenuService;
+
+import fingerorder.webapp.domain.menu.dto.MenuUpdateRequest;
+import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.menu.entity.Menu;
+import fingerorder.webapp.domain.store.entity.Store;
+
+import fingerorder.webapp.domain.member.repository.MemberRepository;
+import fingerorder.webapp.domain.menu.repository.MenuRepository;
+
+=======
 import static fingerorder.webapp.domain.member.status.MemberStatus.ACTIVATE;
 import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
@@ -17,6 +40,7 @@ import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
 import fingerorder.webapp.domain.menu.service.MenuService;
 import fingerorder.webapp.domain.store.entity.Store;
+>>>>>>> feature
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -151,7 +175,11 @@ class MenuServiceTest {
             .email("wlscww@kakao.com")
             .nickName("suzhan")
             .password("1234")
+<<<<<<< HEAD
+            .userType(MERCHANT)
+=======
             .memberType(MERCHANT)
+>>>>>>> feature
             .status(ACTIVATE)
             .stores(new ArrayList<>())
             .build();
