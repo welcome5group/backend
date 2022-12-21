@@ -7,7 +7,6 @@ import fingerorder.webapp.domain.member.exception.InvalidEmailFormatException;
 import fingerorder.webapp.domain.member.exception.NoExistMemberException;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import java.io.UnsupportedEncodingException;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import javax.mail.MessagingException;

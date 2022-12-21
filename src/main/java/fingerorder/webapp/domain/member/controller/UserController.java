@@ -1,16 +1,15 @@
 package fingerorder.webapp.domain.member.controller;
 
+import fingerorder.webapp.domain.member.dto.MemberEditDto;
+import fingerorder.webapp.domain.member.dto.MemberInfoDto;
+import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.dto.SignInDto;
 import fingerorder.webapp.domain.member.dto.SignOutDto;
 import fingerorder.webapp.domain.member.dto.SignUpDto;
 import fingerorder.webapp.domain.member.dto.TokenDto;
-import fingerorder.webapp.domain.member.dto.MemberEditDto;
-import fingerorder.webapp.domain.member.dto.MemberInfoDto;
-import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.service.MailService;
 import fingerorder.webapp.domain.member.service.UserService;
 import fingerorder.webapp.security.JwtTokenProvider;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,8 +29,8 @@ public class UserController {
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@PostMapping("/api/auth/sign-up")
-	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpParam) {
-		var result = this.userService.signUp(signUpParam);
+	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpDto) {
+		var result = this.userService.signUp(signUpDto);
 
 		return ResponseEntity.ok(result);
 	}
@@ -59,14 +57,13 @@ public class UserController {
 
 	@PutMapping("/api/users")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> memberInfoEdit(@RequestBody MemberEditDto userEditDto) {
-		var result = this.userService.editMemberInfo(userEditDto);
+	public ResponseEntity<?> memberInfoEdit(@RequestBody MemberEditDto memberEditDto) {
+		var result = this.userService.editMemberInfo(memberEditDto);
 
 		return ResponseEntity.ok(result);
 	}
 
 	@PostMapping("/api/auth/password")
-	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCAHNT')")
 	public ResponseEntity<?> sendPasswordResetEmail(@RequestBody MemberInfoDto memberInfoDto) {
 		return ResponseEntity.ok(mailService.sendMail(memberInfoDto));
 	}
@@ -76,6 +73,6 @@ public class UserController {
 		@RequestParam String uuid
 		,@RequestBody MemberPasswordResetDto memberPasswordResetDto)
 	{
-		return ResponseEntity.ok(userService.resetPassword(uuid, memberPasswordResetDto));
+		return ResponseEntity.ok(userService.resetPassword(uuid,memberPasswordResetDto));
 	}
 }
