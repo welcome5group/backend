@@ -6,10 +6,7 @@ import fingerorder.webapp.domain.store.entity.Store;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
 import javax.persistence.CascadeType;
-=======
->>>>>>> feat/kakao
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -42,12 +39,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
     private Long id;
-    private LocalDateTime createdAt;
     private int tableNum;
-<<<<<<< HEAD
-
-=======
->>>>>>> feat/kakao
     private int totalPrice;
 
     @Enumerated(EnumType.STRING)
@@ -64,10 +56,6 @@ public class Order {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderMenu> orderMenus = new ArrayList<>();
-
-
     private Order(Member member, Store store, List<OrderMenu> orderMenus, OrderStatus orderStatus) {
         this.member = member;
         this.store = store;
@@ -83,13 +71,6 @@ public class Order {
         List<OrderMenu> orderMenus) {
         return new Order(member, store, orderMenus, orderStatus);
     }
-<<<<<<< HEAD
-=======
-
-    @OneToMany(mappedBy = "order")
-    private List<OrderMenu> orderMenus = new ArrayList<>();
->>>>>>> feat/kakao
-
 
     private void addMenuItems(OrderMenu orderMenu) {
         orderMenu.addOrder(this);

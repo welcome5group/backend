@@ -73,10 +73,7 @@ public class StoreService {
             new StoreLookUpOrderResponse(findStore.getName(), findStore.getStoreLocation());
 
         for (Order order: orders) {
-            HashMap<String, Integer> menus =
-                (HashMap<String, Integer>) order.getOrderMenus().stream().
-                    collect(Collectors.toMap(OrderMenu::getName,OrderMenu::getCount));
-            storeLookUpOrderResponse.insertOrder(order,menus);
+            List<OrderMenu> orderMenus = order.getOrderMenus();
         }
 
         return storeLookUpOrderResponse;
