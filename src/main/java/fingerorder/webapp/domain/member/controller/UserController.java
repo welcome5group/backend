@@ -2,6 +2,7 @@ package fingerorder.webapp.domain.member.controller;
 
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
+import fingerorder.webapp.domain.member.dto.MemberDto;
 import fingerorder.webapp.domain.member.dto.SignInDto;
 import fingerorder.webapp.domain.member.dto.SignOutDto;
 import fingerorder.webapp.domain.member.dto.SignUpDto;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,9 +38,15 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("/api/auth/sign-up")
-	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpDto) {
-		var result = this.userService.signUp(signUpDto);
+	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpParam) {
+		MemberDto unAuthMember = this.userService.signUp(signUpParam);
+		this.mailService.sendUserAuthMail(unAuthMember);
+		return ResponseEntity.ok(unAuthMember);
+	}
 
+	@PostMapping("/api/auth/sign-up/submit")
+	public ResponseEntity<?> signUpSubmit(@RequestParam String uuid) {
+		MemberDto result = this.userService.signUpSubmit(uuid);
 		return ResponseEntity.ok(result);
 	}
 
@@ -84,7 +92,7 @@ public class UserController {
 
 	@PostMapping("/api/auth/password")
 	public ResponseEntity<?> sendPasswordResetEmail(@RequestBody MemberInfoDto memberInfoDto) {
-		return ResponseEntity.ok(mailService.sendMail(memberInfoDto));
+		return ResponseEntity.ok(mailService.sendResetPasswordMail(memberInfoDto));
 	}
 
 	@PutMapping("/api/auth/resetPassword")

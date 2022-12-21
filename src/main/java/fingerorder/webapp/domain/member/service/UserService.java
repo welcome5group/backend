@@ -17,6 +17,7 @@ import fingerorder.webapp.domain.member.exception.InvalidPasswordFormatException
 import fingerorder.webapp.domain.member.exception.KaKaoAuthException;
 import fingerorder.webapp.domain.member.exception.LoginInfoErrorException;
 import fingerorder.webapp.domain.member.exception.NoExistMemberException;
+import fingerorder.webapp.domain.member.exception.NotAuthorizedException;
 import fingerorder.webapp.domain.member.exception.UnauthorizedMemberException;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.member.status.MemberSignUpType;
@@ -35,6 +36,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -87,12 +89,21 @@ public class UserService implements UserDetailsService {
 			.nickName(signUpDto.getNickName())
 			.memberSignUpType(MemberSignUpType.NORMAL)
 			.memberType(signUpDto.getType())
-			.status(MemberStatus.ACTIVATE)
+			.status(MemberStatus.UNAUTHORIZED)
 			.createdAt(LocalDateTime.now())
 			.updatedAt(LocalDateTime.now())
 			.build();
 
-		return this.memberRepository.save(newMember).toUserDto();
+		return this.memberRepository.save(newMember).toMemberDto();
+	}
+
+	public MemberDto signUpSubmit(String uuid) {
+		Member findMember = this.memberRepository.findByUuid(uuid)
+			.orElseThrow(() -> new UnauthorizedMemberException());
+
+		findMember.changeMemberStatus(MemberStatus.ACTIVATE);
+
+		return this.memberRepository.save(findMember).toMemberDto();
 	}
 
 	public TokenDto signIn(SignInDto signInDto) {
@@ -104,10 +115,10 @@ public class UserService implements UserDetailsService {
 			throw new InvalidPasswordFormatException();
 		}
 
-		boolean exist = this.memberRepository.existsByEmail(signInDto.getEmail());
+		Member findMember = checkInvalidMember(signInDto.getEmail());
 
-		if (!exist) {
-			throw new NoExistMemberException();
+		if (findMember.getStatus() != MemberStatus.ACTIVATE) {
+			throw new NotAuthorizedException();
 		}
 
 		TokenDto tokenDto = null;
@@ -233,18 +244,23 @@ public class UserService implements UserDetailsService {
 	public MemberDto getMemberInfo(MemberInfoDto memberInfoDto) {
 		Member findMember = checkInvalidMember(memberInfoDto.getEmail());
 
-		return findMember.toUserDto();
+		return findMember.toMemberDto();
 	}
 
 	// user 정보 수정(nickName 밖에 없음)
 	public MemberDto editMemberInfo(MemberEditDto userEditDto) {
 		Member findMember = checkInvalidMember(userEditDto.getEmail());
 
-		findMember.editNickName(userEditDto.getNickName());
+		boolean existNickName = this.memberRepository.existsByNickName(userEditDto.getNickName());
 
+		if (existNickName) {
+			throw new AlreadyUsageNickNameException();
+		}
+
+		findMember.editNickName(userEditDto.getNickName());
 		this.memberRepository.save(findMember);
 
-		return findMember.toUserDto();
+		return findMember.toMemberDto();
 	}
 
 	public boolean resetPassword(
