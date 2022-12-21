@@ -31,7 +31,7 @@ public class MailService {
 
 		String uuid = UUID.randomUUID().toString();
 		String subject = "[핑거오더] 회원가입 인증 이메일 입니다.";
-		String url = "https://fingerorder.vercel.app/login/signupauthok?uuid=" + uuid;
+		String url = "https://fingerorder.vercel.app/login/signupauthok/uuid=" + uuid;
 
 		if (memberDto.getMemberType() == MemberType.MEMBER) {
 			url = "http://localhost:3000/signUpCheck?uuid=" + uuid;
@@ -52,7 +52,7 @@ public class MailService {
 
 		String uuid = UUID.randomUUID().toString();
 		String subject = "[핑거오더] 비밀 번호 찾기 이메일 입니다.";
-		String url = "https://fingerorder.vercel.app/login/resetpassword?uuid=" + uuid;
+		String url = "https://fingerorder.vercel.app/login/resetpassword/uuid=" + uuid;
 
 		if (memberInfoDto.getType() == MemberType.MEMBER) {
 			url = "http://localhost:3000/changePassword?uuid="+uuid;
