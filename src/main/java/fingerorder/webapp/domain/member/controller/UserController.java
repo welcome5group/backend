@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,8 +36,8 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("/api/auth/sign-up")
-	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpParam) {
-		var result = this.userService.signUp(signUpParam);
+	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpDto) {
+		var result = this.userService.signUp(signUpDto);
 
 		return ResponseEntity.ok(result);
 	}
@@ -77,8 +76,8 @@ public class UserController {
 
 	@PutMapping("/api/users")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> memberInfoEdit(@RequestBody MemberEditDto userEditDto) {
-		var result = this.userService.editMemberInfo(userEditDto);
+	public ResponseEntity<?> memberInfoEdit(@RequestBody MemberEditDto memberEditDto) {
+		var result = this.userService.editMemberInfo(memberEditDto);
 
 		return ResponseEntity.ok(result);
 	}
@@ -93,7 +92,7 @@ public class UserController {
 		@RequestParam String uuid
 		,@RequestBody MemberPasswordResetDto memberPasswordResetDto)
 	{
-		return ResponseEntity.ok(userService.resetPassword(uuid, memberPasswordResetDto));
+		return ResponseEntity.ok(userService.resetPassword(uuid,memberPasswordResetDto));
 	}
 
 	@GetMapping("/api/auth/kakao/sign-in")

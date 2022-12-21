@@ -12,7 +12,6 @@ import fingerorder.webapp.domain.member.dto.TokenDto;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.exception.AlreadyAuthorizedException;
 import fingerorder.webapp.domain.member.exception.AlreadyUsageEmailException;
-import fingerorder.webapp.domain.member.exception.AlreadyUsageNickNameException;
 import fingerorder.webapp.domain.member.exception.InvalidEmailFormatException;
 import fingerorder.webapp.domain.member.exception.InvalidPasswordFormatException;
 import fingerorder.webapp.domain.member.exception.KaKaoAuthException;
