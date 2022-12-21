@@ -50,7 +50,7 @@ public class OrderService {
         List<OrderMenu> orderMenus = new ArrayList<>();
 
         for (OrderMenuDto orderMenuDto : orderMenusDto) {
-            Menu menu = findMenuById(orderMenuDto.getMenuId());
+            Menu menu = findMenuById(orderMenuDto.getId());
             orderMenus.add(OrderMenu.createOrderMenu(menu, orderMenuDto.getCount()));
         }
 

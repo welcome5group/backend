@@ -1,6 +1,7 @@
 package fingerorder.webapp.domain.order.entity;
 
 import fingerorder.webapp.domain.menu.entity.Menu;
+import fingerorder.webapp.domain.order.status.OrderStatus;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,6 +22,8 @@ public class OrderMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private OrderStatus orderStatus;
 
     private int count;
 
