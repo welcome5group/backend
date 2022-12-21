@@ -66,6 +66,7 @@ public class Member {
 
     }
 
+
     public void editNickName(String nickName) {
         this.nickName = nickName;
         this.createdAt = LocalDateTime.now();

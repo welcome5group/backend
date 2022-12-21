@@ -44,7 +44,7 @@ public class UserController {
 		return ResponseEntity.ok(unAuthMember);
 	}
 
-	@PostMapping("/api/auth/sign-up/submit")
+	@PutMapping("/api/auth/sign-up")
 	public ResponseEntity<?> signUpSubmit(@RequestParam String uuid) {
 		MemberDto result = this.userService.signUpSubmit(uuid);
 		return ResponseEntity.ok(result);
