@@ -23,4 +23,5 @@ public class UpdateCategoryDto {
 	@NotBlank
 	@Pattern(regexp = "^[a-zA-Z가-힣0-9 ()]*$")
 	private String updateName;
+
 }

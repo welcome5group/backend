@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.Getter;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Getter
@@ -27,7 +28,7 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
-    @Column(unique = true)
+//    @Column(unique = true)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,6 +38,7 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Menu> menus = new ArrayList<>();
 
+    @Transactional
     public void editName(String name) {
         this.name = name;
     }
@@ -47,7 +49,6 @@ public class Category {
     }
 
     protected Category() {
-
     }
 
     public Category(String name) {

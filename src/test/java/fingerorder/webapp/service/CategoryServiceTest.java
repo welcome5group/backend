@@ -3,25 +3,23 @@ package fingerorder.webapp.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import fingerorder.webapp.domain.category.service.CategoryService;
+import fingerorder.webapp.domain.category.dto.CreateCategoryDto;
+import fingerorder.webapp.domain.category.dto.DeleteCategoryDto;
+import fingerorder.webapp.domain.category.dto.GetCategoryDto;
+import fingerorder.webapp.domain.category.dto.UpdateCategoryDto;
 import fingerorder.webapp.domain.category.entity.Category;
-import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.category.repository.CategoryQueryRepository;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.category.service.CategoryService;
+import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
-import fingerorder.webapp.domain.category.vo.CategoriesVo;
-import fingerorder.webapp.domain.category.vo.CategoryVo;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -50,9 +48,9 @@ class CategoryServiceTest {
 		Store store = createStore();
 
 		try{
-			CategoryVo categoryVo1 = categoryService.createCategory(store.getId(), categoryName);
-			CategoryVo categoryVo2 = categoryService.createCategory(store.getId(), "categoryName");
-			CategoryVo categoryVo3 = categoryService.updateCategory(store.getId(), categoryName, "categoryName");
+			categoryService.createCategory(store.getId(), categoryName);
+			categoryService.createCategory(store.getId(), "categoryName");
+			categoryService.updateCategory(store.getId(), categoryName, "categoryName");
 		} catch (Exception e) {
 			System.err.println("===================" + e);
 		}
@@ -67,14 +65,14 @@ class CategoryServiceTest {
 	void createCategory_success() {
 	    //given
 		Store store = createStore();
-		CategoryVo categoryVo = categoryService.createCategory(store.getId(), categoryName);
+		CreateCategoryDto category = categoryService.createCategory(store.getId(), categoryName);
 
 		// when
 		Category createdCategory = categoryQueryRepository.findCategory(store.getId(), categoryName).get();
 
 	    // then
 		assertThat(createdCategory.getName()).isEqualTo(categoryName);
-		assertThat(categoryVo.getName()).isEqualTo(categoryName);
+		assertThat(category.getName()).isEqualTo(categoryName);
 	}
 
 	@Test
@@ -131,10 +129,10 @@ class CategoryServiceTest {
 		categoryService.createCategory(store.getId(), categoryName);
 
 		// when
-		CategoriesVo categoriesVo = categoryService.getCategory(store.getId());
+		GetCategoryDto category = categoryService.getCategory(store.getId());
 
 		// then
-		assertThat(categoriesVo.getNames().get(0)).isEqualTo(categoryName);
+		assertThat(category.getNames().get(0)).isEqualTo(categoryName);
 	}
 
 	@Test
@@ -144,10 +142,10 @@ class CategoryServiceTest {
 		Store store = createStore();
 
 		// when
-		CategoriesVo categoriesVo = categoryService.getCategory(store.getId());
+		GetCategoryDto category = categoryService.getCategory(store.getId());
 
 		// then
-		assertThat(categoriesVo.getNames()).isEmpty();
+		assertThat(category.getNames()).isEmpty();
 	}
 
 	@Test
@@ -159,12 +157,13 @@ class CategoryServiceTest {
 		categoryService.createCategory(store.getId(), categoryName);
 
 		// when
-		CategoryVo categoryVo = categoryService.updateCategory(store.getId(), categoryName, updateName);
+		UpdateCategoryDto updateCategoryDto = categoryService.updateCategory(store.getId(),
+			categoryName, updateName);
 		List<Category> categories = storeRepository.findCategories(store.getId()).get();
 
 		// then
 		assertThat(categories.get(0).getName()).isEqualTo(updateName);
-		assertThat(categoryVo.getName()).isEqualTo(updateName);
+		assertThat(updateCategoryDto.getUpdateName()).isEqualTo(updateName);
 	}
 
 	@Test
@@ -176,11 +175,12 @@ class CategoryServiceTest {
 		categoryService.createCategory(store.getId(), categoryName);
 
 		// when
-		CategoryVo categoryVo = categoryService.deleteCategory(store.getId(), categoryName);
+		DeleteCategoryDto deleteCategoryDto = categoryService.deleteCategory(store.getId(),
+			categoryName);
 
 		// then
 		assertThat(categoryRepository.findAll().size()).isEqualTo(0);
-		assertThat(categoryVo.getName()).isEqualTo(categoryName);
+		assertThat(deleteCategoryDto.getName()).isEqualTo(categoryName);
 	}
 
 	@Test

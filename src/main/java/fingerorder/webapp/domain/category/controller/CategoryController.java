@@ -1,13 +1,11 @@
 package fingerorder.webapp.domain.category.controller;
 
+import fingerorder.webapp.domain.category.dto.CreateCategoryDto;
 import fingerorder.webapp.domain.category.dto.DeleteCategoryDto;
 import fingerorder.webapp.domain.category.dto.GetCategoryDto;
 import fingerorder.webapp.domain.category.dto.UpdateCategoryDto;
 import fingerorder.webapp.domain.category.exception.NoProperCategoryException;
-import fingerorder.webapp.domain.category.vo.CategoriesVo;
-import fingerorder.webapp.domain.category.dto.CreateCategoryDto;
 import fingerorder.webapp.domain.category.service.CategoryService;
-import fingerorder.webapp.domain.category.vo.CategoryVo;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,9 +31,7 @@ public class CategoryController {
 	public ResponseEntity<GetCategoryDto> getCategory(
 		@PathVariable Long storeId) {
 
-		CategoriesVo categoriesVo = categoryService.getCategory(storeId);
-
-		return new ResponseEntity<>(new GetCategoryDto(categoriesVo.getNames()), HttpStatus.OK);
+		return new ResponseEntity<>(categoryService.getCategory(storeId), HttpStatus.OK);
 	}
 
 	@PostMapping("/{storeId}/category")
@@ -45,9 +41,8 @@ public class CategoryController {
 
 		validateCategoryName(bindingResult);
 
-		CategoryVo categoryVo = categoryService.createCategory(storeId, createCategoryDto.getName());
-
-		return new ResponseEntity<>(new CreateCategoryDto(categoryVo.getName()), HttpStatus.OK);
+		return new ResponseEntity<>(categoryService.createCategory(
+			storeId, createCategoryDto.getName()), HttpStatus.OK);
 	}
 
 	@PutMapping("/{storeId}/category")
@@ -57,9 +52,8 @@ public class CategoryController {
 
 		validateCategoryName(bindingResult);
 
-		CategoryVo categoryVo = categoryService.updateCategory(storeId, updateCategoryDto.getCategoryName(), updateCategoryDto.getUpdateName());
-
-		return new ResponseEntity<>(new UpdateCategoryDto(categoryVo.getName(), categoryVo.getName()), HttpStatus.OK);
+		return new ResponseEntity<>(categoryService.updateCategory(
+			storeId, updateCategoryDto.getCategoryName(), updateCategoryDto.getUpdateName()), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{storeId}/category")
@@ -69,9 +63,7 @@ public class CategoryController {
 
 		validateCategoryName(bindingResult);
 
-		CategoryVo categoryVo = categoryService.deleteCategory(storeId, deleteCategoryDto.getName());
-
-		return new ResponseEntity<>(new DeleteCategoryDto(categoryVo.getName()), HttpStatus.OK);
+		return new ResponseEntity<>(categoryService.deleteCategory(storeId, deleteCategoryDto.getName()), HttpStatus.OK);
 	}
 
 	public void validateCategoryName(BindingResult bindingResult) {
