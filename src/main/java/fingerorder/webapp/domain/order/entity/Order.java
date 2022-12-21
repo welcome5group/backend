@@ -6,10 +6,7 @@ import fingerorder.webapp.domain.store.entity.Store;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
 import javax.persistence.CascadeType;
-=======
->>>>>>> feat/kakao
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -44,10 +41,7 @@ public class Order {
     private Long id;
     private LocalDateTime createdAt;
     private int tableNum;
-<<<<<<< HEAD
 
-=======
->>>>>>> feat/kakao
     private int totalPrice;
 
     @Enumerated(EnumType.STRING)
@@ -83,12 +77,9 @@ public class Order {
         List<OrderMenu> orderMenus) {
         return new Order(member, store, orderMenus, orderStatus);
     }
-<<<<<<< HEAD
-=======
 
     @OneToMany(mappedBy = "order")
     private List<OrderMenu> orderMenus = new ArrayList<>();
->>>>>>> feat/kakao
 
 
     private void addMenuItems(OrderMenu orderMenu) {
@@ -98,6 +89,21 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private List<OrderMenu> orderMenus = new ArrayList<>();
+
+    private void makeTotalPrice(int price) {
+        this.totalPrice += price;
+    }
+
+    public static Order createOrder(Member member, Store store, OrderStatus orderStatus,
+        List<OrderMenu> orderMenus) {
+        return new Order(member, store, orderMenus, orderStatus);
+    }
+
+
+    private void addMenuItems(OrderMenu orderMenu) {
+        orderMenu.addOrder(this);
+        this.orderMenus.add(orderMenu);
+    }
 
     private void makeTotalPrice(int price) {
         this.totalPrice += price;
