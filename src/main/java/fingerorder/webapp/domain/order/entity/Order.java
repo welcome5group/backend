@@ -19,6 +19,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,7 +39,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
     private Long id;
-
+    private int tableNum;
     private int totalPrice;
 
     @Enumerated(EnumType.STRING)
@@ -53,10 +55,6 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderMenu> orderMenus = new ArrayList<>();
-
 
     private Order(Member member, Store store, List<OrderMenu> orderMenus, OrderStatus orderStatus) {
         this.member = member;
@@ -74,11 +72,13 @@ public class Order {
         return new Order(member, store, orderMenus, orderStatus);
     }
 
-
     private void addMenuItems(OrderMenu orderMenu) {
         orderMenu.addOrder(this);
         this.orderMenus.add(orderMenu);
     }
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderMenu> orderMenus = new ArrayList<>();
 
     private void makeTotalPrice(int price) {
         this.totalPrice += price;

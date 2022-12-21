@@ -12,11 +12,13 @@ import fingerorder.webapp.domain.member.dto.TokenDto;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.exception.AlreadyAuthorizedException;
 import fingerorder.webapp.domain.member.exception.AlreadyUsageEmailException;
+import fingerorder.webapp.domain.member.exception.AlreadyUsageNickNameException;
 import fingerorder.webapp.domain.member.exception.InvalidEmailFormatException;
 import fingerorder.webapp.domain.member.exception.InvalidPasswordFormatException;
 import fingerorder.webapp.domain.member.exception.KaKaoAuthException;
 import fingerorder.webapp.domain.member.exception.LoginInfoErrorException;
 import fingerorder.webapp.domain.member.exception.NoExistMemberException;
+import fingerorder.webapp.domain.member.exception.NotAuthorizedException;
 import fingerorder.webapp.domain.member.exception.UnauthorizedMemberException;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.member.status.MemberSignUpType;
@@ -35,6 +37,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -72,10 +75,13 @@ public class UserService implements UserDetailsService {
 			throw new InvalidPasswordFormatException();
 		}
 
-		boolean exists = this.memberRepository.existsByEmail(signUpDto.getEmail());
+		boolean existsEmail = this.memberRepository.existsByEmail(signUpDto.getEmail());
+		boolean existsNickName = this.memberRepository.existsByNickName(signUpDto.getNickName());
 
-		if (exists) {
+		if (existsEmail) {
 			throw new AlreadyUsageEmailException();
+		} else if (existsNickName){
+			throw new AlreadyUsageNickNameException();
 		}
 
 		Member newMember = Member.builder()
@@ -84,12 +90,21 @@ public class UserService implements UserDetailsService {
 			.nickName(signUpDto.getNickName())
 			.memberSignUpType(MemberSignUpType.NORMAL)
 			.memberType(signUpDto.getType())
-			.status(MemberStatus.ACTIVATE)
+			.status(MemberStatus.UNAUTHORIZED)
 			.createdAt(LocalDateTime.now())
 			.updatedAt(LocalDateTime.now())
 			.build();
 
-		return this.memberRepository.save(newMember).toUserDto();
+		return this.memberRepository.save(newMember).toMemberDto();
+	}
+
+	public MemberDto signUpSubmit(String uuid) {
+		Member findMember = this.memberRepository.findByUuid(uuid)
+			.orElseThrow(() -> new UnauthorizedMemberException());
+
+		findMember.changeMemberStatus(MemberStatus.ACTIVATE);
+
+		return this.memberRepository.save(findMember).toMemberDto();
 	}
 
 	public TokenDto signIn(SignInDto signInDto) {
@@ -101,10 +116,10 @@ public class UserService implements UserDetailsService {
 			throw new InvalidPasswordFormatException();
 		}
 
-		boolean exist = this.memberRepository.existsByEmail(signInDto.getEmail());
+		Member findMember = checkInvalidMember(signInDto.getEmail());
 
-		if (!exist) {
-			throw new NoExistMemberException();
+		if (findMember.getStatus() != MemberStatus.ACTIVATE) {
+			throw new NotAuthorizedException();
 		}
 
 		TokenDto tokenDto = null;
@@ -134,10 +149,7 @@ public class UserService implements UserDetailsService {
 
 	public TokenDto kakaoSignIn(String code) {
 		String accessToken = "";
-		String refreshToken = "";
-		Integer expirationTime = 0;
 		SignInDto tempSignInDto = null;
-		String email = "";
 		String reqURL = "https://kauth.kakao.com/oauth/token";
 
 		try {
@@ -151,7 +163,7 @@ public class UserService implements UserDetailsService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id=43b7585079d42f271bc7c481ffca8f03");
-			sb.append("&redirect_uri=http://localhost:8080/kakao_callback");
+			sb.append("&redirect_uri=https://www.fingerorder.ga/kakao_callback");
 			sb.append("&code="+code);
 			bw.write(sb.toString());
 			bw.flush();
@@ -212,7 +224,7 @@ public class UserService implements UserDetailsService {
 			redisTemplate.delete("REFRESH_TOKEN:" + email);
 		}
 
-		Long expiration = jwtTokenProvider.getExpiration(signOutDto.getRefreshToken());
+		Long expiration = jwtTokenProvider.getExpiration(signOutDto.getAccessToken());
 		redisTemplate.opsForValue()
 			.set(signOutDto.getAccessToken(),"logout",expiration,TimeUnit.MICROSECONDS);
 
@@ -233,24 +245,29 @@ public class UserService implements UserDetailsService {
 	public MemberDto getMemberInfo(MemberInfoDto memberInfoDto) {
 		Member findMember = checkInvalidMember(memberInfoDto.getEmail());
 
-		return findMember.toUserDto();
+		return findMember.toMemberDto();
 	}
 
 	// user 정보 수정(nickName 밖에 없음)
 	public MemberDto editMemberInfo(MemberEditDto userEditDto) {
 		Member findMember = checkInvalidMember(userEditDto.getEmail());
 
-		findMember.editNickName(userEditDto.getNickName());
+		boolean existNickName = this.memberRepository.existsByNickName(userEditDto.getNickName());
 
+		if (existNickName) {
+			throw new AlreadyUsageNickNameException();
+		}
+
+		findMember.editNickName(userEditDto.getNickName());
 		this.memberRepository.save(findMember);
 
-		return findMember.toUserDto();
+		return findMember.toMemberDto();
 	}
 
 	public boolean resetPassword(
 		String uuid,
 		MemberPasswordResetDto memberPasswordResetDto) {
-		if (!checkInvalidPassword(memberPasswordResetDto.getPassword())) {
+		if (checkInvalidPassword(memberPasswordResetDto.getPassword())) {
 			throw new InvalidPasswordFormatException();
 		}
 
@@ -299,7 +316,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	private boolean checkInvalidPassword(String password) {
-		return Pattern.matches("^[^0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣~!@#$%^&*()-_=+,.?]$",password);
+		return Pattern.matches("^[^0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣~!@#$%^&*()-_=+,.?]{8,}$",password);
 	}
 
 	private MemberDto getEmailByKakaoAccessToken(String kakaoToken) {

@@ -18,6 +18,10 @@ public enum MemberErrorCodeException implements ErrorCode {
 	LOGIN_INFO_ERROR("M09","로그인 정보가 올바르지 않습니다."),
 	ALREADY_AUTHORIZED_EXCEPTION
 		("M10","해당 사이트에 같은 이메일을 사용하는 사용자가 있습니다."),
+	EXPIRED_TOKEN("M11","토큰이 만료 되었습니다. 재 로그인 해주세요."),
+
+	NOT_AUTHORIZED_EXCEPTION("M12","인증처리가 완료되지 않은 사용자 입니다. 이메일 인증"
+		+ "완료 후 로그인 해주세요"),
 	KAKAO_LOGIN("M20","카카오 로그인 인증 관련 에러");
 
 
