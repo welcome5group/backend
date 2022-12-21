@@ -2,6 +2,7 @@ package fingerorder.webapp.domain.store.controller;
 
 import fingerorder.webapp.core.dto.Result;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
+import fingerorder.webapp.domain.store.dto.StoreLookUpOrderResponse;
 import fingerorder.webapp.domain.store.dto.StoreResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.store.service.StoreService;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,5 +51,11 @@ public class StoreController {
     public ResponseEntity<Result<List<StoreResponse>>> findAllStores(@RequestParam Long memberId) {
         List<StoreResponse> stores = storeService.findAllStores(memberId);
         return ResponseEntity.ok(new Result<>(stores));
+    }
+
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<?> lookUpOrders(@PathVariable Long id) {
+        StoreLookUpOrderResponse response = storeService.getOrders(id);
+        return ResponseEntity.ok(response);
     }
 }

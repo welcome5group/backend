@@ -72,10 +72,13 @@ public class UserService implements UserDetailsService {
 			throw new InvalidPasswordFormatException();
 		}
 
-		boolean exists = this.memberRepository.existsByEmail(signUpDto.getEmail());
+		boolean existsEmail = this.memberRepository.existsByEmail(signUpDto.getEmail());
+		boolean existsNickName = this.memberRepository.existsByNickName(signUpDto.getNickName());
 
-		if (exists) {
+		if (existsEmail) {
 			throw new AlreadyUsageEmailException();
+		} else if (existsNickName){
+			throw new AlreadyUsageNickNameException();
 		}
 
 		Member newMember = Member.builder()
@@ -134,10 +137,7 @@ public class UserService implements UserDetailsService {
 
 	public TokenDto kakaoSignIn(String code) {
 		String accessToken = "";
-		String refreshToken = "";
-		Integer expirationTime = 0;
 		SignInDto tempSignInDto = null;
-		String email = "";
 		String reqURL = "https://kauth.kakao.com/oauth/token";
 
 		try {
@@ -151,7 +151,7 @@ public class UserService implements UserDetailsService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id=43b7585079d42f271bc7c481ffca8f03");
-			sb.append("&redirect_uri=http://localhost:8080/kakao_callback");
+			sb.append("&redirect_uri=https://www.fingerorder.ga/kakao_callback");
 			sb.append("&code="+code);
 			bw.write(sb.toString());
 			bw.flush();
@@ -212,7 +212,7 @@ public class UserService implements UserDetailsService {
 			redisTemplate.delete("REFRESH_TOKEN:" + email);
 		}
 
-		Long expiration = jwtTokenProvider.getExpiration(signOutDto.getRefreshToken());
+		Long expiration = jwtTokenProvider.getExpiration(signOutDto.getAccessToken());
 		redisTemplate.opsForValue()
 			.set(signOutDto.getAccessToken(),"logout",expiration,TimeUnit.MICROSECONDS);
 
@@ -250,7 +250,7 @@ public class UserService implements UserDetailsService {
 	public boolean resetPassword(
 		String uuid,
 		MemberPasswordResetDto memberPasswordResetDto) {
-		if (!checkInvalidPassword(memberPasswordResetDto.getPassword())) {
+		if (checkInvalidPassword(memberPasswordResetDto.getPassword())) {
 			throw new InvalidPasswordFormatException();
 		}
 
@@ -299,7 +299,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	private boolean checkInvalidPassword(String password) {
-		return Pattern.matches("^[^0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣~!@#$%^&*()-_=+,.?]$",password);
+		return Pattern.matches("^[^0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣~!@#$%^&*()-_=+,.?]{8,}$",password);
 	}
 
 	private MemberDto getEmailByKakaoAccessToken(String kakaoToken) {

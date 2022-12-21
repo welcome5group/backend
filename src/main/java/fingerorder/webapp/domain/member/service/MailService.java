@@ -34,7 +34,7 @@ public class MailService {
 		MimeMessage message = mailSender.createMimeMessage();
 		String subject = "[핑거오더] 비밀 번호 찾기 이메일 입니다.";
 		//현재 프론트 테스트를 위해서 아래와 같이 링크 작성
-		String url = "http://localhost:3000/findPassword?uuid=" + uuid;
+		String url = "https://fingerorder.vercel.app/login/resetpassword/" + uuid;
 		String htmlContent = "<p>핑거오더 비밀번호 재설정 이메일 입니다.</p>"
 			+"<p>아래 링크를 클릭 하셔서 비밀번호를 재설정 해주세요.</p>"
 			+"<div><a target ='_blank' href='"+url+"'>비밀 번호 재설정 링크</a></div>";
