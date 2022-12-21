@@ -87,7 +87,6 @@ public class Member {
     }
 
     public MemberDto toMemberDto() {
-    public MemberDto toUserDto() {
         return MemberDto.builder()
             .email(this.email)
             .nickName(this.nickName)
