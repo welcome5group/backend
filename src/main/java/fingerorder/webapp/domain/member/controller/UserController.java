@@ -2,6 +2,7 @@ package fingerorder.webapp.domain.member.controller;
 
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
+import fingerorder.webapp.domain.member.dto.MemberDto;
 import fingerorder.webapp.domain.member.dto.SignInDto;
 import fingerorder.webapp.domain.member.dto.SignOutDto;
 import fingerorder.webapp.domain.member.dto.SignUpDto;
@@ -38,8 +39,14 @@ public class UserController {
 
 	@PostMapping("/api/auth/sign-up")
 	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpParam) {
-		var result = this.userService.signUp(signUpParam);
+		MemberDto unAuthMember = this.userService.signUp(signUpParam);
+		this.mailService.sendUserAuthMail(unAuthMember);
+		return ResponseEntity.ok(unAuthMember);
+	}
 
+	@PostMapping("/api/auth/sign-up/submit")
+	public ResponseEntity<?> signUpSubmit(@RequestParam String uuid) {
+		MemberDto result = this.userService.signUpSubmit(uuid);
 		return ResponseEntity.ok(result);
 	}
 
@@ -85,7 +92,7 @@ public class UserController {
 
 	@PostMapping("/api/auth/password")
 	public ResponseEntity<?> sendPasswordResetEmail(@RequestBody MemberInfoDto memberInfoDto) {
-		return ResponseEntity.ok(mailService.sendMail(memberInfoDto));
+		return ResponseEntity.ok(mailService.sendResetPasswordMail(memberInfoDto));
 	}
 
 	@PutMapping("/api/auth/resetPassword")
