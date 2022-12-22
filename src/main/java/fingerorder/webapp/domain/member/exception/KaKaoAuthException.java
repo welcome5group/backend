@@ -1,8 +1,8 @@
 package fingerorder.webapp.domain.member.exception;
 
-public class KaKaoAuthException extends MemberException{
+public class KaKaoAuthException extends MemberException {
 
-	public KaKaoAuthException() {
-		super(MemberErrorCodeException.KAKAO_LOGIN);
-	}
+    public KaKaoAuthException() {
+        super(MemberErrorCodeException.KAKAO_LOGIN);
+    }
 }

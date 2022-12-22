@@ -21,81 +21,82 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MailService {
-	private final MemberRepository memberRepository;
-	private final JavaMailSender mailSender;
 
-	public void sendUserAuthMail(MemberDto memberDto) {
-		if (checkInvalidEmail(memberDto.getEmail())) {
-			throw new InvalidEmailFormatException();
-		}
+    private final MemberRepository memberRepository;
+    private final JavaMailSender mailSender;
 
-		String uuid = UUID.randomUUID().toString();
-		String subject = "[핑거오더] 회원가입 인증 이메일 입니다.";
-		String url = "https://fingerorder.vercel.app/login/signupauthok/uuid=" + uuid;
+    public void sendUserAuthMail(MemberDto memberDto) {
+        if (checkInvalidEmail(memberDto.getEmail())) {
+            throw new InvalidEmailFormatException();
+        }
 
-		if (memberDto.getMemberType() == MemberType.MEMBER) {
-			url = "http://localhost:3000/signUpCheck?uuid=" + uuid;
-			//url = "https://fingeroreder-order.netlify.app/signUpCheck?uuid" + uuid;
-		}
+        String uuid = UUID.randomUUID().toString();
+        String subject = "[핑거오더] 회원가입 인증 이메일 입니다.";
+        String url = "https://fingerorder.vercel.app/login/signupauthok/uuid=" + uuid;
 
-		String htmlContent = "<p>핑거오더 회원가입 인증 이메일 입니다.</p>"
-			+ "<p>아래 링크를 클릭 하셔서 회원가입 인증을 진행해 주세요</p>"
-			+"<div><a target ='_blank' href='"+url+"'>회원가입 인증 링크</a></div>";
+        if (memberDto.getMemberType() == MemberType.MEMBER) {
+            url = "http://localhost:3000/signUpCheck?uuid=" + uuid;
+            //url = "https://fingeroreder-order.netlify.app/signUpCheck?uuid" + uuid;
+        }
 
-		sendEmail(memberDto.getEmail(), uuid,subject,htmlContent);
-	}
+        String htmlContent = "<p>핑거오더 회원가입 인증 이메일 입니다.</p>"
+            + "<p>아래 링크를 클릭 하셔서 회원가입 인증을 진행해 주세요</p>"
+            + "<div><a target ='_blank' href='" + url + "'>회원가입 인증 링크</a></div>";
 
-	public MailSendResultDto sendResetPasswordMail(MemberInfoDto memberInfoDto) {
-		if (checkInvalidEmail(memberInfoDto.getEmail())) {
-			throw new InvalidEmailFormatException();
-		}
+        sendEmail(memberDto.getEmail(), uuid, subject, htmlContent);
+    }
 
-		String uuid = UUID.randomUUID().toString();
-		String subject = "[핑거오더] 비밀 번호 찾기 이메일 입니다.";
-		String url = "https://fingerorder.vercel.app/login/resetpassword/uuid=" + uuid;
+    public MailSendResultDto sendResetPasswordMail(MemberInfoDto memberInfoDto) {
+        if (checkInvalidEmail(memberInfoDto.getEmail())) {
+            throw new InvalidEmailFormatException();
+        }
 
-		if (memberInfoDto.getType() == MemberType.MEMBER) {
-			url = "http://localhost:3000/changePassword?uuid="+uuid;
-		}
+        String uuid = UUID.randomUUID().toString();
+        String subject = "[핑거오더] 비밀 번호 찾기 이메일 입니다.";
+        String url = "https://fingerorder.vercel.app/login/resetpassword/uuid=" + uuid;
 
-		String htmlContent = "<p>핑거오더 비밀번호 재설정 이메일 입니다.</p>"
-			+"<p>아래 링크를 클릭 하셔서 비밀번호를 재설정 해주세요.</p>"
-			+"<div><a target ='_blank' href='"+url+"'>비밀 번호 재설정 링크</a></div>";
+        if (memberInfoDto.getType() == MemberType.MEMBER) {
+            url = "http://localhost:3000/changePassword?uuid=" + uuid;
+        }
 
-		sendEmail(memberInfoDto.getEmail(),uuid,subject,htmlContent);
+        String htmlContent = "<p>핑거오더 비밀번호 재설정 이메일 입니다.</p>"
+            + "<p>아래 링크를 클릭 하셔서 비밀번호를 재설정 해주세요.</p>"
+            + "<div><a target ='_blank' href='" + url + "'>비밀 번호 재설정 링크</a></div>";
 
-		return MailSendResultDto.builder()
-			.result(true)
-			.build();
-	}
+        sendEmail(memberInfoDto.getEmail(), uuid, subject, htmlContent);
 
-	private void sendEmail(String email, String uuid, String subject,String htmlContent){
-		Member findMember = this.memberRepository.findByEmail(email)
-			.orElseThrow(() -> new NoExistMemberException());
+        return MailSendResultDto.builder()
+            .result(true)
+            .build();
+    }
 
-		MimeMessage message = mailSender.createMimeMessage();
+    private void sendEmail(String email, String uuid, String subject, String htmlContent) {
+        Member findMember = this.memberRepository.findByEmail(email)
+            .orElseThrow(() -> new NoExistMemberException());
 
-		findMember.giveUUID(uuid);
-		this.memberRepository.save(findMember);
+        MimeMessage message = mailSender.createMimeMessage();
 
-		try {
-			MimeMessageHelper messageHelper =
-				new MimeMessageHelper(message,true,"UTF-8");
+        findMember.giveUUID(uuid);
+        this.memberRepository.save(findMember);
 
-			messageHelper.setSubject(subject);
-			messageHelper.setTo(email);
-			messageHelper.setFrom("mansa0805@gmail.com","핑거오더");
-			messageHelper.setText(htmlContent,true);
-			mailSender.send(message);
+        try {
+            MimeMessageHelper messageHelper =
+                new MimeMessageHelper(message, true, "UTF-8");
 
-		} catch (MessagingException e) {
-			throw new RuntimeException(e);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-	}
+            messageHelper.setSubject(subject);
+            messageHelper.setTo(email);
+            messageHelper.setFrom("mansa0805@gmail.com", "핑거오더");
+            messageHelper.setText(htmlContent, true);
+            mailSender.send(message);
 
-	private boolean checkInvalidEmail(String email) {
-		return !Pattern.matches("^[a-zA-Z.].+[@][a-zA-Z].+[.][a-zA-Z]{2,4}$",email);
-	}
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean checkInvalidEmail(String email) {
+        return !Pattern.matches("^[a-zA-Z.].+[@][a-zA-Z].+[.][a-zA-Z]{2,4}$", email);
+    }
 }

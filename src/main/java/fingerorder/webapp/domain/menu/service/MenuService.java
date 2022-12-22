@@ -1,11 +1,16 @@
 package fingerorder.webapp.domain.menu.service;
 
+import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.category.exception.CategoryNotFoundException;
+import fingerorder.webapp.domain.category.repository.CategoryRepository;
 import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
 import fingerorder.webapp.domain.menu.dto.MenuResponse;
 import fingerorder.webapp.domain.menu.dto.MenuUpdateRequest;
 import fingerorder.webapp.domain.menu.entity.Menu;
-import fingerorder.webapp.domain.store.entity.Store;
+import fingerorder.webapp.domain.menu.exception.MenuFindException;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
+import fingerorder.webapp.domain.store.entity.Store;
+import fingerorder.webapp.domain.store.exception.StoreFindException;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,23 +23,31 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
-    public MenuResponse registerMenu(MenuCreateRequest menuCreateRequest) { // 매장 내의 메뉴 등록
+    public MenuResponse registerMenu(MenuCreateRequest menuCreateRequest,
+        Long storeId) { // 매장 내의 메뉴 등록
         Menu menu = new Menu(menuCreateRequest);
-        Store store = storeRepository.findById(menuCreateRequest.getStoreId()).orElseThrow(()
-            -> new RuntimeException("존재하는 가게가 없습니다."));
+        Category category = categoryRepository.findByName(
+            menuCreateRequest.getCategoryName()).orElseThrow(CategoryNotFoundException::new);
+        Store store = storeRepository.findById(storeId).orElseThrow(
+            StoreFindException::new);
         Menu savedMenu = menuRepository.save(menu);
         store.addMenu(savedMenu);
         savedMenu.changeStore(store);
+        savedMenu.add(category);
         return savedMenu.toMenuResponse(savedMenu);
     }
 
     @Transactional
     public MenuResponse updateMenu(MenuUpdateRequest menuUpdateRequest) { // 매장 내의 메뉴 수정
-        Menu menu = menuRepository.findById(menuUpdateRequest.getMenuId()).orElseThrow(()
-            -> new RuntimeException("존재하지 않는 매장입니다."));
-        Menu updatedMenu = menu.updateMenu(menuUpdateRequest);
+
+        Menu menu = menuRepository.findById(menuUpdateRequest.getMenuId()).orElseThrow(
+            MenuFindException::new);
+        Category category = categoryRepository.findByName(
+            menuUpdateRequest.getCategoryName()).orElseThrow(CategoryNotFoundException::new);
+        Menu updatedMenu = menu.updateMenu(menuUpdateRequest, category);
         return menu.toMenuResponse(updatedMenu);
     }
 

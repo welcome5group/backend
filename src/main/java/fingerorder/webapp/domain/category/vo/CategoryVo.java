@@ -7,5 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 public class CategoryVo {
-	private final String name;
+
+    private final String name;
 }

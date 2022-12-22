@@ -5,10 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class CategoryException extends ServiceException {
-	private final CategoryErrorCode categoryErrorCode;
 
-	protected CategoryException(CategoryErrorCode categoryErrorCode) {
-		super(categoryErrorCode);
-		this.categoryErrorCode = categoryErrorCode;
-	}
+    private final CategoryErrorCode categoryErrorCode;
+
+    protected CategoryException(CategoryErrorCode categoryErrorCode) {
+        super(categoryErrorCode);
+        this.categoryErrorCode = categoryErrorCode;
+    }
 }

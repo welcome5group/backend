@@ -66,7 +66,6 @@ public class Member {
 
     }
 
-
     public void editNickName(String nickName) {
         this.nickName = nickName;
         this.createdAt = LocalDateTime.now();
@@ -88,6 +87,7 @@ public class Member {
 
     public MemberDto toMemberDto() {
         return MemberDto.builder()
+            .id(this.id)
             .email(this.email)
             .nickName(this.nickName)
             .memberType(this.memberType)
