@@ -1,8 +1,8 @@
 package fingerorder.webapp.controller;
 
 
-import fingerorder.webapp.service.MailService;
-import fingerorder.webapp.service.UserService;
+import fingerorder.webapp.domain.member.service.MailService;
+import fingerorder.webapp.domain.member.service.UserService;
 import fingerorder.webapp.dto.SignInDto;
 import fingerorder.webapp.dto.SignUpDto;
 import fingerorder.webapp.dto.UserEditDto;
@@ -17,52 +17,52 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-	private final MailService mailService;
-	private final UserService userService;
-	private final JwtTokenProvider jwtTokenProvider;
 
-	@PostMapping("/api/auth/sign-up")
-	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpParam) {
-		var result = this.userService.signUp(signUpParam);
+    private final MailService mailService;
+    private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-		return ResponseEntity.ok(result);
-	}
+    @PostMapping("/api/auth/sign-up")
+    public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpParam) {
+        var result = this.userService.signUp(signUpParam);
 
-	@PostMapping("/api/auth/sign-in")
-	public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
-		var result = this.userService.authenticate(signInDto);
-		List<String> roles = this.userService.getRoles(signInDto);
-		var token = this.jwtTokenProvider.genToken(signInDto.getEmail(),roles);
+        return ResponseEntity.ok(result);
+    }
 
-		return ResponseEntity.ok(token);
-	}
+    @PostMapping("/api/auth/sign-in")
+    public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
+        var result = this.userService.authenticate(signInDto);
+        List<String> roles = this.userService.getRoles(signInDto);
+        var token = this.jwtTokenProvider.genToken(signInDto.getEmail(), roles);
 
-	@GetMapping("/api/users")
-	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> userInfo(@ModelAttribute UserInfoDto userInfoDto) {
-		var result = this.userService.getUserInfo(userInfoDto);
+        return ResponseEntity.ok(token);
+    }
 
-		return ResponseEntity.ok(result);
-	}
+    @GetMapping("/api/users")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
+    public ResponseEntity<?> userInfo(@ModelAttribute UserInfoDto userInfoDto) {
+        var result = this.userService.getUserInfo(userInfoDto);
 
-	@PatchMapping("/api/users")
-	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> userInfoEdit(@RequestBody UserEditDto userEditDto) {
-		var result = this.userService.editUserInfo(userEditDto);
+        return ResponseEntity.ok(result);
+    }
 
-		return ResponseEntity.ok(result);
-	}
+    @PatchMapping("/api/users")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
+    public ResponseEntity<?> userInfoEdit(@RequestBody UserEditDto userEditDto) {
+        var result = this.userService.editUserInfo(userEditDto);
 
-	@PostMapping("/api/auth/password")
-	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> userPasswordInit(@RequestBody UserInfoDto userInfoDto) {
-		//mailService.sendMail(userInfoDto);
-		return ResponseEntity.ok(userInfoDto.getEmail());
-	}
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/api/auth/password")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
+    public ResponseEntity<?> userPasswordInit(@RequestBody UserInfoDto userInfoDto) {
+        //mailService.sendMail(userInfoDto);
+        return ResponseEntity.ok(userInfoDto.getEmail());
+    }
 }

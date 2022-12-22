@@ -19,32 +19,33 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	public static final String TOKEN_HEADER = "Authorization";
-	public static final String TOKEN_PREFIX = "Bearer ";
-	private final JwtTokenProvider jwtTokenProvider;
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-		FilterChain filterChain) throws ServletException, IOException {
-		String token = this.resolveTokenFromRequest(request);
+    public static final String TOKEN_HEADER = "Authorization";
+    public static final String TOKEN_PREFIX = "Bearer ";
+    private final JwtTokenProvider jwtTokenProvider;
 
-		// token이 있고, 토큰의 유효성 검증 후 해당 토큰의 인증 정보를 가져와서 SecurityContext에 전달
-		if (StringUtils.hasText(token) && this.jwtTokenProvider.validateToken(token)) {
-			Authentication auth = this.jwtTokenProvider.getAuthentication(token);
-			SecurityContextHolder.getContext().setAuthentication(auth);
-		}
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
+        String token = this.resolveTokenFromRequest(request);
 
-		//이후 필터로 접근
-		filterChain.doFilter(request,response);
-	}
+        // token이 있고, 토큰의 유효성 검증 후 해당 토큰의 인증 정보를 가져와서 SecurityContext에 전달
+        if (StringUtils.hasText(token) && this.jwtTokenProvider.validateToken(token)) {
+            Authentication auth = this.jwtTokenProvider.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+        }
 
-	// 토큰 파싱
-	private String resolveTokenFromRequest(HttpServletRequest request) {
-		String token = request.getHeader(TOKEN_HEADER);
+        //이후 필터로 접근
+        filterChain.doFilter(request, response);
+    }
 
-		if (!ObjectUtils.isEmpty(token) && token.startsWith(TOKEN_PREFIX)) {
-			return token.substring(TOKEN_PREFIX.length());
-		}
+    // 토큰 파싱
+    private String resolveTokenFromRequest(HttpServletRequest request) {
+        String token = request.getHeader(TOKEN_HEADER);
 
-		return null;
-	}
+        if (!ObjectUtils.isEmpty(token) && token.startsWith(TOKEN_PREFIX)) {
+            return token.substring(TOKEN_PREFIX.length());
+        }
+
+        return null;
+    }
 }

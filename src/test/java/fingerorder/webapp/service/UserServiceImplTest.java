@@ -1,14 +1,15 @@
 package fingerorder.webapp.service;
 
-import static fingerorder.webapp.entity.UserType.MEMBER;
-import static fingerorder.webapp.entity.UserType.MERCHANT;
+import static fingerorder.webapp.domain.member.status.UserType.MEMBER;
+import static fingerorder.webapp.domain.member.status.UserType.MERCHANT;
 import static org.junit.jupiter.api.Assertions.*;
 
+import fingerorder.webapp.domain.member.service.UserService;
 import fingerorder.webapp.dto.UserDto;
-import fingerorder.webapp.entity.Member;
+import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.dto.UserEditDto;
 import fingerorder.webapp.dto.UserInfoDto;
-import fingerorder.webapp.repository.MemberRepository;
+import fingerorder.webapp.domain.member.repository.MemberRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

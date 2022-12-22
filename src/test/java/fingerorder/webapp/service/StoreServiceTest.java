@@ -1,30 +1,28 @@
 package fingerorder.webapp.service;
 
-import static fingerorder.webapp.entity.UserType.MEMBER;
-import static fingerorder.webapp.entity.UserType.MERCHANT;
-import static fingerorder.webapp.status.MenuStatus.ABLE;
-import static fingerorder.webapp.status.UserStatus.ACTIVATE;
+import static fingerorder.webapp.domain.member.status.UserType.MERCHANT;
+import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
+import static fingerorder.webapp.domain.member.status.UserStatus.ACTIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
-import fingerorder.webapp.dto.StoreCreateRequest;
-import fingerorder.webapp.dto.StoreUpdateRequest;
-import fingerorder.webapp.entity.Category;
-import fingerorder.webapp.entity.Member;
-import fingerorder.webapp.entity.Menu;
-import fingerorder.webapp.entity.Store;
-import fingerorder.webapp.repository.CategoryRepository;
-import fingerorder.webapp.repository.MemberRepository;
-import fingerorder.webapp.repository.MenuRepository;
-import fingerorder.webapp.repository.StoreRepository;
 
+import fingerorder.webapp.domain.store.service.StoreService;
+import fingerorder.webapp.dto.request.create.StoreCreateRequest;
+import fingerorder.webapp.dto.request.update.StoreUpdateRequest;
+import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.menu.entity.Menu;
+import fingerorder.webapp.domain.store.entity.Store;
+import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.member.repository.MemberRepository;
+import fingerorder.webapp.domain.menu.repository.MenuRepository;
+import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -48,7 +46,7 @@ class StoreServiceTest {
 
         Member savedMember = memberRepository.save(member);
 
-        StoreCreateRequest storeCreateRequest = new StoreCreateRequest(savedMember.getId(), "중국집","서울시");
+        StoreCreateRequest storeCreateRequest = new StoreCreateRequest(savedMember.getId(), "중국집",3,"서울시");
         //when
         storeService.registerStore(storeCreateRequest);
         Store store = storeRepository.findByName(storeCreateRequest.getName());
@@ -125,7 +123,7 @@ class StoreServiceTest {
             .build();
     }
 
-    private static Store createStore(String storeLocation, int tableCount, String name) {
+    private static Store createStore(String storeLocation, Integer tableCount, String name) {
         return Store.builder()
             .storeLocation(storeLocation)
             .createdAt(LocalDateTime.now())
