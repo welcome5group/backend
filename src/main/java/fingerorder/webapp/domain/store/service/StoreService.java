@@ -1,5 +1,11 @@
 package fingerorder.webapp.domain.store.service;
 
+<<<<<<< HEAD
+import fingerorder.webapp.domain.store.dto.PaymentDatailsRequestDto;
+import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
+import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
+import fingerorder.webapp.domain.store.repository.StoreRepository;
+=======
 import fingerorder.webapp.domain.category.exception.StoreNotFoundException;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.exception.MemberFindException;
@@ -7,6 +13,7 @@ import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.entity.OrderMenu;
 import fingerorder.webapp.domain.order.repository.OrderRepository;
+>>>>>>> feature
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreLookUpOrderResponse;
 import fingerorder.webapp.domain.store.dto.StoreResponse;
@@ -27,6 +34,7 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
+    private final SalesQueryRepository salesQueryRepository;
     private final OrderRepository orderRepository;
 
 
@@ -75,5 +83,17 @@ public class StoreService {
         }
 
         return storeLookUpOrderResponse;
+    }
+
+    public List<PaymentDetailsResponseDto> findSalesForMonth(
+        PaymentDatailsRequestDto paymentDatailsRequestDto) {
+        List<PaymentDetailsResponseDto> orders = salesQueryRepository.findOrders(
+            paymentDatailsRequestDto.getStoreId(), paymentDatailsRequestDto.getYear(), paymentDatailsRequestDto.getMonth());
+
+        if(orders.isEmpty()) {
+            throw new RuntimeException("해당 년월의 매출 내역이 존재하지 않습니다.");
+        }
+
+        return orders;
     }
 }
