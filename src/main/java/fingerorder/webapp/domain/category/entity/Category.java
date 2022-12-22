@@ -32,15 +32,6 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Menu> menus = new ArrayList<>();
 
-    protected Category() {
-
-    }
-
-    public void changeStore(Store store) { // 이거 냅두고 리팩토링
-        this.store = store;
-        store.getCategories().add(this);
-    }
-
     public void editName(String name) {
         this.name = name;
     }
@@ -48,6 +39,10 @@ public class Category {
     public void setCategoryAndStore(Store store) {
         this.store = store;
         store.getCategories().add(this);
+    }
+
+    protected Category() {
+
     }
 
     public Category(String name) {

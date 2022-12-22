@@ -40,7 +40,6 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7'
-
 	//querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
 	implementation 'com.querydsl:querydsl-apt:5.0.0'
@@ -51,8 +50,6 @@ dependencies {
 
 
 	runtimeOnly 'com.h2database:h2'
-
-
 	// security dependency 추가
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
@@ -61,7 +58,6 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	implementation group: 'org.apache.commons',name: 'commons-collections4',version: '4.3'
 
-	//mail dependency 추가
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	// redis depndency 추가

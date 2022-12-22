@@ -1,10 +1,12 @@
 package fingerorder.webapp.service;
 
+
 import static fingerorder.webapp.domain.member.status.MemberStatus.ACTIVATE;
 import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ENABLE;
 import static org.assertj.core.api.Assertions.assertThat;
+
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
 import fingerorder.webapp.domain.member.entity.Member;
@@ -30,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 class MenuServiceTest {
 
     @Autowired
-    MenuService menuService;
+	MenuService menuService;
     @Autowired
     StoreRepository storeRepository;
     @Autowired

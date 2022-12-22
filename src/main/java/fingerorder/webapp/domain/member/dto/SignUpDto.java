@@ -14,4 +14,5 @@ public class SignUpDto {
     private String password;
     private String nickName;
     private MemberType type;
+
 }

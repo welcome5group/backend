@@ -100,6 +100,6 @@ public class Store extends BaseEntity {
 
     public void addCategory(Category category) {
         this.categories.add(category);
-        category.changeStore(this);
+        category.setCategoryAndStore(this);
     }
 }

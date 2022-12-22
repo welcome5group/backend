@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignInDto {
 
+
     private String email;
     private String password;
     private MemberType type;
+
 
 }

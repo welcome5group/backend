@@ -23,7 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 class MenuQueryServiceTest {
 
     @Autowired
-    MenuQueryService menuQueryService;
+	MenuQueryService menuQueryService;
+
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
