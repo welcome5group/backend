@@ -1,6 +1,5 @@
 package fingerorder.webapp.domain.member.dto;
 
-
 import fingerorder.webapp.domain.member.status.MemberStatus;
 import fingerorder.webapp.domain.member.status.MemberType;
 import java.time.LocalDateTime;
