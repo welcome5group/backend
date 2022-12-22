@@ -1,27 +1,23 @@
 package fingerorder.webapp.service;
 
+
 import static fingerorder.webapp.domain.member.status.MemberStatus.ACTIVATE;
 import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ENABLE;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
+import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
 import fingerorder.webapp.domain.menu.dto.MenuResponse;
-import fingerorder.webapp.domain.menu.service.MenuService;
-
 import fingerorder.webapp.domain.menu.dto.MenuUpdateRequest;
-import fingerorder.webapp.domain.category.entity.Category;
-import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.menu.entity.Menu;
-import fingerorder.webapp.domain.store.entity.Store;
-
-import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
-import static fingerorder.webapp.domain.member.status.MemberStatus.ACTIVATE;
-import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
+import fingerorder.webapp.domain.menu.service.MenuService;
+import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +25,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -59,15 +54,15 @@ class MenuServiceTest {
 
         MenuCreateRequest menuCreateRequest = MenuCreateRequest
             .builder()
-            .storeId(savedStore.getId())
-            .category(savedCategory)
             .description("탕수육 입니다.")
             .imageUrl("aaa")
             .name("탕수육")
             .price(10000)
+            .categoryName("메인 메뉴")
             .build();
+
         //when
-        MenuResponse menuResponse = menuService.registerMenu(menuCreateRequest);
+        MenuResponse menuResponse = menuService.registerMenu(menuCreateRequest, savedStore.getId());
 
         //then
         assertThat(menuResponse.getStoreId()).isEqualTo(savedStore.getId());
@@ -77,10 +72,11 @@ class MenuServiceTest {
         assertThat(menuResponse.getDescription()).isEqualTo("탕수육 입니다.");
         assertThat(menuResponse.getPrice()).isEqualTo(10000);
         assertThat(menuResponse.getImageUrl()).isEqualTo("aaa");
-        assertThat(menuResponse.getCategory()).isEqualTo(savedCategory);
+        assertThat(menuResponse.getCategoryName()).isEqualTo(savedCategory.getName());
     }
 
-    private static Store createStore(String storeLocation, int tableCount, String name) {
+
+    private static Store createStore(String storeLocation, Integer tableCount, String name) {
         return Store.builder()
             .storeLocation(storeLocation)
             .createdAt(LocalDateTime.now())
@@ -103,7 +99,7 @@ class MenuServiceTest {
         Category savedCategory = categoryRepository.save(category);
 
         store.addMenu(savedMenu);
-//        store.addCategory(savedCategory);
+        store.addCategory(savedCategory);
 
         MenuUpdateRequest menuUpdateRequest = MenuUpdateRequest
             .builder()
@@ -112,7 +108,8 @@ class MenuServiceTest {
             .description("탕수육 입니다.")
             .price(10000)
             .imageUrl("aaa")
-            .category(savedCategory)
+            .categoryName(savedCategory.getName())
+
             .build();
 
         //when
@@ -125,13 +122,11 @@ class MenuServiceTest {
         assertThat(menuResponse.getDescription()).isEqualTo("탕수육 입니다.");
         assertThat(menuResponse.getPrice()).isEqualTo(10000);
         assertThat(menuResponse.getImageUrl()).isEqualTo("aaa");
-        assertThat(menuResponse.getCategory()).isEqualTo(savedCategory);
+        assertThat(menuResponse.getCategoryName()).isEqualTo(savedCategory.getName());
 
     }
 
-
     @Test
-    @Rollback(value = false)
     void deleteMenuTest() {
         //given
         Member member = createMember();
@@ -162,7 +157,8 @@ class MenuServiceTest {
             .build();
     }
 
-    private static Menu createMenu(int price, String description, String imageUrl, String menuName) {
+
+    private static Menu createMenu(Integer price, String description, String imageUrl, String menuName) {
         return Menu.builder()
             .price(price)
             .description(description)
@@ -178,8 +174,11 @@ class MenuServiceTest {
         //given
         Menu menu = createMenu(10000, "탕수육입니다.", "aaa", "탕수육");
         Menu savedMenu = menuRepository.save(menu);
+
+
         //when
         menuService.menuDisable(savedMenu.getId());
+
         //then
         assertThat(savedMenu.getStatus()).isEqualTo(ENABLE);
     }

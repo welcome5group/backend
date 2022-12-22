@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FindPasswordResultDto {
-	private boolean result;
+
+    private boolean result;
 }

@@ -19,38 +19,40 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	private final JwtAuthenticationFilter authenticationFilter;
 
-	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
+    private final JwtAuthenticationFilter authenticationFilter;
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		super.configure(web);
-	}
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		//권한 주는 페이지
-		http.httpBasic().disable()
-			.csrf().disable()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
-					.authorizeRequests()
-						.antMatchers(
-							"/**/sign-up"
-							,"/**/sign-in"
-							,"/api/auth/password"
-							,"/api/auth/resetPassword"
-							,"/**/kakao_callback"
-							,"/api/auth/sign-up/submit"
-							).permitAll()
-				.and()
-					.addFilterBefore(this.authenticationFilter,
-						UsernamePasswordAuthenticationFilter.class);
-		super.configure(http);
-	}
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        super.configure(web);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        //권한 주는 페이지
+        http.httpBasic().disable()
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeRequests()
+            .antMatchers(
+                "/**/sign-up"
+                , "/**/sign-in"
+                , "/api/auth/password"
+                , "/api/auth/resetPassword"
+                , "/**/kakao_callback"
+                , "/api/auth/sign-up/submit"
+            ).permitAll()
+            .and()
+            .addFilterBefore(this.authenticationFilter,
+                UsernamePasswordAuthenticationFilter.class);
+        super.configure(http);
+    }
+
 }
