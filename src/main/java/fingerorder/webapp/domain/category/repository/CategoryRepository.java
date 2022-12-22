@@ -1,13 +1,11 @@
 package fingerorder.webapp.domain.category.repository;
 
 import fingerorder.webapp.domain.category.entity.Category;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-//    @Query("select c from Category c ")
-//    List<Category> findCategories();
-
-    Category findByName(String categoryName);
+    Optional<Category> findByName(String categoryName);
 
 }

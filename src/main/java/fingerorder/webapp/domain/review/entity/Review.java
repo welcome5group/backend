@@ -1,11 +1,11 @@
 package fingerorder.webapp.domain.review.entity;
 
 import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
+import fingerorder.webapp.domain.review.dto.ReviewCommentResponse;
+import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateRequest;
+import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateResponse;
 import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.dto.request.create.ReviewCommentRequest;
-import fingerorder.webapp.dto.request.update.ReviewCommentUpdateRequest;
-import fingerorder.webapp.dto.response.create.ReviewCommentResponse;
-import fingerorder.webapp.dto.response.update.ReviewCommentUpdateResponse;
 import fingerorder.webapp.entity.BaseEntity;
 import fingerorder.webapp.entity.ReviewCreateRequest;
 import fingerorder.webapp.entity.ReviewCreateResponse;

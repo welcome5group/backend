@@ -20,7 +20,6 @@ public class MenuUpdateRequest {
     private int price;
     @NotEmpty
     private String imageUrl;
-
     private String categoryName;
 
 
@@ -33,5 +32,6 @@ public class MenuUpdateRequest {
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryName = categoryName;
+
     }
 }

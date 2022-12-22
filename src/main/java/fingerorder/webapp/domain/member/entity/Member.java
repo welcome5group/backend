@@ -1,13 +1,13 @@
 package fingerorder.webapp.domain.member.entity;
 
-import fingerorder.webapp.domain.member.status.UserStatus;
-import fingerorder.webapp.domain.member.status.UserType;
+import fingerorder.webapp.domain.member.dto.MemberDto;
+import fingerorder.webapp.domain.member.status.MemberSignUpType;
+import fingerorder.webapp.domain.member.status.MemberStatus;
+import fingerorder.webapp.domain.member.status.MemberType;
 import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.dto.UserDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -30,28 +30,30 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
+    private String uuid;
     private String email;
     private String password;
     private String nickName;
-    private UserStatus status;
+    private MemberStatus status;
+    private MemberSignUpType memberSignUpType;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
     @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private MemberType memberType;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "member")
     private List<Store> stores = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String nickName, UserStatus status,
-        UserType userType) {
+    public Member(String email, String password, String nickName, MemberStatus status,
+        MemberType memberType) {
         this.email = email;
         this.password = password;
         this.nickName = nickName;
         this.status = status;
-        this.userType = userType;
+        this.memberType = memberType;
     }
 
     protected Member() {
@@ -64,7 +66,6 @@ public class Member {
 
     }
 
-
     public void editNickName(String nickName) {
         this.nickName = nickName;
         this.createdAt = LocalDateTime.now();
@@ -72,14 +73,24 @@ public class Member {
 
     public void resetPassword(String password) {
         this.password = password;
-        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public UserDto toUserDto() {
-        return UserDto.builder()
+    public void giveUUID(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public void changeMemberStatus(MemberStatus status) {
+        this.status = status;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public MemberDto toMemberDto() {
+        return MemberDto.builder()
+            .id(this.id)
             .email(this.email)
             .nickName(this.nickName)
-            .userType(this.userType)
+            .memberType(this.memberType)
             .status(this.status)
             .createdAt(this.createdAt)
             .updatedAt(this.updatedAt)

@@ -10,5 +10,4 @@ public class StoreResponse {
     private Long storeId;
     private String name;
     private String location;
-
 }

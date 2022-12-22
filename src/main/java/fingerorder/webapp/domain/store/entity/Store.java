@@ -3,9 +3,9 @@ package fingerorder.webapp.domain.store.entity;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.menu.entity.Menu;
-import fingerorder.webapp.dto.request.create.StoreCreateRequest;
-import fingerorder.webapp.dto.request.update.StoreUpdateRequest;
-import fingerorder.webapp.dto.response.StoreResponse;
+import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
+import fingerorder.webapp.domain.store.dto.StoreResponse;
+import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.entity.BaseEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,6 +45,7 @@ public class Store extends BaseEntity {
     private List<Menu> menus = new ArrayList<>();
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, orphanRemoval = true)
+
     private List<Category> categories = new ArrayList<>();
 
     public Store(StoreCreateRequest storeCreateRequest) {
@@ -55,7 +56,8 @@ public class Store extends BaseEntity {
     }
 
     @Builder
-    public Store(String name, LocalDateTime createdAt, LocalDateTime updatedAt, Integer tableCount,
+    public Store(String name, LocalDateTime createdAt, LocalDateTime updatedAt,
+        Integer tableCount,
         String storeLocation) {
         this.name = name;
         this.createdAt = createdAt;
@@ -74,7 +76,6 @@ public class Store extends BaseEntity {
         this.storeLocation = storeUpdateRequest.getStoreLocation();
         this.tableCount = storeUpdateRequest.getTableCount();
     }
-
 
     public LocalDateTime showCreateAt() {
         return LocalDateTime.now();
@@ -101,6 +102,4 @@ public class Store extends BaseEntity {
         this.categories.add(category);
         category.changeStore(this);
     }
-
-
 }

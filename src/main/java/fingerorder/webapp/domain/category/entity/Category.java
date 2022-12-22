@@ -36,10 +36,18 @@ public class Category {
 
     }
 
-    public void changeStore(Store store) {
+    public void changeStore(Store store) { // 이거 냅두고 리팩토링
         this.store = store;
         store.getCategories().add(this);
+    }
 
+    public void editName(String name) {
+        this.name = name;
+    }
+
+    public void setCategoryAndStore(Store store) {
+        this.store = store;
+        store.getCategories().add(this);
     }
 
     public Category(String name) {

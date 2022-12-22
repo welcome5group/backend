@@ -1,31 +1,22 @@
 package fingerorder.webapp.domain.store.repository;
 
+import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.store.entity.Store;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
+    @Query(value = "select c from Category c join fetch c.store s where s.id = :id")
+    Optional<List<Category>> findCategories(@Param("id") Long id);
 
     Store findByName(String name);
 
-//    @Query("select c from Store s join fetch s.categories c where s.id =: id")
-//    Optional<Category> findCategory(@Param("id") Long id);
-//
-//
-//    @Query("select c from Store s join fetch s.categories c")
-//    List<Category> findCategoriesV1(Long id);
-//
-//    @Query("select c from Store s join s.categories c")
-//    List<Category> findCategoriesV2(Long id);
-
     List<Store> findAllByMemberId(Long id);
-
-//    @Query(value = "select c from Store s on s.id = :id join fetch s.categories c where c.name = :name", nativeQuery = true)
-//    Optional<Category> findCategory(@Param("id") Long storeId, @Param("name") String categoryName);
-
-    // storeId x번인 스토어 안에 {'메인메뉴' '사이드메뉴'} 중 '메인메뉴' 만
-    // fetchone()
-
-
 }
+

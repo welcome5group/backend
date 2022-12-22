@@ -16,8 +16,10 @@ public class MenuQueryService {
     private final EntityManager em;
 
     @Transactional
+
     public List<MenuAndCategory> findMenuAndCategory(
         Long storeId) { // 전체 메뉴 조회인데, 카테고리에 해당하는 전체메뉴 조회
+
         List<MenuAndCategory> categories = findCategories();
         categories.forEach(c -> {
             List<MenuInCategory> menus = findMenus(c.getCategoryName(), storeId);
@@ -27,14 +29,15 @@ public class MenuQueryService {
     }
 
     private List<MenuAndCategory> findCategories() {
-        return em.createQuery("select distinct new fingerorder.webapp.dto.menuquerydto"
+        return em.createQuery("select distinct new fingerorder.webapp.domain.menu.dto.menuquerydto"
             //왜 distinct 로 해야하는지는 조금 더 생각해보기
+
             + ".MenuAndCategory(c.name) "
             + "from Category c join c.menus", MenuAndCategory.class).getResultList();
     }
 
     private List<MenuInCategory> findMenus(String categoryName, Long storeId) {
-        return em.createQuery("select new fingerorder.webapp.dto.menuquerydto"
+        return em.createQuery("select new fingerorder.webapp.domain.menu.dto.menuquerydto"
                 + ".MenuInCategory(m.name,m.description,m.price,m.imageUrl) "
                 + "from Menu m "
                 + "join m.store s "

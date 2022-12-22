@@ -11,8 +11,6 @@ class MerchantReviewServiceTest {
 
     @Test
     void registerComment() {
-        Review review = new Review()
-
 
     }
 
