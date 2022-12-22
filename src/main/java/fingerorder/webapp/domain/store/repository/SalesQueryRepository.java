@@ -8,7 +8,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
-import fingerorder.webapp.domain.store.dto.QSalesResponseDto;
+import fingerorder.webapp.domain.store.dto.QPaymentDetailsResponseDto;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -39,7 +39,7 @@ public class SalesQueryRepository {
 
 		List<PaymentDetailsResponseDto> fetch = queryFactory
 			.select(
-				new QSalesResponseDto(
+				new QPaymentDetailsResponseDto(
 					formattedDate.as("yyyymm")
 					, order.totalPrice.sum()
 				)

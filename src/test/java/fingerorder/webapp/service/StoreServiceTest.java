@@ -7,27 +7,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
-<<<<<<< HEAD
-import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
-import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
-import fingerorder.webapp.domain.store.repository.StoreRepository;
-import fingerorder.webapp.domain.store.service.StoreService;
-=======
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
->>>>>>> feature
+import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.store.entity.Store;
+import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import fingerorder.webapp.domain.store.service.StoreService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
