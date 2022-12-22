@@ -86,10 +86,6 @@ public class StoreService {
         List<PaymentDetailsResponseDto> orders = salesQueryRepository.findOrders(
             paymentDatailsRequestDto.getStoreId(), paymentDatailsRequestDto.getYear(), paymentDatailsRequestDto.getMonth());
 
-        if(orders.isEmpty()) {
-            throw new RuntimeException("해당 년월의 매출 내역이 존재하지 않습니다.");
-        }
-
         return orders;
     }
 }
