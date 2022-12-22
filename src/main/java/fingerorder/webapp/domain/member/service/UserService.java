@@ -147,7 +147,7 @@ public class UserService implements UserDetailsService {
 		return tokenDto;
 	}
 
-	public TokenDto kakaoSignIn(String code) {
+	public TokenDto kakaoSignIn(String code,String type) {
 		String accessToken = "";
 		SignInDto tempSignInDto = null;
 		String reqURL = "https://kauth.kakao.com/oauth/token";
@@ -163,7 +163,7 @@ public class UserService implements UserDetailsService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id=43b7585079d42f271bc7c481ffca8f03");
-			sb.append("&redirect_uri=https://www.fingerorder.ga/kakao_callback");
+			sb.append("&redirect_uri=http://localhost:8080/kakao_callback?type="+type);
 			sb.append("&code="+code);
 			bw.write(sb.toString());
 			bw.flush();
@@ -185,7 +185,14 @@ public class UserService implements UserDetailsService {
 			boolean exist = memberRepository.existsByEmail(memberDto.getEmail());
 
 			if (exist) {
-				throw new AlreadyAuthorizedException();
+				Member findMember = this.memberRepository.findByEmail(memberDto.getEmail())
+					.orElseThrow(() -> new NoExistMemberException());
+
+				tempSignInDto = SignInDto.builder()
+					.email(findMember.getEmail())
+					.password("kakao")
+					.type(MemberType.MEMBER)
+					.build();
 			} else {
 				Member newMember = Member.builder()
 					.email(memberDto.getEmail())

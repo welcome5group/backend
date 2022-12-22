@@ -15,6 +15,7 @@ import fingerorder.webapp.domain.member.service.MailService;
 import fingerorder.webapp.domain.member.service.UserService;
 import fingerorder.webapp.security.JwtTokenProvider;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,8 @@ public class UserController {
 		cookie.setMaxAge(tokenDto.getAccessTokenTokenExpirationTime().intValue()/1000);
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
+		cookie.setPath("/");
+		cookie.setDomain("/");
 
 		response.addCookie(cookie);
 		TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
@@ -69,8 +72,15 @@ public class UserController {
 	}
 
 	@PostMapping("/api/auth/sign-out")
-	public ResponseEntity<?> signOut(@RequestBody SignOutDto signOutDto) {
+	public ResponseEntity<?> signOut(@RequestBody SignOutDto signOutDto,HttpServletResponse response) {
 		var result = this.userService.signOut(signOutDto);
+
+		Cookie cookie = new Cookie("refresh_token",null);
+
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+
 		return ResponseEntity.ok(result);
 	}
 
@@ -104,20 +114,18 @@ public class UserController {
 	}
 
 	@GetMapping("/api/auth/kakao/sign-in")
-	public String kakaoLogin() {
+	public String kakaoLoginMember(@RequestParam String type) {
 		StringBuffer loginUrl = new StringBuffer();
 		loginUrl.append("https://kauth.kakao.com/oauth/authorize?client_id=");
 		loginUrl.append("43b7585079d42f271bc7c481ffca8f03");
 		loginUrl.append("&redirect_uri=");
-		loginUrl.append("https://www.fingerorder.ga/kakao_callback");
+		if (type.equals("MEMBER")) {
+			loginUrl.append("http://localhost:8080/kakao_callback?type=MEMBER");
+		} else {
+			loginUrl.append("http://localhost:8080/kakao_callback?type=MERCHANT");
+		}
 		loginUrl.append("&response_type=code");
 
 		return "redirect:"+loginUrl.toString();
-	}
-
-	@RequestMapping("/kakao_callback")
-	public ResponseEntity<?> kakaoCallback(@RequestParam String code, HttpSession session) {
-		TokenDto tokenDto = userService.kakaoSignIn(code);
-		return ResponseEntity.ok(tokenDto);
 	}
 }
