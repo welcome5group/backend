@@ -15,11 +15,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
-	@Query(value = "select c from Category c join fetch c.store s where s.id = :id")
-	Optional<List<Category>> findCategories(@Param("id") Long id);
+    @Query(value = "select c from Category c join fetch c.store s where s.id = :id")
+    Optional<List<Category>> findCategories(@Param("id") Long id);
 
-	Store findByName(String name);
+    Store findByName(String name);
 
-	List<Store> findAllByMemberId(Long id);
-
+    List<Store> findAllByMemberId(Long id);
 }
+

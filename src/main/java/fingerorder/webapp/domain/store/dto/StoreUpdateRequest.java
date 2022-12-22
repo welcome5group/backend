@@ -1,17 +1,21 @@
 package fingerorder.webapp.domain.store.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class StoreUpdateRequest {
 
     //    private Long memberId; 우선은 필요없으니 나중에 추가하든지 하자
-    private Long storeId;
+    @NotEmpty
     private String name;
-//    private LocalDateTime createdAt;
-//    private LocalDateTime updatedAt;
-    private int tableCount;
+    @NotNull
+    private Integer tableCount;
+    @NotEmpty
     private String storeLocation;
 }

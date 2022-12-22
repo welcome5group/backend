@@ -13,10 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-	private String email;
-	private String nickName;
-	private UserStatus status;
-	private UserType userType;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
+
+    private String email;
+    private String nickName;
+    private UserStatus status;
+    private UserType userType;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

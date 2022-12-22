@@ -3,13 +3,13 @@ package fingerorder.webapp.service;
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import fingerorder.webapp.domain.category.repository.CategoryRepository;
-import fingerorder.webapp.domain.menu.service.MenuQueryService;
-import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuAndCategory;
 import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuAndCategory;
 import fingerorder.webapp.domain.menu.entity.Menu;
-import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
+import fingerorder.webapp.domain.menu.service.MenuQueryService;
+import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +24,7 @@ class MenuQueryServiceTest {
 
     @Autowired
 	MenuQueryService menuQueryService;
+
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
@@ -34,7 +35,7 @@ class MenuQueryServiceTest {
     @Test
     void findMenuAndCategoryTest() {
         //given
-        Store store = createStore("서울시",10,"차이나");
+        Store store = createStore("서울시", 10, "차이나");
         storeRepository.save(store);
 
         Category categoryA = new Category("메인 메뉴");
@@ -68,7 +69,10 @@ class MenuQueryServiceTest {
 
     }
 
-    private static Menu createMenu(int price, String description, String imageUrl, String menuName) {
+
+    private static Menu createMenu(Integer price, String description, String imageUrl,
+        String menuName) {
+
         return Menu.builder()
             .price(price)
             .description(description)
@@ -78,7 +82,9 @@ class MenuQueryServiceTest {
             .build();
     }
 
-    private static Store createStore(String storeLocation, int tableCount, String name) {
+
+    private static Store createStore(String storeLocation, Integer tableCount, String name) {
+
         return Store.builder()
             .storeLocation(storeLocation)
             .createdAt(LocalDateTime.now())

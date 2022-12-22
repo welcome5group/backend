@@ -1,15 +1,15 @@
 package fingerorder.webapp.service;
 
-import static fingerorder.webapp.domain.member.status.UserType.MEMBER;
-import static fingerorder.webapp.domain.member.status.UserType.MERCHANT;
-import static org.junit.jupiter.api.Assertions.*;
+import static fingerorder.webapp.domain.member.status.MemberType.MEMBER;
+import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import fingerorder.webapp.domain.member.dto.UserDto;
-import fingerorder.webapp.domain.member.service.UserService;
+import fingerorder.webapp.domain.member.dto.MemberDto;
+import fingerorder.webapp.domain.member.dto.MemberEditDto;
+import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.entity.Member;
-import fingerorder.webapp.domain.member.dto.UserEditDto;
-import fingerorder.webapp.domain.member.dto.UserInfoDto;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
+import fingerorder.webapp.domain.member.service.UserService;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class UserServiceImplTest {
+class UserServiceTest {
 	@Autowired
 	UserService userService;
 
@@ -37,7 +37,7 @@ class UserServiceImplTest {
 		Member member = Member.builder()
 			.email("testMember@naver.com")
 			.nickName("testNickName")
-			.userType(MEMBER)
+			.memberType(MEMBER)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -45,16 +45,16 @@ class UserServiceImplTest {
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
-			.userType(MERCHANT)
+			.memberType(MERCHANT)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
 
-		UserInfoDto userParamMember = UserInfoDto.builder()
+		MemberInfoDto userParamMember = MemberInfoDto.builder()
 			.email("testMember@naver.com")
 			.build();
 
-		UserInfoDto userParamMerchant = UserInfoDto.builder()
+		MemberInfoDto userParamMerchant = MemberInfoDto.builder()
 			.email("testMerchant@naver.com")
 			.build();
 
@@ -63,15 +63,15 @@ class UserServiceImplTest {
 		memberRepository.save(merchant);
 
 		//then
-		UserDto resultMember = userService.getUserInfo(userParamMember);
-		UserDto resultMerchant = userService.getUserInfo(userParamMerchant);
+		MemberDto resultMember = userService.getMemberInfo(userParamMember);
+		MemberDto resultMerchant = userService.getMemberInfo(userParamMerchant);
 
 		assertEquals(resultMember.getEmail(),"testMember@naver.com");
 		assertEquals(resultMember.getNickName(),"testNickName");
-		assertEquals(resultMember.getUserType(),MEMBER);
+		assertEquals(resultMember.getMemberType(),MEMBER);
 		assertEquals(resultMerchant.getEmail(),"testMerchant@naver.com");
 		assertEquals(resultMerchant.getNickName(), "testNickNameMerchant");
-		assertEquals(resultMerchant.getUserType(), MERCHANT);
+		assertEquals(resultMerchant.getMemberType(), MERCHANT);
 	}
 
 	@Test
@@ -80,7 +80,7 @@ class UserServiceImplTest {
 		Member member = Member.builder()
 			.email("testMember@naver.com")
 			.nickName("testNickName")
-			.userType(MEMBER)
+			.memberType(MEMBER)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
@@ -88,28 +88,28 @@ class UserServiceImplTest {
 		Member merchant = Member.builder()
 			.email("testMerchant@naver.com")
 			.nickName("testNickNameMerchant")
-			.userType(MERCHANT)
+			.memberType(MERCHANT)
 			.updatedAt(LocalDateTime.now())
 			.createdAt(LocalDateTime.now())
 			.build();
 
-		UserEditDto userEditParamMember = UserEditDto.builder()
+		MemberEditDto userEditParamMember = MemberEditDto.builder()
 			.email("testMember@naver.com")
 			.nickName("changedNickName")
 			.type(MEMBER)
 			.build();
 
-		UserEditDto userEditParamMerchant = UserEditDto.builder()
+		MemberEditDto userEditParamMerchant = MemberEditDto.builder()
 			.email("testMerchant@naver.com")
 			.nickName("changedNickNameMerchant")
 			.type(MERCHANT)
 			.build();
 
-		UserInfoDto userParamMember = UserInfoDto.builder()
+		MemberInfoDto userParamMember = MemberInfoDto.builder()
 			.email("testMember@naver.com")
 			.build();
 
-		UserInfoDto userParamMerchant = UserInfoDto.builder()
+		MemberInfoDto userParamMerchant = MemberInfoDto.builder()
 			.email("testMerchant@naver.com")
 			.build();
 
@@ -118,11 +118,11 @@ class UserServiceImplTest {
 		memberRepository.save(merchant);
 
 		//then
-		UserDto resultMember = userService.editUserInfo(userEditParamMember);
-		UserDto resultMerchant = userService.editUserInfo(userEditParamMerchant);
+		MemberDto resultMember = userService.editMemberInfo(userEditParamMember);
+		MemberDto resultMerchant = userService.editMemberInfo(userEditParamMerchant);
 
-		UserDto checkMemberDto = userService.getUserInfo(userParamMember);
-		UserDto checkMerchantDto = userService.getUserInfo(userParamMerchant);
+		MemberDto checkMemberDto = userService.getMemberInfo(userParamMember);
+		MemberDto checkMerchantDto = userService.getMemberInfo(userParamMerchant);
 
 		assertEquals(resultMember.getNickName(),checkMemberDto.getNickName());
 		assertEquals(resultMerchant.getNickName(),checkMerchantDto.getNickName());
