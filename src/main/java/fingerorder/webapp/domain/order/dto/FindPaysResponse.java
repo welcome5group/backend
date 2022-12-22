@@ -31,7 +31,7 @@ public class FindPaysResponse {
         this.id = order.getId();
         this.totalPrice = order.getTotalPrice();
         this.createdAt = order.getCreatedAt();
-        this.store = store.toStoreRequestDto(store);
+        this.store = store.toStoreRequest(store);
 
         for (OrderMenu orderMenu : order.getOrderMenus()) {
             addOrderMenu(orderMenu, orderMenu.getMenu());
