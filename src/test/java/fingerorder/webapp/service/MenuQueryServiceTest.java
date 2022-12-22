@@ -1,5 +1,6 @@
 package fingerorder.webapp.service;
 
+<<<<<<< HEAD
 import static fingerorder.webapp.status.MenuStatus.ABLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,6 +11,18 @@ import fingerorder.webapp.entity.Store;
 import fingerorder.webapp.repository.CategoryRepository;
 import fingerorder.webapp.repository.MenuRepository;
 import fingerorder.webapp.repository.StoreRepository;
+=======
+import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
+import static org.assertj.core.api.Assertions.assertThat;
+import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.menu.service.MenuQueryService;
+import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuAndCategory;
+import fingerorder.webapp.domain.category.entity.Category;
+import fingerorder.webapp.domain.menu.entity.Menu;
+import fingerorder.webapp.domain.store.entity.Store;
+import fingerorder.webapp.domain.menu.repository.MenuRepository;
+import fingerorder.webapp.domain.store.repository.StoreRepository;
+>>>>>>> 568de452b34e8c24fa0933772f7ff2b703ce8de4
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -22,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 class MenuQueryServiceTest {
 
     @Autowired
-    MenuQueryService menuQueryService;
+	MenuQueryService menuQueryService;
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
