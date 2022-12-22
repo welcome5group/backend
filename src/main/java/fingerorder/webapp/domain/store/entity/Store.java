@@ -1,14 +1,16 @@
 package fingerorder.webapp.domain.store.entity;
 
-import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
-import fingerorder.webapp.domain.store.dto.StoreResponse;
-import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.menu.entity.Menu;
+import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
+import fingerorder.webapp.domain.store.dto.StoreResponse;
+import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
+import fingerorder.webapp.entity.BaseEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,7 +25,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class Store {
+public class Store extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,17 +34,18 @@ public class Store {
     private String name;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private int tableCount;
+    private Integer tableCount;
     private String storeLocation;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Menu> menus = new ArrayList<>();
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, orphanRemoval = true)
+
     private List<Category> categories = new ArrayList<>();
 
     public Store(StoreCreateRequest storeCreateRequest) {
@@ -53,7 +56,8 @@ public class Store {
     }
 
     @Builder
-    public Store(String name, LocalDateTime createdAt, LocalDateTime updatedAt, int tableCount,
+    public Store(String name, LocalDateTime createdAt, LocalDateTime updatedAt,
+        Integer tableCount,
         String storeLocation) {
         this.name = name;
         this.createdAt = createdAt;
@@ -74,20 +78,15 @@ public class Store {
     }
 
     public LocalDateTime showCreateAt() {
-
         return LocalDateTime.now();
-
     }
 
     public LocalDateTime showUpdatedAt() {
-
         return LocalDateTime.now();
-
     }
 
-    public StoreResponse toStoreRequestDto(Store store) {
+    public StoreResponse toStoreRequest(Store store) {
         return new StoreResponse(store.getId(), store.getName(), store.getStoreLocation());
-
     }
 
     public void changeMember(Member member) {
@@ -99,10 +98,8 @@ public class Store {
         menu.changeStore(this);
     }
 
-//    public void addCategory(Category category) {
-//        this.categories.add(category);
-//        category.changeStore(this);
-//    }
-
-
+    public void addCategory(Category category) {
+        this.categories.add(category);
+        category.setCategoryAndStore(this);
+    }
 }

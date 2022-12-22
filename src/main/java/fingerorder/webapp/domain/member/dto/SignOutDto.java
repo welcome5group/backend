@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class SignOutDto {
-	private String accessToken;
-	private String refreshToken;
+
+    private String accessToken;
+    private String refreshToken;
 }

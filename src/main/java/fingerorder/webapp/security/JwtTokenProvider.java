@@ -25,101 +25,104 @@ import org.springframework.util.StringUtils;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-	private static final String BEARER_TYPE = "Bearer";
-	// ACCESS 토큰 만료시간
-	private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 7 * 24;
-	// REFRESH 토큰 만료시간
-	private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000;
 
-	@Value("{spring.jwt.secret}")
-	private String secretKey;
+    private static final String BEARER_TYPE = "Bearer";
+    // ACCESS 토큰 만료시간
+    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 7 * 24;
+    // REFRESH 토큰 만료시간
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000;
 
-	public TokenDto genToken(Authentication authentication) {
-		String authorities = authentication.getAuthorities().stream()
-			.map(GrantedAuthority::getAuthority)
-			.collect(Collectors.joining(","));
+    @Value("{spring.jwt.secret}")
+    private String secretKey;
 
-		var now = new Date();
-		var expiredDate = new Date(now.getTime() + TOKEN_EXPIRE_TIME);
+    public TokenDto genToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(","));
 
-		String accessToken = Jwts.builder()
-			.setSubject(authentication.getName())
-			.claim("roles",authorities)
-			.setIssuedAt(now)
-			.setExpiration(expiredDate)
-			.signWith(SignatureAlgorithm.HS512,this.secretKey)
-			.compact();
+        var now = new Date();
+        var expiredDate = new Date(now.getTime() + TOKEN_EXPIRE_TIME);
 
-		String refreshToken = Jwts.builder()
-			.setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME))
-			.signWith(SignatureAlgorithm.HS512,this.secretKey)
-			.compact();
+        String accessToken = Jwts.builder()
+            .setSubject(authentication.getName())
+            .claim("roles", authorities)
+            .setIssuedAt(now)
+            .setExpiration(expiredDate)
+            .signWith(SignatureAlgorithm.HS512, this.secretKey)
+            .compact();
 
-		return TokenDto.builder()
-			.grantType(BEARER_TYPE)
-			.accessToken(accessToken)
-			.accessTokenTokenExpirationTime(TOKEN_EXPIRE_TIME)
-			.refreshToken(refreshToken)
-			.refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
-			.build();
-	}
+        String refreshToken = Jwts.builder()
+            .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME))
+            .signWith(SignatureAlgorithm.HS512, this.secretKey)
+            .compact();
 
-	public TokenDto getToken(Authentication authentication) {
-		TokenDto tokenDto = genToken(authentication);
+        return TokenDto.builder()
+            .grantType(BEARER_TYPE)
+            .accessToken(accessToken)
+            .accessTokenTokenExpirationTime(TOKEN_EXPIRE_TIME)
+            .refreshToken(refreshToken)
+            .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+            .build();
+    }
 
-		return tokenDto;
-	}
+    public TokenDto getToken(Authentication authentication) {
+        TokenDto tokenDto = genToken(authentication);
 
-	private Claims parserClaims(String token) {
-		try {
-			return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
-		} catch (ExpiredJwtException e) {
-			return e.getClaims();
-		}
-	}
+        return tokenDto;
+    }
 
-	public boolean validateToken(String token) {
-		if(!StringUtils.hasText(token)) return false;
+    private Claims parserClaims(String token) {
+        try {
+            return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
 
-		var claims = this.parserClaims(token);
-		boolean checkExpired = !claims.getExpiration().before(new Date());
-		if (!checkExpired) {
-			throw new ExpiredTokenException();
-		}
-		return !claims.getExpiration().before(new Date());
-	}
+    public boolean validateToken(String token) {
+        if (!StringUtils.hasText(token)) {
+            return false;
+        }
 
-	// 토큰에서 email을 가져옴
-	public String getEmail(String token) {
-		return this.parserClaims(token).getSubject();
-	}
+        var claims = this.parserClaims(token);
+        boolean checkExpired = !claims.getExpiration().before(new Date());
+        if (!checkExpired) {
+            throw new ExpiredTokenException();
+        }
+        return !claims.getExpiration().before(new Date());
+    }
 
-	// 토큰에서 Expiration을 가져옴
-	public Long getExpiration(String token) {
-		Date expiration = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token)
-			.getBody().getExpiration();
+    // 토큰에서 email을 가져옴
+    public String getEmail(String token) {
+        return this.parserClaims(token).getSubject();
+    }
 
-		Long now = new Date().getTime();
-		return (expiration.getTime() - now);
-	}
+    // 토큰에서 Expiration을 가져옴
+    public Long getExpiration(String token) {
+        Date expiration = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token)
+            .getBody().getExpiration();
 
-	// jwt 토큰으로 부터 인증 정보를 받아옴
-	public Authentication getAuthentication(String jwt) {
-		Claims claims = parserClaims(jwt);
+        Long now = new Date().getTime();
+        return (expiration.getTime() - now);
+    }
 
-		// 권한 정보 존재 확인
-		if (claims.get("roles") == null) {
-			throw new NoAuthorizedInfoTokenException();
-		}
+    // jwt 토큰으로 부터 인증 정보를 받아옴
+    public Authentication getAuthentication(String jwt) {
+        Claims claims = parserClaims(jwt);
 
-		// 권한 정보들을 가져온다.
-		List<GrantedAuthority> authorities =
-			Arrays.stream(claims.get("roles").toString().split(","))
-			.map(SimpleGrantedAuthority::new)
-			.collect(Collectors.toList());
+        // 권한 정보 존재 확인
+        if (claims.get("roles") == null) {
+            throw new NoAuthorizedInfoTokenException();
+        }
 
-		// UserDetails 객체를 만들어 인증 정보 리턴
-		UserDetails userDetails = new User(claims.getSubject(),"",authorities);
-		return new UsernamePasswordAuthenticationToken(userDetails,"",authorities);
-	}
+        // 권한 정보들을 가져온다.
+        List<GrantedAuthority> authorities =
+            Arrays.stream(claims.get("roles").toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+
+        // UserDetails 객체를 만들어 인증 정보 리턴
+        UserDetails userDetails = new User(claims.getSubject(), "", authorities);
+        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+    }
 }

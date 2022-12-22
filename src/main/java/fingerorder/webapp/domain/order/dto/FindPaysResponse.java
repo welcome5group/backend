@@ -1,7 +1,10 @@
 package fingerorder.webapp.domain.order.dto;
 
+import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.entity.OrderMenu;
+import fingerorder.webapp.domain.store.dto.StoreResponse;
+import fingerorder.webapp.domain.store.entity.Store;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,29 +22,28 @@ public class FindPaysResponse {
 
     private LocalDateTime createdAt;
 
-    // MemberDto 추가 예정
-
-    // StoreDto 추가 예정
+    private StoreResponse store;
 
     private List<OrderMenuDto> orderMenus = new ArrayList<>();
 
 
-    private FindPaysResponse(Order order) {
+    private FindPaysResponse(Order order, Store store) {
         this.id = order.getId();
         this.totalPrice = order.getTotalPrice();
         this.createdAt = order.getCreatedAt();
+        this.store = store.toStoreRequest(store);
 
         for (OrderMenu orderMenu : order.getOrderMenus()) {
-            addOrderMenu(orderMenu);
+            addOrderMenu(orderMenu, orderMenu.getMenu());
         }
     }
 
-    public static FindPaysResponse createPayResponse(Order order) {
-        return new FindPaysResponse(order);
+    public static FindPaysResponse createPayResponse(Order order, Store store) {
+        return new FindPaysResponse(order, store);
     }
 
-    private void addOrderMenu(OrderMenu orderMenu) {
-        this.orderMenus.add(OrderMenuDto.createOrderMenu(orderMenu));
+    private void addOrderMenu(OrderMenu orderMenu, Menu menu) {
+        this.orderMenus.add(OrderMenuDto.createOrderMenu(orderMenu, menu));
     }
 
 }
