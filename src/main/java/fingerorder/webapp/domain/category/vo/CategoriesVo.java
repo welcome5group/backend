@@ -8,5 +8,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 public class CategoriesVo {
-	private final List<String> names;
+
+    private final List<String> names;
 }

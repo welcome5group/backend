@@ -5,10 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class MemberException extends ServiceException {
-	private final MemberErrorCodeException memberErrorCodeException;
 
-	protected MemberException(MemberErrorCodeException memberErrorCodeException) {
-		super(memberErrorCodeException);
-		this.memberErrorCodeException = memberErrorCodeException;
-	}
+    private final MemberErrorCodeException memberErrorCodeException;
+
+    protected MemberException(MemberErrorCodeException memberErrorCodeException) {
+        super(memberErrorCodeException);
+        this.memberErrorCodeException = memberErrorCodeException;
+    }
 }

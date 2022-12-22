@@ -12,20 +12,21 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CategoryQueryRepository {
-	private final EntityManager em;
-	private final JPAQueryFactory queryFactory;
 
-	@Autowired
-	public CategoryQueryRepository(EntityManager em) {
-		this.em = em;
-		this.queryFactory = new JPAQueryFactory(em);
-	}
+    private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
 
-	public Optional<Category> findCategory(Long storeId, String categoryName) {
+    @Autowired
+    public CategoryQueryRepository(EntityManager em) {
+        this.em = em;
+        this.queryFactory = new JPAQueryFactory(em);
+    }
 
-		return Optional.ofNullable(queryFactory.select(category).from(category)
-			.join(category.store, store).on(store.id.eq(storeId))
-			.where(category.name.eq(categoryName))
-			.fetchOne());
-	}
+    public Optional<Category> findCategory(Long storeId, String categoryName) {
+
+        return Optional.ofNullable(queryFactory.select(category).from(category)
+            .join(category.store, store).on(store.id.eq(storeId))
+            .where(category.name.eq(categoryName))
+            .fetchOne());
+    }
 }

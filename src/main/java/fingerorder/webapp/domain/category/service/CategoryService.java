@@ -1,5 +1,6 @@
 package fingerorder.webapp.domain.category.service;
 
+import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.exception.CategoryNotFoundException;
 import fingerorder.webapp.domain.category.exception.NoMatchingCategoryException;
 import fingerorder.webapp.domain.category.exception.NoProperCategoryException;
@@ -7,11 +8,10 @@ import fingerorder.webapp.domain.category.exception.NoUniqueCategoryException;
 import fingerorder.webapp.domain.category.exception.StoreNotFoundException;
 import fingerorder.webapp.domain.category.repository.CategoryQueryRepository;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
-import fingerorder.webapp.domain.store.repository.StoreRepository;
 import fingerorder.webapp.domain.category.vo.CategoriesVo;
 import fingerorder.webapp.domain.category.vo.CategoryVo;
-import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.store.entity.Store;
+import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -22,84 +22,85 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-	private final CategoryRepository categoryRepository;
-	private final StoreRepository storeRepository;
-	private final CategoryQueryRepository categoryQueryRepository;
 
-	public CategoryVo createCategory(Long storeId, String categoryName) {
-		validateName(categoryName);
-		isUnique(categoryName);
+    private final CategoryRepository categoryRepository;
+    private final StoreRepository storeRepository;
+    private final CategoryQueryRepository categoryQueryRepository;
 
-		Category category = new Category(categoryName);
-		Store store = findStore(storeId);
-		category.setCategoryAndStore(store);
-		categoryRepository.save(category);
+    public CategoryVo createCategory(Long storeId, String categoryName) {
+        validateName(categoryName);
+        isUnique(categoryName);
 
-		return new CategoryVo(categoryName);
-	}
+        Category category = new Category(categoryName);
+        Store store = findStore(storeId);
+        category.setCategoryAndStore(store);
+        categoryRepository.save(category);
 
-	@Transactional(readOnly = true)
-	public CategoriesVo getCategory(Long storeId) {
-		List<Category> categories = findCategories(storeId);
+        return new CategoryVo(categoryName);
+    }
 
-		List<String> categoryNames = new ArrayList<>();
+    @Transactional(readOnly = true)
+    public CategoriesVo getCategory(Long storeId) {
+        List<Category> categories = findCategories(storeId);
 
-		for (Category category : categories) {
-			categoryNames.add(category.getName());
-		}
+        List<String> categoryNames = new ArrayList<>();
 
-		return new CategoriesVo(categoryNames);
-	}
+        for (Category category : categories) {
+            categoryNames.add(category.getName());
+        }
 
-	@Transactional
-	public CategoryVo updateCategory(Long storeId, String categoryName, String updateName) {
-		validateName(updateName);
-		isUnique(updateName);
+        return new CategoriesVo(categoryNames);
+    }
 
-		Category category = findCategory(storeId, categoryName);
-		category.editName(updateName);
+    @Transactional
+    public CategoryVo updateCategory(Long storeId, String categoryName, String updateName) {
+        validateName(updateName);
+        isUnique(updateName);
 
-		return new CategoryVo(updateName);
-	}
+        Category category = findCategory(storeId, categoryName);
+        category.editName(updateName);
 
-	@Transactional
-	public CategoryVo deleteCategory(Long storeId, String categoryName) {
-		validateName(categoryName);
+        return new CategoryVo(updateName);
+    }
 
-		Category category = findCategory(storeId, categoryName);
+    @Transactional
+    public CategoryVo deleteCategory(Long storeId, String categoryName) {
+        validateName(categoryName);
 
-		categoryRepository.delete(category);
+        Category category = findCategory(storeId, categoryName);
 
-		return new CategoryVo(categoryName);
-	}
+        categoryRepository.delete(category);
 
-	private List<Category> findCategories(Long storeId) {
-		return storeRepository.findCategories(storeId)
-			.orElseThrow(CategoryNotFoundException::new);
-	}
+        return new CategoryVo(categoryName);
+    }
 
-	private Store findStore(Long storeId) {
-		return storeRepository.findById(storeId)
-			.orElseThrow(StoreNotFoundException::new);
-	}
+    private List<Category> findCategories(Long storeId) {
+        return storeRepository.findCategories(storeId)
+            .orElseThrow(CategoryNotFoundException::new);
+    }
 
-	private Category findCategory(Long storeId, String categoryName) {
-		return categoryQueryRepository.findCategory(storeId, categoryName)
-			.orElseThrow(NoMatchingCategoryException::new);
-	}
+    private Store findStore(Long storeId) {
+        return storeRepository.findById(storeId)
+            .orElseThrow(StoreNotFoundException::new);
+    }
 
-	private void validateName(String categoryName) {
-		if (categoryName == null || categoryName.equals("")) {
-			throw new NoProperCategoryException();
-		} else if (!Pattern.matches("^[a-zA-Z가-힣0-9 ()]*$", categoryName)) {
-			throw new NoProperCategoryException();
-		}
-	}
+    private Category findCategory(Long storeId, String categoryName) {
+        return categoryQueryRepository.findCategory(storeId, categoryName)
+            .orElseThrow(NoMatchingCategoryException::new);
+    }
 
-	private void isUnique(String categoryName) {
-		if (categoryRepository.findByName(categoryName).isPresent()) {
-			throw new NoUniqueCategoryException();
-		}
-	}
+    private void validateName(String categoryName) {
+        if (categoryName == null || categoryName.equals("")) {
+            throw new NoProperCategoryException();
+        } else if (!Pattern.matches("^[a-zA-Z가-힣0-9 ()]*$", categoryName)) {
+            throw new NoProperCategoryException();
+        }
+    }
+
+    private void isUnique(String categoryName) {
+        if (categoryRepository.findByName(categoryName).isPresent()) {
+            throw new NoUniqueCategoryException();
+        }
+    }
 
 }
