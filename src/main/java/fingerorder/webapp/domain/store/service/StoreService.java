@@ -17,7 +17,6 @@ import fingerorder.webapp.domain.store.dto.StoreResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.exception.StoreFindException;
-import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

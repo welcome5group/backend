@@ -26,7 +26,7 @@ public class PayService {
 
         List<FindPaysResponse> pays = new ArrayList<>();
         for (Order order : orders) {
-            pays.add(FindPaysResponse.createPayResponse(order));
+            pays.add(FindPaysResponse.createPayResponse(order, order.getStore()));
         }
 
         return pays;

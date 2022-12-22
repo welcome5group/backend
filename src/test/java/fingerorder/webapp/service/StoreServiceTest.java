@@ -7,6 +7,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
+import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
+import fingerorder.webapp.domain.store.repository.StoreRepository;
+import fingerorder.webapp.domain.store.service.StoreService;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.entity.Menu;
