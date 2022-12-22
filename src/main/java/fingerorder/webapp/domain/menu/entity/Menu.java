@@ -80,7 +80,7 @@ public class Menu {
     public MenuResponse toMenuResponse(Menu menu) {
 
         MenuResponse menuResponse = new MenuResponse();
-        menuResponse.setStoreId(menu.getStore().getId());
+//        menuResponse.setStoreId(menu.getStore().getId());
         menuResponse.setMenuId(menu.getId());
         menuResponse.setName(menu.getName());
         menuResponse.setPrice(menu.getPrice());

@@ -30,7 +30,7 @@ public class OrderMenu {
     @JoinColumn(name = "orders_id")
     private Order order;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
