@@ -18,43 +18,43 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class SalesQueryRepository {
 
-	private final EntityManager em;
-	private final JPAQueryFactory queryFactory;
+    private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
 
-	@Autowired
-	public SalesQueryRepository(EntityManager em) {
-		this.em = em;
-		this.queryFactory = new JPAQueryFactory(em);
-	}
+    @Autowired
+    public SalesQueryRepository(EntityManager em) {
+        this.em = em;
+        this.queryFactory = new JPAQueryFactory(em);
+    }
 
-	public List<PaymentDetailsResponseDto> findOrders(Long storeId, int year, int month) {
+    public List<PaymentDetailsResponseDto> findOrders(Long storeId, int year, int month) {
 
-		LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
-		LocalDateTime endDate = LocalDateTime.of(year, month, 31, 23, 59, 59);
+        LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
+        LocalDateTime endDate = LocalDateTime.of(year, month, 31, 23, 59, 59);
 
-		StringTemplate formattedDate = Expressions.stringTemplate(
-			"DATE_FORMAT({0}, {1})"
-			, order.createdAt
-			, ConstantImpl.create("%Y-%m-%d"));
+        StringTemplate formattedDate = Expressions.stringTemplate(
+            "DATE_FORMAT({0}, {1})"
+            , order.createdAt
+            , ConstantImpl.create("%Y-%m-%d"));
 
-		List<PaymentDetailsResponseDto> fetch = queryFactory
-			.select(
-				new QPaymentDetailsResponseDto(
-					formattedDate.as("yyyymm")
-					, order.totalPrice.sum()
-				)
-		)
-		.from(order)
-		.join(order.store, store).on(store.id.eq(storeId))
-		.where(order.createdAt.goe(startDate)
-				, order.createdAt.loe(endDate)
-		)
-		.groupBy(formattedDate)
-		.orderBy(formattedDate.asc())
-		.fetch();
+        List<PaymentDetailsResponseDto> fetch = queryFactory
+            .select(
+                new QPaymentDetailsResponseDto(
+                    formattedDate.as("yyyymm")
+                    , order.totalPrice.sum()
+                )
+            )
+            .from(order)
+            .join(order.store, store).on(store.id.eq(storeId))
+            .where(order.createdAt.goe(startDate)
+                , order.createdAt.loe(endDate)
+            )
+            .groupBy(formattedDate)
+            .orderBy(formattedDate.asc())
+            .fetch();
 
-		return fetch;
+        return fetch;
 
-	}
+    }
 
 }
