@@ -7,6 +7,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
+import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
+import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
+import fingerorder.webapp.domain.store.repository.StoreRepository;
+import fingerorder.webapp.domain.store.service.StoreService;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.entity.Menu;
@@ -20,6 +24,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,6 +44,20 @@ class StoreServiceTest {
     CategoryRepository categoryRepository;
     @Autowired
     MenuRepository menuRepository;
+
+    @Autowired
+    SalesQueryRepository salesQueryRepository;
+
+    @Test
+    @DisplayName("그룹 쿼리 실행(querydsl)")
+    void querydslGroupbyTest() {
+        List<PaymentDetailsResponseDto> salesMonthlyTestDtos = salesQueryRepository.findOrders(1L, 1, 1);
+
+        for (PaymentDetailsResponseDto salesMonthlyTestDto : salesMonthlyTestDtos) {
+            System.out.println("salesMonthlyTestDto = " + salesMonthlyTestDto);
+        }
+    }
+
 
     @Test
     void registerStoreTest() {
