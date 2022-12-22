@@ -23,7 +23,7 @@ public class OrderMenuDto {
         this.id = orderMenu.getId();
         this.count = orderMenu.getCount();
         this.totalPrice = orderMenu.getTotalPrice();
-        this.menu = menu.toMenuResponse(orderMenu.getMenu());
+        this.menu = menu.toMenuResponse(menu);
     }
 
     public static OrderMenuDto createOrderMenu(OrderMenu orderMenu, Menu menu) {

@@ -57,15 +57,15 @@ public class Order {
     @JoinColumn(name = "store_id")
     private Store store;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderMenu> orderMenus = new ArrayList<>();
+
     @Builder
     public Order(int totalPrice, Member member, Store store) {
         this.totalPrice = totalPrice;
         this.member = member;
         this.store = store;
     }
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderMenu> orderMenus = new ArrayList<>();
 
     private Order(Member member, Store store, List<OrderMenu> orderMenus, OrderStatus orderStatus) {
         this.member = member;
@@ -93,4 +93,3 @@ public class Order {
     }
 
 }
-
