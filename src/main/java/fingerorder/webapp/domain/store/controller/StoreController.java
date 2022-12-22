@@ -1,12 +1,15 @@
 package fingerorder.webapp.domain.store.controller;
 
 import fingerorder.webapp.core.dto.Result;
+import fingerorder.webapp.domain.store.dto.PaymentDatailsRequestDto;
+import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.store.service.StoreService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,4 +53,16 @@ public class StoreController {
         List<StoreResponse> stores = storeService.findAllStores(memberId);
         return ResponseEntity.ok(new Result<>(stores));
     }
+
+    @GetMapping("/payment-details")
+    public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestBody PaymentDatailsRequestDto getSalesDto) {
+
+        return new ResponseEntity<>(storeService.findSalesForMonth(getSalesDto), HttpStatus.OK);
+    }
+
+//    @GetMapping("/order-details")
+//    public ResponseEntity<List<PaymentDetailsResponseDto>> getOrderDetails(@RequestBody PaymentDatailsRequestDto getSalesDto) {
+//
+//        return new ResponseEntity<>(storeService.findSalesForMonth(getSalesDto), HttpStatus.OK);
+//    }
 }

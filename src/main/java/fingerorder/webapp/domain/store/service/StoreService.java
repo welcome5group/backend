@@ -1,5 +1,8 @@
 package fingerorder.webapp.domain.store.service;
 
+import fingerorder.webapp.domain.store.dto.PaymentDatailsRequestDto;
+import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
+import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreResponse;
@@ -20,6 +23,7 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
+    private final SalesQueryRepository salesQueryRepository;
 
     @Transactional
     public StoreResponse registerStore(StoreCreateRequest storeCreateRequest) { // 가게 생성
@@ -55,5 +59,17 @@ public class StoreService {
             .map(s -> new StoreResponse(s.getId(), s.getName(), s.getStoreLocation())).collect(
                 Collectors.toList());
 
+    }
+
+    public List<PaymentDetailsResponseDto> findSalesForMonth(
+        PaymentDatailsRequestDto paymentDatailsRequestDto) {
+        List<PaymentDetailsResponseDto> orders = salesQueryRepository.findOrders(
+            paymentDatailsRequestDto.getStoreId(), paymentDatailsRequestDto.getYear(), paymentDatailsRequestDto.getMonth());
+
+        if(orders.isEmpty()) {
+            throw new RuntimeException("해당 년월의 매출 내역이 존재하지 않습니다.");
+        }
+
+        return orders;
     }
 }
