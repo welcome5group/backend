@@ -85,7 +85,7 @@ public class StoreService {
         return storeLookUpOrderResponse;
     }
 
-    public List<PaymentDetailsResponseDto> findSalesForMonth(
+    public List<PaymentDetailsResponseDto> findPaymentsForMonth(
         PaymentDatailsRequestDto paymentDatailsRequestDto) {
         List<PaymentDetailsResponseDto> orders = salesQueryRepository.findOrders(
             paymentDatailsRequestDto.getStoreId(), paymentDatailsRequestDto.getYear(), paymentDatailsRequestDto.getMonth());
