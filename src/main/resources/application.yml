@@ -12,6 +12,7 @@ spring:
       hibernate:
         #                show_sql: true
         format_sql: true
+
   jwt:
     secret: ZmluZ2Vyb3JkZXItc3ByaW5nLWJvb3QtcHJvamVjdC1qd3Qtc2VjcmV0LWtleQo=
 
