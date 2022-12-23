@@ -41,4 +41,4 @@ jasypt:
     bean: jasyptStringEncryptor
     password: 5678
 api:
-  key: ${API_KEY}
+  key: 43b7585079d42f271bc7c481ffca8f03
