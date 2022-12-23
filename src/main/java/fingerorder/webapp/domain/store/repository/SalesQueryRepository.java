@@ -20,14 +20,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class SalesQueryRepository {
 
-	private final EntityManager em;
-	private final JPAQueryFactory queryFactory;
+    private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
 
-	@Autowired
-	public SalesQueryRepository(EntityManager em) {
-		this.em = em;
-		this.queryFactory = new JPAQueryFactory(em);
-	}
+    @Autowired
+    public SalesQueryRepository(EntityManager em) {
+        this.em = em;
+        this.queryFactory = new JPAQueryFactory(em);
+    }
 
 	public List<PaymentDetailsResponseDto> findOrders(Long storeId, int year, int month) {
 
