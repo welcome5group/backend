@@ -5,7 +5,9 @@ import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import fingerorder.webapp.domain.member.dto.MemberDto;
-import fingerorder.webapp.domain.member.dto.MemberEditDto;
+import fingerorder.webapp.domain.member.service.UserService;
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.member.dto.MemberEditNickNameDto;
 import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
@@ -93,13 +95,13 @@ class UserServiceTest {
 			.createdAt(LocalDateTime.now())
 			.build();
 
-		MemberEditDto userEditParamMember = MemberEditDto.builder()
+		MemberEditNickNameDto userEditParamMember = MemberEditNickNameDto.builder()
 			.email("testMember@naver.com")
 			.nickName("changedNickName")
 			.type(MEMBER)
 			.build();
 
-		MemberEditDto userEditParamMerchant = MemberEditDto.builder()
+		MemberEditNickNameDto userEditParamMerchant = MemberEditNickNameDto.builder()
 			.email("testMerchant@naver.com")
 			.nickName("changedNickNameMerchant")
 			.type(MERCHANT)
@@ -118,8 +120,8 @@ class UserServiceTest {
 		memberRepository.save(merchant);
 
 		//then
-		MemberDto resultMember = userService.editMemberInfo(userEditParamMember);
-		MemberDto resultMerchant = userService.editMemberInfo(userEditParamMerchant);
+		MemberDto resultMember = userService.editMemberNickName(userEditParamMember);
+		MemberDto resultMerchant = userService.editMemberNickName(userEditParamMerchant);
 
 		MemberDto checkMemberDto = userService.getMemberInfo(userParamMember);
 		MemberDto checkMerchantDto = userService.getMemberInfo(userParamMerchant);
