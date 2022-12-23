@@ -43,7 +43,7 @@ public class StoreController {
         @Validated @RequestBody StoreCreateRequest storeCreateRequest
         , BindingResult bindingResult) {
         StoreResponse storeResponse = storeService.registerStore(storeCreateRequest);
-        return ResponseEntity.ok(storeResponse);
+        return new ResponseEntity<>(storeResponse, HttpStatus.OK);
     }
 
     //매장수정
@@ -53,7 +53,7 @@ public class StoreController {
         BindingResult bindingResult,
         @PathVariable("storeId") Long storeId) {
         StoreResponse storeResponse = storeService.updateStore(storeUpdateRequest, storeId);
-        return ResponseEntity.ok(storeResponse);
+        return new ResponseEntity<>(storeResponse, HttpStatus.OK);
     }
 
     //매장 삭제
@@ -67,7 +67,7 @@ public class StoreController {
     @GetMapping
     public ResponseEntity<Result<List<StoreResponse>>> findAllStores(@RequestParam Long memberId) {
         List<StoreResponse> stores = storeService.findAllStores(memberId);
-        return ResponseEntity.ok(new Result<>(stores));
+        return new ResponseEntity<>(new Result<>(stores), HttpStatus.OK);
     }
 
     @GetMapping("/payment-details")

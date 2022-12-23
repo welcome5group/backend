@@ -10,7 +10,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.QPaymentDetailsResponseDto;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class SalesQueryRepository {
+
 	private final EntityManager em;
 	private final JPAQueryFactory queryFactory;
 
@@ -47,15 +47,15 @@ public class SalesQueryRepository {
 					formattedDate.as("yyyymm")
 					, order.totalPrice.sum()
 				)
-		)
-		.from(order)
-		.join(order.store, store).on(store.id.eq(storeId))
-		.where(order.createdAt.goe(startDate)
+			)
+			.from(order)
+			.join(order.store, store).on(store.id.eq(storeId))
+			.where(order.createdAt.goe(startDate)
 				, order.createdAt.loe(endDate)
-		)
-		.groupBy(formattedDate)
-		.orderBy(formattedDate.asc())
-		.fetch();
+			)
+			.groupBy(formattedDate)
+			.orderBy(formattedDate.asc())
+			.fetch();
 
 	}
 

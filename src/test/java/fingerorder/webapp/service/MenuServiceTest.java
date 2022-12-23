@@ -174,11 +174,8 @@ class MenuServiceTest {
         //given
         Menu menu = createMenu(10000, "탕수육입니다.", "aaa", "탕수육");
         Menu savedMenu = menuRepository.save(menu);
-
-
         //when
         menuService.menuDisable(savedMenu.getId());
-
         //then
         assertThat(savedMenu.getStatus()).isEqualTo(ENABLE);
     }
