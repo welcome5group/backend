@@ -5,12 +5,13 @@ import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentResponse;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateResponse;
+import fingerorder.webapp.domain.review.dto.ReviewRequest;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.entity.BaseEntity;
-import fingerorder.webapp.entity.ReviewCreateRequest;
-import fingerorder.webapp.entity.ReviewCreateResponse;
-import fingerorder.webapp.entity.ReviewUpdateRequest;
-import fingerorder.webapp.entity.ReviewUpdateResponse;
+//import fingerorder.webapp.entity.ReviewCreateRequest;
+//import fingerorder.webapp.entity.ReviewCreateResponse;
+//import fingerorder.webapp.entity.ReviewUpdateRequest;
+//import fingerorder.webapp.entity.ReviewUpdateResponse;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,16 +53,23 @@ public class Review extends BaseEntity {
 //        this.updatedAt = LocalDateTime.now();
     }
 
-    protected Review() {
+    public Review() {
 
     }
 
-    public Review(ReviewCreateRequest reviewCreateRequest) {
-
-        this.content = reviewCreateRequest.getContent();
-
-
+    public Review(Member member, Store store, ReviewRequest reviewRequest) {
+        this.member = member;
+        this.store = store;
+        this.content = reviewRequest.getContent();
+        this.parentId = reviewRequest.getMemberId();
     }
+
+//    public Review(ReviewCreateRequest reviewCreateRequest) {
+//
+//        this.content = reviewCreateRequest.getContent();
+//
+//
+//    }
 
     public void addMember(Member member) {
         this.member = member;
@@ -74,11 +82,11 @@ public class Review extends BaseEntity {
 //
 //    }
 
-    public Review updateReview(ReviewUpdateRequest reviewUpdateRequest) {
-        this.content = reviewUpdateRequest.getContent();
-        return this;
-
-    }
+//    public Review updateReview(ReviewUpdateRequest reviewUpdateRequest) {
+//        this.content = reviewUpdateRequest.getContent();
+//        return this;
+//
+//    }
 
 
     public Review updateComment(ReviewCommentUpdateRequest reviewCommentUpdateRequest) {
@@ -104,14 +112,14 @@ public class Review extends BaseEntity {
         return new ReviewCommentUpdateResponse(review);
     }
 
-    public ReviewCreateResponse toReviewCreateResponse(Review review) {
-        return new ReviewCreateResponse(review);
-
-    }
-
-    public ReviewUpdateResponse toReviewUpdateResponse(Review review) {
-        return new ReviewUpdateResponse(review);
-    }
+//    public ReviewCreateResponse toReviewCreateResponse(Review review) {
+//        return new ReviewCreateResponse(review);
+//
+//    }
+//
+//    public ReviewUpdateResponse toReviewUpdateResponse(Review review) {
+//        return new ReviewUpdateResponse(review);
+//    }
 
 
     public void addStore(Store store) {
