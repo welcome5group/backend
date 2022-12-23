@@ -71,16 +71,16 @@ public class UserController {
 		return ResponseEntity.ok(result);
 	}
 
-	@PutMapping("/api/users")
+	@PutMapping("/api/users/edit/nickname")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> memberInfoEdit(
+	public ResponseEntity<?> memberEditNickName(
 		@RequestBody MemberEditNickNameDto memberEditNickNameDto) {
 		var result = this.userService.editMemberNickName(memberEditNickNameDto);
 
 		return ResponseEntity.ok(result);
 	}
 
-	@PutMapping("/api/users/editProfile")
+	@PutMapping("/api/users/edit/profile")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
 	public ResponseEntity<?> memberEditProfile(
 		@RequestBody MemberEditProfileDto memberEditProfileDto) {
