@@ -61,7 +61,7 @@ public class Review extends BaseEntity {
         this.member = member;
         this.store = store;
         this.content = reviewRequest.getContent();
-        this.parentId = reviewRequest.getMemberId();
+        this.parentId = reviewRequest.getParentId();
     }
 
 //    public Review(ReviewCreateRequest reviewCreateRequest) {
