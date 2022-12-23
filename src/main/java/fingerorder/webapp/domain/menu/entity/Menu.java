@@ -56,14 +56,14 @@ public class Menu {
     }
 
     @Builder
-
     public Menu(String name, String description, Integer price, String imageUrl,
-        MenuStatus status) {
+        MenuStatus status, Category category) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
         this.status = status;
+        this.category = category;
     }
 
 
