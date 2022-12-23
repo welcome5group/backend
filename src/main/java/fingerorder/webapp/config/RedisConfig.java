@@ -16,10 +16,10 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Value("${spring.redis.host}")
-    private final String redisHost;
+    private String redisHost;
 
     @Value("${spring.redis.port}")
-    private final int redisPort;
+    private int redisPort;
 
     /**
      * @ 작성자 : BE_서형동

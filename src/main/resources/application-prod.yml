@@ -15,7 +15,7 @@ spring:
   jwt:
     secret: ZmluZ2Vyb3JkZXItc3ByaW5nLWJvb3QtcHJvamVjdC1qd3Qtc2VjcmV0LWtleQo=
   redis:
-    host: localhost
+    host: prodhost
     port: 6379
 
   mail:
