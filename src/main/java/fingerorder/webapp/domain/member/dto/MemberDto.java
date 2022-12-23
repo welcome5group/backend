@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class MemberDto {
 	private String email;
 	private String nickName;
+	private String profile;
 	private MemberStatus status;
 	private MemberType memberType;
 	private LocalDateTime createdAt;

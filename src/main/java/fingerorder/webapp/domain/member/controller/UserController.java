@@ -1,26 +1,19 @@
 package fingerorder.webapp.domain.member.controller;
 
-import static org.springframework.http.HttpHeaders.SET_COOKIE;
-
 import fingerorder.webapp.domain.member.dto.MemberDto;
+import fingerorder.webapp.domain.member.dto.MemberEditNickNameDto;
+import fingerorder.webapp.domain.member.dto.MemberEditProfileDto;
+import fingerorder.webapp.domain.member.dto.MemberInfoDto;
+import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.dto.SignInDto;
 import fingerorder.webapp.domain.member.dto.SignOutDto;
 import fingerorder.webapp.domain.member.dto.SignUpDto;
 import fingerorder.webapp.domain.member.dto.TokenDto;
-import fingerorder.webapp.domain.member.dto.MemberEditDto;
-import fingerorder.webapp.domain.member.dto.MemberInfoDto;
-import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.dto.TokenResponseDto;
 import fingerorder.webapp.domain.member.service.MailService;
 import fingerorder.webapp.domain.member.service.UserService;
-import fingerorder.webapp.security.JwtTokenProvider;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.startup.UserConfig;
-import org.springframework.http.ResponseCookie;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 	private final MailService mailService;
 	private final UserService userService;
+	@Value("${api.key}")
+	private String API_KEY;
 
 	@PostMapping("/api/auth/sign-up")
 	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpParam) {
@@ -52,18 +46,9 @@ public class UserController {
 	}
 
 	@PostMapping("/api/auth/sign-in")
-	public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto, HttpServletResponse response) {
+	public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
 		TokenDto tokenDto = this.userService.signIn(signInDto);
 
-		Cookie cookie = new Cookie("refresh_token",tokenDto.getRefreshToken());
-
-		cookie.setMaxAge(tokenDto.getAccessTokenTokenExpirationTime().intValue()/1000);
-		cookie.setSecure(true);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-		cookie.setDomain("/");
-
-		response.addCookie(cookie);
 		TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
 			.accessToken("Bearer " + tokenDto.getAccessToken())
 			.build();
@@ -72,14 +57,8 @@ public class UserController {
 	}
 
 	@PostMapping("/api/auth/sign-out")
-	public ResponseEntity<?> signOut(@RequestBody SignOutDto signOutDto,HttpServletResponse response) {
+	public ResponseEntity<?> signOut(@RequestBody SignOutDto signOutDto) {
 		var result = this.userService.signOut(signOutDto);
-
-		Cookie cookie = new Cookie("refresh_token",null);
-
-		cookie.setMaxAge(0);
-		cookie.setPath("/");
-		response.addCookie(cookie);
 
 		return ResponseEntity.ok(result);
 	}
@@ -94,9 +73,18 @@ public class UserController {
 
 	@PutMapping("/api/users")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> memberInfoEdit(@RequestBody MemberEditDto memberEditDto) {
-		var result = this.userService.editMemberInfo(memberEditDto);
+	public ResponseEntity<?> memberInfoEdit(
+		@RequestBody MemberEditNickNameDto memberEditNickNameDto) {
+		var result = this.userService.editMemberNickName(memberEditNickNameDto);
 
+		return ResponseEntity.ok(result);
+	}
+
+	@PutMapping("/api/users/editProfile")
+	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
+	public ResponseEntity<?> memberEditProfile(
+		@RequestBody MemberEditProfileDto memberEditProfileDto) {
+		var result = this.userService.editMemberProfile(memberEditProfileDto);
 		return ResponseEntity.ok(result);
 	}
 
@@ -117,7 +105,7 @@ public class UserController {
 	public String kakaoLoginMember(@RequestParam String type) {
 		StringBuffer loginUrl = new StringBuffer();
 		loginUrl.append("https://kauth.kakao.com/oauth/authorize?client_id=");
-		loginUrl.append("43b7585079d42f271bc7c481ffca8f03");
+		loginUrl.append(this.API_KEY);
 		loginUrl.append("&redirect_uri=");
 		if (type.equals("MEMBER")) {
 			loginUrl.append("http://localhost:8080/kakao_callback?type=MEMBER");

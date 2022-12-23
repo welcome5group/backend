@@ -5,7 +5,6 @@ spring:
     username: root
     password: wpfkem!@34
 
-
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -19,8 +18,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: mansa0805@gmail.com
-    password: vhfyolvbnhijjqpn
+    username: ${MAIL_NAME}
+    password: ${MAIL_APP_PASSWORD}
     properties:
       mail:
         smtp:
@@ -41,3 +40,6 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
     password : 5678
+
+api:
+  key: ${KAKAO_API_KEY}

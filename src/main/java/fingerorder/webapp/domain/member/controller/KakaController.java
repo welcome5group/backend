@@ -3,8 +3,6 @@ package fingerorder.webapp.domain.member.controller;
 import fingerorder.webapp.domain.member.dto.TokenDto;
 import fingerorder.webapp.domain.member.dto.TokenResponseDto;
 import fingerorder.webapp.domain.member.service.UserService;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,19 +15,8 @@ public class KakaController {
 	private final UserService userService;
 
 	@RequestMapping("/kakao_callback")
-	public String kakaoCallback(@RequestParam String type,@RequestParam String code, Model model,
-		HttpServletResponse response) {
+	public String kakaoCallback(@RequestParam String type,@RequestParam String code, Model model) {
 		TokenDto tokenDto = userService.kakaoSignIn(code,type);
-
-		Cookie cookie = new Cookie("refresh_token",tokenDto.getRefreshToken());
-
-		cookie.setMaxAge(tokenDto.getAccessTokenTokenExpirationTime().intValue()/1000);
-		cookie.setSecure(true);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-		cookie.setDomain(".fingerorder.vercel.com");
-
-		response.addCookie(cookie);
 
 		TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
 			.accessToken("Bearer " + tokenDto.getAccessToken())

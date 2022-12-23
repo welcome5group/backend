@@ -1,7 +1,8 @@
 package fingerorder.webapp.domain.member.service;
 
 import fingerorder.webapp.domain.member.dto.MemberDto;
-import fingerorder.webapp.domain.member.dto.MemberEditDto;
+import fingerorder.webapp.domain.member.dto.MemberEditNickNameDto;
+import fingerorder.webapp.domain.member.dto.MemberEditProfileDto;
 import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.dto.SignInDto;
@@ -10,7 +11,6 @@ import fingerorder.webapp.domain.member.dto.SignOutResponseDto;
 import fingerorder.webapp.domain.member.dto.SignUpDto;
 import fingerorder.webapp.domain.member.dto.TokenDto;
 import fingerorder.webapp.domain.member.entity.Member;
-import fingerorder.webapp.domain.member.exception.AlreadyAuthorizedException;
 import fingerorder.webapp.domain.member.exception.AlreadyUsageEmailException;
 import fingerorder.webapp.domain.member.exception.AlreadyUsageNickNameException;
 import fingerorder.webapp.domain.member.exception.InvalidEmailFormatException;
@@ -37,13 +37,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -65,6 +65,9 @@ public class UserService implements UserDetailsService {
 	private final RedisTemplate redisTemplate;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+	@Value("${api.key}")
+	private String API_KEY;
 
 	public MemberDto signUp(SignUpDto signUpDto) {
 		if (checkInvalidEmail(signUpDto.getEmail())) {
@@ -88,6 +91,7 @@ public class UserService implements UserDetailsService {
 			.email(signUpDto.getEmail())
 			.password(this.passwordEncoder.encode(signUpDto.getPassword()))
 			.nickName(signUpDto.getNickName())
+			.profile(signUpDto.getProfile())
 			.memberSignUpType(MemberSignUpType.NORMAL)
 			.memberType(signUpDto.getType())
 			.status(MemberStatus.UNAUTHORIZED)
@@ -162,7 +166,7 @@ public class UserService implements UserDetailsService {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
-			sb.append("&client_id=43b7585079d42f271bc7c481ffca8f03");
+			sb.append("&client_id=API_KEY");
 			sb.append("&redirect_uri=http://localhost:8080/kakao_callback?type="+type);
 			sb.append("&code="+code);
 			bw.write(sb.toString());
@@ -256,19 +260,28 @@ public class UserService implements UserDetailsService {
 	}
 
 	// user 정보 수정(nickName 밖에 없음)
-	public MemberDto editMemberInfo(MemberEditDto userEditDto) {
-		Member findMember = checkInvalidMember(userEditDto.getEmail());
+	public MemberDto editMemberNickName(MemberEditNickNameDto memberEditNickNameDto) {
+		Member findMember = checkInvalidMember(memberEditNickNameDto.getEmail());
 
-		boolean existNickName = this.memberRepository.existsByNickName(userEditDto.getNickName());
+		boolean existNickName = this.memberRepository.existsByNickName(
+			memberEditNickNameDto.getNickName());
 
 		if (existNickName) {
 			throw new AlreadyUsageNickNameException();
 		}
 
-		findMember.editNickName(userEditDto.getNickName());
+		findMember.editNickName(memberEditNickNameDto.getNickName());
 		this.memberRepository.save(findMember);
 
 		return findMember.toMemberDto();
+	}
+
+	public MemberDto editMemberProfile(MemberEditProfileDto memberEditProfileDto) {
+		Member findMember = checkInvalidMember(memberEditProfileDto.getEmail());
+
+		findMember.editProfile(memberEditProfileDto.getProfile());
+
+		return this.memberRepository.save(findMember).toMemberDto();
 	}
 
 	public boolean resetPassword(

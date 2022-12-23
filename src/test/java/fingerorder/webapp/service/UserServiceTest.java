@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import fingerorder.webapp.domain.member.dto.MemberDto;
 import fingerorder.webapp.domain.member.service.UserService;
 import fingerorder.webapp.domain.member.entity.Member;
-import fingerorder.webapp.domain.member.dto.MemberEditDto;
+import fingerorder.webapp.domain.member.dto.MemberEditNickNameDto;
 import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import java.time.LocalDateTime;
@@ -93,13 +93,13 @@ class UserServiceTest {
 			.createdAt(LocalDateTime.now())
 			.build();
 
-		MemberEditDto userEditParamMember = MemberEditDto.builder()
+		MemberEditNickNameDto userEditParamMember = MemberEditNickNameDto.builder()
 			.email("testMember@naver.com")
 			.nickName("changedNickName")
 			.type(MEMBER)
 			.build();
 
-		MemberEditDto userEditParamMerchant = MemberEditDto.builder()
+		MemberEditNickNameDto userEditParamMerchant = MemberEditNickNameDto.builder()
 			.email("testMerchant@naver.com")
 			.nickName("changedNickNameMerchant")
 			.type(MERCHANT)
