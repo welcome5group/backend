@@ -16,8 +16,8 @@ spring:
     secret: ZmluZ2Vyb3JkZXItc3ByaW5nLWJvb3QtcHJvamVjdC1qd3Qtc2VjcmV0LWtleQo=
 
   redis:
-    host: 127.0.0.1
-    port: 6379
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
 
   mail:
     host: smtp.gmail.com
