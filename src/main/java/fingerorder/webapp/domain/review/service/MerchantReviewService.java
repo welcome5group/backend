@@ -1,6 +1,7 @@
 package fingerorder.webapp.domain.review.service;
 
 import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.member.exception.MemberFindException;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.exception.MenuFindException;
 import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
@@ -18,9 +19,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MerchantReviewService {
 
     private final ReviewRepository reviewRepository;
@@ -56,6 +59,7 @@ public class MerchantReviewService {
 //    }
 
     //점주의 회원 리뷰에 대한 댓글 생성
+    @Transactional
     public ReviewCommentResponse registerComment(ReviewCommentRequest reviewCommentRequest,
         Long storeId) {
 
@@ -65,11 +69,12 @@ public class MerchantReviewService {
             MenuFindException::new);
         Store store = storeRepository.findById(storeId).orElseThrow(
             StoreFindException::new);
-        review.changeMember(member);
-        review.changeStore(store);
+        savedReview.addMember(member);
+        savedReview.addStore(store);
         return savedReview.toReviewCommentResponse(savedReview);
     }
 
+    @Transactional
     //점주의 회원 리뷰에 대한 댓글 수정
     public ReviewCommentUpdateResponse updateComment(
         ReviewCommentUpdateRequest reviewCommentUpdateRequest) {
@@ -80,6 +85,7 @@ public class MerchantReviewService {
         return review.toReviewCommentUpdateResponse(review);
     }
 
+    @Transactional
     //점주의 회원 리뷰에 대한 댓글 삭제
     public void deleteComment(Long reviewId) {
         Review findReview = reviewRepository.findById(reviewId).orElseThrow(()
@@ -89,21 +95,25 @@ public class MerchantReviewService {
 
     }
 
+    @Transactional //트랜잭션을 써야 변경감지가 된다!! -> 트러블슈팅에 넣기
     //손님이 등록한 모든 리뷰 조회 (사장 관점에서)
     public List<ReviewResponse> searchAllReview(Long storeId) {
         List<ReviewResponse> reviewResponses = searchReviewByStore(storeId);
-        List<Comment> comments = searchReviewByParentId();
+        Store store = storeRepository.findById(storeId).orElseThrow(StoreFindException::new);
+        List<Comment> comments = searchReviewByParentId(store);
 
         for (ReviewResponse reviewResponse : reviewResponses) {
             for (Comment comment : comments) {
                 if (comment.getParentId().equals(reviewResponse.getReviewId())) {
                     reviewResponse.setComment(comment);
+                    break;
                 }
-                break;
             }
         }
         return reviewResponses;
     }
+
+
 
     private List<ReviewResponse> searchReviewByStore(Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(StoreFindException::new);
@@ -115,22 +125,14 @@ public class MerchantReviewService {
             .collect(Collectors.toList());
     }
 
-    private List<Comment> searchReviewByParentId() {
 
-        List<Review> reviews = reviewRepository.findAllByParentIdIsNotNull();
+    private List<Comment> searchReviewByParentId(Store store) {
 
-//        System.out.println("reviews = " + reviews);
-//        System.out.println("reviews = " + reviews.get(0));
-//        System.out.println("reviews = " + reviews.get(0).getParentId());
-//        System.out.println("reviews = " + reviews.get(0).getId());
-//        System.out.println("reviews = " + reviews.get(0).getUpdatedAt());
-//        System.out.println("reviews = " + reviews.get(0).getMember().getNickName());
+        List<Review> reviews = reviewRepository.findAllByParentIdIsNotNullAndStore(store);
 
         return reviews.stream().map(
                 r -> new Comment(r.getMember().getNickName(), r.getId(), r.getParentId(),
                     r.getUpdatedAt()))
             .collect(Collectors.toList());
-
-
     }
 }

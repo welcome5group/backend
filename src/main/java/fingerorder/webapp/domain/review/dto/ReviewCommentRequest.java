@@ -10,13 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReviewCommentRequest {
 
-
-    @NotBlank
+    @NotNull
     private Long parentId;
-    @NotBlank
+    @NotNull
     private Long memberId;
     @NotBlank
     private String content;
-
-
 }

@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class ReviewCommentUpdateRequest {
 
-    @NotBlank
+    @NotNull
     private Long reviewId;
     @NotBlank
     private String content;

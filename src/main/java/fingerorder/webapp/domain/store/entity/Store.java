@@ -1,6 +1,7 @@
 package fingerorder.webapp.domain.store.entity;
 
 import fingerorder.webapp.annotation.Trim;
+import fingerorder.webapp.annotation.TrimEntityListener;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.menu.entity.Menu;
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,6 +28,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@EntityListeners(TrimEntityListener.class)
 public class Store extends BaseEntity {
 
     @Id
@@ -71,15 +74,7 @@ public class Store extends BaseEntity {
         this.tableCount = storeUpdateRequest.getTableCount();
     }
 
-    public LocalDateTime showCreateAt() {
-        return LocalDateTime.now();
-    }
-
-    public LocalDateTime showUpdatedAt() {
-        return LocalDateTime.now();
-    }
-
-    public StoreResponse toStoreRequest(Store store) {
+    public StoreResponse toStoreResponse(Store store) {
         return new StoreResponse(store.getId(), store.getName(), store.getStoreLocation());
     }
 

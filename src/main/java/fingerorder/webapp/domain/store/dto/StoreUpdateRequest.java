@@ -15,8 +15,10 @@ public class StoreUpdateRequest {
     //    private Long memberId; 우선은 필요없으니 나중에 추가하든지 하자
     @NotBlank
     private String name;
-    @NotBlank
+    @NotNull
     private Integer tableCount;
     @NotBlank
     private String storeLocation;
+
+
 }

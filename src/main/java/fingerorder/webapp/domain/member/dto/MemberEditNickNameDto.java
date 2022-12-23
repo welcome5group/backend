@@ -11,11 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class MemberEditDto {
-
-    private String email;
-    private String nickName;
-    private MemberType type;
-
+public class MemberEditNickNameDto {
+	private String email;
+	private String nickName;
+	private MemberType type;
 }

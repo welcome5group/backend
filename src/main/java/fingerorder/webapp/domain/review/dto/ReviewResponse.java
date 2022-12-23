@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class ReviewResponse {
 
-
     private Long reviewId;
     private String content;
     private String nickName;
@@ -30,8 +29,5 @@ public class ReviewResponse {
         private Long parentId;
         private LocalDateTime updatedAt;
 
-
     }
-
-
 }

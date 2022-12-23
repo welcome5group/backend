@@ -34,7 +34,6 @@ public class MenuService {
         Store store = storeRepository.findById(storeId).orElseThrow(
             StoreFindException::new);
         Menu savedMenu = menuRepository.save(menu);
-        store.addMenu(savedMenu);
         savedMenu.changeStore(store);
         savedMenu.add(category);
         return savedMenu.toMenuResponse(savedMenu);

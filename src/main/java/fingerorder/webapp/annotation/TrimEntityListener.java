@@ -2,10 +2,12 @@ package fingerorder.webapp.annotation;
 
 import java.lang.reflect.Field;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 
 public class TrimEntityListener {
 
     @PrePersist
+    @PreUpdate
     public void postLoad(Object entity) {
 
         Field[] fields = entity.getClass().getDeclaredFields();
@@ -23,8 +25,5 @@ public class TrimEntityListener {
 
             }
         }
-
-
     }
-
 }

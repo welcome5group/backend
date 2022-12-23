@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MenuUpdateRequest {
 
-    @NotBlank
+    @NotNull
     private Long menuId;
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z가-힣0-9 ()].+$")
     private String name;
     @NotBlank
     private String description;
-    @NotBlank
+    @NotNull
     private Integer price;
     @NotBlank
     private String imageUrl;

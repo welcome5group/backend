@@ -38,9 +38,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
     private Long id;
-
     private int tableNum;
-
     private int totalPrice;
 
     @Enumerated(EnumType.STRING)
@@ -91,5 +89,4 @@ public class Order {
     private void makeTotalPrice(int price) {
         this.totalPrice += price;
     }
-
 }

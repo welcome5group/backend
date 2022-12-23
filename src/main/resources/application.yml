@@ -13,28 +13,21 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
         #                show_sql: true
         format_sql: true
+
   jwt:
     secret: ZmluZ2Vyb3JkZXItc3ByaW5nLWJvb3QtcHJvamVjdC1qd3Qtc2VjcmV0LWtleQo=
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: mansa0805@gmail.com
-    password: vhfyolvbnhijjqpn
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
 
   redis:
     host: localhost
     port: 6379
+
+  profiles:
+    include: secret
 
 logging.level:
   org.hibernate.SQL: debug
@@ -45,4 +38,4 @@ logging.level:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    password:
+    password: 5678

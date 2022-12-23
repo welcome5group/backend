@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StoreCreateRequest {
 
-    @NotBlank
+    @NotNull
     private Long memberId; //사장 아이디
     @NotBlank
     private String name; //가게 이름
 
-    @NotBlank
+    @NotNull
     private Integer tableCount;
 
     @NotBlank

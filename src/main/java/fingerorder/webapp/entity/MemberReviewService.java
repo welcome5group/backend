@@ -53,6 +53,7 @@ public class MemberReviewService {
         return review.toReviewCreateResponse(savedReview);
     }
 
+    @Transactional
     public ReviewUpdateResponse updateReview(ReviewUpdateRequest reviewUpdateRequest) {
         Review findReview = reviewRepository.findById(reviewUpdateRequest.getReviewId())
             .orElseThrow(()
@@ -61,6 +62,7 @@ public class MemberReviewService {
         return review.toReviewUpdateResponse(review);
     }
 
+    @Transactional
     public void deleteReviewAndComment(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(()
             -> new RuntimeException("리뷰가 존재하지 않습니다."));

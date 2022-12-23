@@ -1,6 +1,7 @@
 package fingerorder.webapp.domain.review.entity;
 
 import fingerorder.webapp.annotation.Trim;
+import fingerorder.webapp.annotation.TrimEntityListener;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentResponse;
@@ -14,6 +15,7 @@ import fingerorder.webapp.entity.ReviewUpdateRequest;
 import fingerorder.webapp.entity.ReviewUpdateResponse;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +26,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@EntityListeners(TrimEntityListener.class)
 public class Review extends BaseEntity {
 
     @Id
@@ -49,8 +52,6 @@ public class Review extends BaseEntity {
     public Review(ReviewCommentRequest reviewCommentRequest) {
         this.parentId = reviewCommentRequest.getParentId();
         this.content = reviewCommentRequest.getContent();
-//        this.createdAt = LocalDateTime.now();
-//        this.updatedAt = LocalDateTime.now();
     }
 
     protected Review() {
@@ -85,15 +86,6 @@ public class Review extends BaseEntity {
     public Review updateComment(ReviewCommentUpdateRequest reviewCommentUpdateRequest) {
         this.content = reviewCommentUpdateRequest.getContent();
         return this;
-    }
-
-    public void changeMember(Member member) {
-        this.member = member;
-    }
-
-    public void changeStore(Store store) {
-        this.store = store;
-
     }
 
     public ReviewCommentResponse toReviewCommentResponse(Review review) {

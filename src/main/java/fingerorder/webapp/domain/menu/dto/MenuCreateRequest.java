@@ -17,7 +17,7 @@ public class MenuCreateRequest {
     private String name;
     @NotBlank
     private String description;
-    @NotBlank
+    @NotNull
     private Integer price;
     @NotBlank
     private String imageUrl;
