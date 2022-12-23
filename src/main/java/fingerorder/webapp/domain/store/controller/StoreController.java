@@ -1,6 +1,8 @@
 package fingerorder.webapp.domain.store.controller;
 
 import fingerorder.webapp.core.dto.Result;
+import fingerorder.webapp.domain.store.dto.OrderDetailsRequestDto;
+import fingerorder.webapp.domain.store.dto.OrderDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.PaymentDatailsRequestDto;
 import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
@@ -69,14 +71,14 @@ public class StoreController {
     }
 
     @GetMapping("/payment-details")
-    public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestBody PaymentDatailsRequestDto getSalesDto) {
+    public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestBody PaymentDatailsRequestDto paymentDatailsRequestDto) {
 
-        return new ResponseEntity<>(storeService.findSalesForMonth(getSalesDto), HttpStatus.OK);
+        return new ResponseEntity<>(storeService.findPaymentsForMonth(paymentDatailsRequestDto), HttpStatus.OK);
     }
 
-//    @GetMapping("/order-details")
-//    public ResponseEntity<List<PaymentDetailsResponseDto>> getOrderDetails(@RequestBody PaymentDatailsRequestDto getSalesDto) {
-//
-//        return new ResponseEntity<>(storeService.findSalesForMonth(getSalesDto), HttpStatus.OK);
-//    }
+    @GetMapping("/order-details")
+    public ResponseEntity<List<OrderDetailsResponseDto>> getOrderDetails(@RequestBody OrderDetailsRequestDto orderDetailsRequestDto) {
+
+        return ResponseEntity.ok(storeService.findOrderDetails(orderDetailsRequestDto));
+    }
 }

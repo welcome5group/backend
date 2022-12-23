@@ -1,5 +1,8 @@
 package fingerorder.webapp.domain.store.service;
 
+import fingerorder.webapp.domain.store.dto.OrderDetailsRequestDto;
+import fingerorder.webapp.domain.store.dto.OrderDetailsResponseDto;
+import fingerorder.webapp.domain.store.dto.OrderMenuInfo;
 import fingerorder.webapp.domain.store.dto.PaymentDatailsRequestDto;
 import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
 import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
@@ -17,6 +20,7 @@ import fingerorder.webapp.domain.store.dto.StoreResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.exception.StoreFindException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -81,11 +85,38 @@ public class StoreService {
         return storeLookUpOrderResponse;
     }
 
-    public List<PaymentDetailsResponseDto> findSalesForMonth(
+    public List<PaymentDetailsResponseDto> findPaymentsForMonth(
         PaymentDatailsRequestDto paymentDatailsRequestDto) {
         List<PaymentDetailsResponseDto> orders = salesQueryRepository.findOrders(
             paymentDatailsRequestDto.getStoreId(), paymentDatailsRequestDto.getYear(), paymentDatailsRequestDto.getMonth());
 
         return orders;
+    }
+
+    public List<OrderDetailsResponseDto> findOrderDetails(
+        OrderDetailsRequestDto orderDetailsRequestDto ) {
+        List<Order> orders = salesQueryRepository.findOrders(
+            orderDetailsRequestDto.getStoreId(), orderDetailsRequestDto.getStartDate(), orderDetailsRequestDto.getEndDate()
+        );
+
+        List<OrderDetailsResponseDto> orderDetailsResponseDtos = new ArrayList<>();
+
+        for (Order order : orders) {
+            List<OrderMenu> orderMenus = order.getOrderMenus();
+            List<OrderMenuInfo> orderMenuInfos = new ArrayList<>();
+
+            for (OrderMenu orderMenu : orderMenus) {
+                OrderMenuInfo orderMenuInfo = new OrderMenuInfo(orderMenu.getMenu().getName(), orderMenu.getTotalPrice(), orderMenu.getCount());
+                orderMenuInfos.add(orderMenuInfo);
+            }
+
+            OrderDetailsResponseDto orderDetailsResponseDto = new OrderDetailsResponseDto(
+                order.getId(), order.getTableNum(), order.getTotalPrice(), order.getCreatedAt(), orderMenuInfos
+            );
+
+            orderDetailsResponseDtos.add(orderDetailsResponseDto);
+        }
+
+        return orderDetailsResponseDtos;
     }
 }
