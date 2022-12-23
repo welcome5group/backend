@@ -33,27 +33,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         super.configure(web);
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        //권한 주는 페이지
-        http.httpBasic().disable()
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeRequests()
-            .antMatchers(
-                "/**/sign-up"
-                , "/**/sign-in"
-                , "/api/auth/password"
-                , "/api/auth/resetPassword"
-                , "/**/kakao_callback"
-                , "/api/auth/sign-up/submit"
-                , "/api/**"
-            ).permitAll()
-            .and()
-            .addFilterBefore(this.authenticationFilter,
-                UsernamePasswordAuthenticationFilter.class);
-        super.configure(http);
-    }
-
+	  @Override
+	  protected void configure(HttpSecurity http) throws Exception {
+		  //권한 주는 페이지
+		  http.httpBasic().disable()
+			  .csrf().disable()
+				  .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				  .and()
+					  .authorizeRequests()
+						  .antMatchers(
+							  "/**/sign-up"
+							  ,"/**/sign-in"
+							  ,"/api/auth/password"
+							  ,"/api/auth/resetPassword"
+							  ,"/**/kakao_callback"
+							  ,"/api/auth/sign-up/submit"
+							  ,"/api/**"
+							  ).permitAll()
+				  .and()
+					  .addFilterBefore(this.authenticationFilter,
+						  UsernamePasswordAuthenticationFilter.class);
+		  super.configure(http);
+	  }
 }

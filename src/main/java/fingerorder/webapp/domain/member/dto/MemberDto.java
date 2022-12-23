@@ -13,13 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDto {
-
-    private Long id;
-    private String email;
-    private String nickName;
-    private MemberStatus status;
-    private MemberType memberType;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
+	private Long id;
+	private String email;
+	private String nickName;
+	private String profile;
+	private MemberStatus status;
+	private MemberType memberType;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 }

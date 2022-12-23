@@ -34,6 +34,7 @@ public class Member {
     private String email;
     private String password;
     private String nickName;
+    private String profile;
     private MemberStatus status;
     private MemberSignUpType memberSignUpType;
     private LocalDateTime createdAt;
@@ -91,10 +92,16 @@ public class Member {
             .id(this.id)
             .email(this.email)
             .nickName(this.nickName)
+            .profile(this.profile)
             .memberType(this.memberType)
             .status(this.status)
             .createdAt(this.createdAt)
             .updatedAt(this.updatedAt)
             .build();
+    }
+
+    public void editProfile(String profile) {
+        this.profile = profile;
+        this.updatedAt = LocalDateTime.now();
     }
 }
