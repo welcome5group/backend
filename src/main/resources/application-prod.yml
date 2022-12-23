@@ -14,8 +14,9 @@ spring:
         format_sql: true
   jwt:
     secret: ZmluZ2Vyb3JkZXItc3ByaW5nLWJvb3QtcHJvamVjdC1qd3Qtc2VjcmV0LWtleQo=
+
   redis:
-    host: prodhost
+    host: 127.0.0.1
     port: 6379
 
   mail:
