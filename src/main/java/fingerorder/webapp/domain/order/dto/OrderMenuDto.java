@@ -1,5 +1,7 @@
 package fingerorder.webapp.domain.order.dto;
 
+import fingerorder.webapp.domain.menu.dto.MenuResponse;
+import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.order.entity.OrderMenu;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,14 +17,17 @@ public class OrderMenuDto {
 
     private int totalPrice;
 
-    private OrderMenuDto(OrderMenu orderMenu) {
+    private MenuResponse menu;
+
+    private OrderMenuDto(OrderMenu orderMenu, Menu menu) {
         this.id = orderMenu.getId();
         this.count = orderMenu.getCount();
         this.totalPrice = orderMenu.getTotalPrice();
+        this.menu = menu.toMenuResponse(menu);
     }
 
-    public static OrderMenuDto createOrderMenu(OrderMenu orderMenu) {
-        return new OrderMenuDto(orderMenu);
+    public static OrderMenuDto createOrderMenu(OrderMenu orderMenu, Menu menu) {
+        return new OrderMenuDto(orderMenu, menu);
     }
 
 }

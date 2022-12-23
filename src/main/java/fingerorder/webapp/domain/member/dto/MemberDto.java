@@ -1,9 +1,8 @@
 package fingerorder.webapp.domain.member.dto;
 
-import fingerorder.webapp.domain.member.status.MemberType;
 import fingerorder.webapp.domain.member.status.MemberStatus;
+import fingerorder.webapp.domain.member.status.MemberType;
 import java.time.LocalDateTime;
-import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

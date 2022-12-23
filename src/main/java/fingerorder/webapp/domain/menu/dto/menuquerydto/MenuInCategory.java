@@ -12,5 +12,4 @@ public class MenuInCategory {
     private int price;
     private String imageUrl;
 
-
 }

@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MailSendResultDto {
-	private boolean result;
+
+    private boolean result;
 }

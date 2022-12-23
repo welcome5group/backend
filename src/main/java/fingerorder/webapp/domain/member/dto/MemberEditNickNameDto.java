@@ -1,5 +1,6 @@
 package fingerorder.webapp.domain.member.dto;
 
+
 import fingerorder.webapp.domain.member.status.MemberType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -19,10 +19,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -52,9 +51,19 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderMenu> orderMenus = new ArrayList<>();
+
+    @Builder
+    public Order(int totalPrice, Member member, Store store) {
+        this.totalPrice = totalPrice;
+        this.member = member;
+        this.store = store;
+    }
 
     private Order(Member member, Store store, List<OrderMenu> orderMenus, OrderStatus orderStatus) {
         this.member = member;
@@ -77,11 +86,7 @@ public class Order {
         this.orderMenus.add(orderMenu);
     }
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderMenu> orderMenus = new ArrayList<>();
-
     private void makeTotalPrice(int price) {
         this.totalPrice += price;
     }
-
 }

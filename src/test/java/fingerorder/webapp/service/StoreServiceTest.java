@@ -5,24 +5,24 @@ import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
 import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
-import fingerorder.webapp.domain.store.repository.StoreRepository;
-import fingerorder.webapp.domain.store.service.StoreService;
+import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.member.repository.MemberRepository;
+import fingerorder.webapp.domain.menu.entity.Menu;
+import fingerorder.webapp.domain.menu.repository.MenuRepository;
+import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
-import fingerorder.webapp.domain.category.entity.Category;
-import fingerorder.webapp.domain.member.entity.Member;
-import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.domain.member.repository.MemberRepository;
-import fingerorder.webapp.domain.menu.repository.MenuRepository;
-
-import static fingerorder.webapp.domain.member.status.MemberStatus.ACTIVATE;
-import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
+import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
+import fingerorder.webapp.domain.store.repository.StoreRepository;
+import fingerorder.webapp.domain.store.service.StoreService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,8 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 class StoreServiceTest {
+
     @Autowired
-	StoreService storeService;
+    StoreService storeService;
     @Autowired
     StoreRepository storeRepository;
     @Autowired
@@ -42,6 +43,21 @@ class StoreServiceTest {
     @Autowired
     MenuRepository menuRepository;
 
+    @Autowired
+    SalesQueryRepository salesQueryRepository;
+
+    @Test
+    @DisplayName("그룹 쿼리 실행(querydsl)")
+    void querydslGroupbyTest() {
+        List<PaymentDetailsResponseDto> salesMonthlyTestDtos = salesQueryRepository.findOrders(1L,
+            1, 1);
+
+        for (PaymentDetailsResponseDto salesMonthlyTestDto : salesMonthlyTestDtos) {
+            System.out.println("salesMonthlyTestDto = " + salesMonthlyTestDto);
+        }
+    }
+
+
     @Test
     void registerStoreTest() {
         //given
@@ -49,7 +65,8 @@ class StoreServiceTest {
 
         Member savedMember = memberRepository.save(member);
 
-        StoreCreateRequest storeCreateRequest = new StoreCreateRequest(savedMember.getId(), "중국집","서울시");
+        StoreCreateRequest storeCreateRequest = new StoreCreateRequest(savedMember.getId(), "중국집",
+            3, "서울시");
         //when
         storeService.registerStore(storeCreateRequest);
         Store store = storeRepository.findByName(storeCreateRequest.getName());
@@ -74,14 +91,14 @@ class StoreServiceTest {
     @Test
     void updateStoreTest() {
         //given
-        Store store = new Store("일식집",LocalDateTime.now(),LocalDateTime.now(),4,"수원시");
+        Store store = new Store("일식집", LocalDateTime.now(), LocalDateTime.now(), 4, "수원시");
         Store savedStore = storeRepository.save(store);
         Long storeId = savedStore.getId();
-        StoreUpdateRequest storeUpdateRequest = new StoreUpdateRequest(storeId,"중국집",10,"서울시");
+        StoreUpdateRequest storeUpdateRequest = new StoreUpdateRequest("중국집", 10, "서울시");
         //when
-        storeService.updateStore(storeUpdateRequest);
+        storeService.updateStore(storeUpdateRequest, storeId);
         //then
-        Store updatedStore = storeRepository.findById(storeUpdateRequest.getStoreId())
+        Store updatedStore = storeRepository.findById(storeId)
             .orElseThrow(() -> new RuntimeException("존재하는 가게가 없습니다."));
         assertThat(updatedStore.getName()).isEqualTo("중국집");
         assertThat(updatedStore.getStoreLocation()).isEqualTo("서울시");
@@ -126,7 +143,9 @@ class StoreServiceTest {
             .build();
     }
 
-    private static Store createStore(String storeLocation, int tableCount, String name) {
+
+    private static Store createStore(String storeLocation, Integer tableCount, String name) {
+
         return Store.builder()
             .storeLocation(storeLocation)
             .createdAt(LocalDateTime.now())

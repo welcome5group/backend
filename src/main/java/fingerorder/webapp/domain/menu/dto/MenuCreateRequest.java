@@ -1,28 +1,34 @@
 package fingerorder.webapp.domain.menu.dto;
 
-import fingerorder.webapp.domain.category.entity.Category;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class MenuCreateRequest {
 
-    private Long storeId;
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String description;
-    private int price;
+    @NotNull
+    private Integer price;
+    @NotEmpty
     private String imageUrl;
-    private Category category;
+    @NotEmpty
+    private String categoryName;
 
     @Builder
-    public MenuCreateRequest(Long storeId, String name, String description, int price,
+    public MenuCreateRequest(String name, String description, int price,
         String imageUrl,
-        Category category) {
-        this.storeId = storeId;
+        String categoryName) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.category = category;
+        this.categoryName = categoryName;
     }
 }

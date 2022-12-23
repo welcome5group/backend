@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequiredArgsConstructor
 public class TestController {
+
     private final UserService userService;
+
     @ResponseBody
     @GetMapping("/aws-v1")
     public String test() {
