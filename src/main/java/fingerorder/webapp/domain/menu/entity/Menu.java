@@ -1,5 +1,6 @@
 package fingerorder.webapp.domain.menu.entity;
 
+import fingerorder.webapp.annotation.Trim;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
 import fingerorder.webapp.domain.menu.dto.MenuResponse;
@@ -25,7 +26,9 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "menu_id")
     private Long id;
+    @Trim
     private String name;
+    @Trim
     private String description;
     private Integer price;
     private String imageUrl;

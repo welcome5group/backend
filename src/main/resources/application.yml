@@ -45,4 +45,4 @@ logging.level:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    password: 5678
+    password:

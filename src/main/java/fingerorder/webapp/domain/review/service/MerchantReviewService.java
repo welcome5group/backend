@@ -119,21 +119,18 @@ public class MerchantReviewService {
 
         List<Review> reviews = reviewRepository.findAllByParentIdIsNotNull();
 
-        System.out.println("reviews = " + reviews);
-        System.out.println("reviews = " + reviews.get(0));
-        System.out.println("reviews = " + reviews.get(0).getParentId());
-        System.out.println("reviews = " + reviews.get(0).getId());
-        System.out.println("reviews = " + reviews.get(0).getUpdatedAt());
-        System.out.println("reviews = " + reviews.get(0).getMember().getNickName());
+//        System.out.println("reviews = " + reviews);
+//        System.out.println("reviews = " + reviews.get(0));
+//        System.out.println("reviews = " + reviews.get(0).getParentId());
+//        System.out.println("reviews = " + reviews.get(0).getId());
+//        System.out.println("reviews = " + reviews.get(0).getUpdatedAt());
+//        System.out.println("reviews = " + reviews.get(0).getMember().getNickName());
 
         return reviews.stream().map(
                 r -> new Comment(r.getMember().getNickName(), r.getId(), r.getParentId(),
                     r.getUpdatedAt()))
             .collect(Collectors.toList());
 
-//        private String nickName;
-//        private Long reviewId;
-//        private Long parentId;
-//        private LocalDateTime updatedAt;
+
     }
 }

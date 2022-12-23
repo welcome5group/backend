@@ -1,5 +1,6 @@
 package fingerorder.webapp.domain.review.entity;
 
+import fingerorder.webapp.annotation.Trim;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentResponse;
@@ -31,7 +32,7 @@ public class Review extends BaseEntity {
     private Long id;
 
     //    private String nickName;
-    @Column(length = 1000)
+    @Trim
     private String content;
 //    private LocalDateTime deletedAt;
 

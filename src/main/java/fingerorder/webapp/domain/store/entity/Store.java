@@ -1,5 +1,6 @@
 package fingerorder.webapp.domain.store.entity;
 
+import fingerorder.webapp.annotation.Trim;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.menu.entity.Menu;
@@ -31,10 +32,10 @@ public class Store extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "store_id")
     private Long id;
+    @Trim
     private String name;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private Integer tableCount;
+    @Trim
     private String storeLocation;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,18 +51,12 @@ public class Store extends BaseEntity {
 
     public Store(StoreCreateRequest storeCreateRequest) {
         this.name = storeCreateRequest.getName();
-        this.createdAt = showCreateAt();
-        this.updatedAt = showUpdatedAt();
         this.storeLocation = storeCreateRequest.getStoreLocation();
     }
 
     @Builder
-    public Store(String name, LocalDateTime createdAt, LocalDateTime updatedAt,
-        Integer tableCount,
-        String storeLocation) {
+    public Store(String name, Integer tableCount, String storeLocation) {
         this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.tableCount = tableCount;
         this.storeLocation = storeLocation;
     }
@@ -72,7 +67,6 @@ public class Store extends BaseEntity {
 
     public void changeStore(StoreUpdateRequest storeUpdateRequest) {
         this.name = storeUpdateRequest.getName();
-        this.updatedAt = showUpdatedAt();
         this.storeLocation = storeUpdateRequest.getStoreLocation();
         this.tableCount = storeUpdateRequest.getTableCount();
     }
