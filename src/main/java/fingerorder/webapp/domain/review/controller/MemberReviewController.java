@@ -27,5 +27,5 @@ public class MemberReviewController {
     public ResponseEntity<?> edit(@RequestBody ReviewRequest reviewRequest) {
         return memberReviewService.edit(reviewRequest);
     }
-
+    
 }
