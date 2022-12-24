@@ -80,6 +80,10 @@ public class Review extends BaseEntity {
 //
 //    }
 
+    public Review updateReview(ReviewRequest reviewRequest) {
+        this.content = reviewRequest.getContent();
+        return this;
+    }
 
     public Review updateComment(ReviewCommentUpdateRequest reviewCommentUpdateRequest) {
         this.content = reviewCommentUpdateRequest.getContent();
