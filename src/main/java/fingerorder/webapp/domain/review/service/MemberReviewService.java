@@ -45,6 +45,14 @@ public class MemberReviewService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    public ResponseEntity<?> remove(ReviewRequest reviewRequest) {
+        Review review = findReviewById(reviewRequest.getReviewId());
+
+        reviewRepository.delete(review);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     private Member findMemberById(Long id) {
         return memberRepository.findById(id)
             .orElseThrow(() -> new RuntimeException());
@@ -57,6 +65,6 @@ public class MemberReviewService {
 
     private Review findReviewById(Long id) {
         return reviewRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException());
+            .orElseThrow(() -> new RuntimeException("리뷰 아이디가 없습니다."));
     }
 }
