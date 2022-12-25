@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 public class ReviewRequest {
 
     @NotNull
+    private Long reviewId;
+
+    @NotNull
     private Long memberId;
 
     @NotNull
