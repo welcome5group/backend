@@ -92,4 +92,14 @@ public class OrderService {
         }
     }
 
+    //손님의 주문 내역 조회
+    public void searchOrderMenuList(Long memberId) {
+
+
+
+
+
+
+    }
+
 }

@@ -85,9 +85,10 @@ public class Store extends BaseEntity {
             orderNumber, tableNumber);
     }
 
-    public StoreUpdateResponse toStoreUpdateResponse(Store store) {
+    public StoreUpdateResponse toStoreUpdateResponse(Store store, String orderNumber, String tableNumber) {
 
-        return new StoreUpdateResponse(store.getId(), store.getName(), store.getStoreLocation());
+        return new StoreUpdateResponse(store.getId(), store.getName(), store.getStoreLocation(),
+            orderNumber, tableNumber);
 
     }
 

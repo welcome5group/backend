@@ -20,4 +20,7 @@ public class StoreUpdateRequest {
     @NotBlank
     private String storeLocation;
 
+    private String orderNumber;
+
+    private String tableNumber;
 }
