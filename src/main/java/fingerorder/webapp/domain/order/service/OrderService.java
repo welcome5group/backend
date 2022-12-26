@@ -11,6 +11,7 @@ import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.entity.OrderMenu;
 import fingerorder.webapp.domain.order.repository.OrderRepository;
 import fingerorder.webapp.domain.order.status.OrderStatus;
+import fingerorder.webapp.domain.order.status.ReviewStatus;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -40,7 +42,8 @@ public class OrderService {
         List<OrderMenu> orderMenus = createOrderMenus(
             saveOrderRequest.getOrderMenus());
 
-        Order order = Order.createOrder(member, store, OrderStatus.INCOMP, orderMenus);
+        Order order = Order.createOrder(member, store, OrderStatus.INCOMP, ReviewStatus.INCOMP,
+            orderMenus);
 
         orderRepository.save(order);
 
@@ -59,7 +62,8 @@ public class OrderService {
     }
 
     public List<GetIncompOrdersResponse> getIncompOrders(Long storeId) {
-        List<Order> getOrders = orderRepository.findAllByStoreIdAndOrderStatus(storeId, OrderStatus.INCOMP)
+        List<Order> getOrders = orderRepository.findAllByStoreIdAndOrderStatus(storeId,
+                OrderStatus.INCOMP)
             .orElseThrow(() -> new RuntimeException());
 
         List<GetIncompOrdersResponse> orders = new ArrayList<>();
@@ -105,7 +109,6 @@ public class OrderService {
 
     //손님의 주문 내역 조회
     public void searchOrderMenuList(Long memberId) {
-
 
     }
 
