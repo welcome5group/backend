@@ -10,7 +10,7 @@ public class StoreCreateResponse {
     private Long storeId;
     private String name;
     private String location;
-    private String orderNumber;
-    private String tableNumber;
+    private String orderNumber = "";
+    private String tableNumber = "";
 
 }
