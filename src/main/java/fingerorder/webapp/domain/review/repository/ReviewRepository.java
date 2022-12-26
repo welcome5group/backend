@@ -23,6 +23,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Optional<Review> findOneByParentId(Long id);
 
-    boolean existsByMember(Member member);
+    boolean existsByMemberIdAndOrderId(Long memberId, Long orderId);
 
 }
