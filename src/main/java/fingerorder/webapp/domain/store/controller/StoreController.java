@@ -15,6 +15,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -73,7 +74,7 @@ public class StoreController {
     }
 
     @GetMapping("/payment-details")
-//    @PreAuthorize("hasRole('MERCHANT')")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestParam Long storeId, @RequestParam int year, @RequestParam int month) {
 
         PaymentDatailsRequestDto paymentDatailsRequestDto = new PaymentDatailsRequestDto(storeId, year, month);
@@ -81,7 +82,7 @@ public class StoreController {
     }
 
     @GetMapping("/order-details")
-//    @PreAuthorize("hasRole('MERCHANT')")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<List<OrderDetailsResponseDto>> getOrderDetails(
         @RequestParam Long storeId,
         @RequestParam String startDate,
