@@ -124,4 +124,8 @@ public class Review extends BaseEntity {
     public void addStore(Store store) {
         this.store = store;
     }
+
+    public void addOrder(Order order) {
+        this.order = order;
+    }
 }

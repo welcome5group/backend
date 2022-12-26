@@ -1,6 +1,8 @@
 package fingerorder.webapp.domain.review.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,13 +13,18 @@ public class ReviewResponse {
     private String content;
     private String nickName;
     private LocalDateTime updatedAt;
+
+    private List<String> menuNames = new ArrayList<>();
+
     private Comment comment;
 
-    public ReviewResponse(Long reviewId, String content, String nickName, LocalDateTime updatedAt) {
+
+    public ReviewResponse(Long reviewId, String content, String nickName, LocalDateTime updatedAt, List<String> menuNames) {
         this.reviewId = reviewId;
         this.content = content;
         this.nickName = nickName;
         this.updatedAt = updatedAt;
+        this.menuNames = menuNames;
     }
 
     @Data
@@ -28,6 +35,8 @@ public class ReviewResponse {
         private Long reviewId;
         private Long parentId;
         private LocalDateTime updatedAt;
+        private String content;
+
 
     }
 }
