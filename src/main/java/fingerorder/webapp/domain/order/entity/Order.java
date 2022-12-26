@@ -89,4 +89,8 @@ public class Order {
     private void makeTotalPrice(int price) {
         this.totalPrice += price;
     }
+
+    public void editOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }

@@ -71,6 +71,13 @@ public class OrderService {
         return orders;
     }
 
+    @Transactional
+    public void editOrderStatus(Long orderId) {
+        Order order = findOrderById(orderId);
+
+        order.editOrderStatus(OrderStatus.COMP);
+    }
+
     private Menu findMenuById(Long id) {
         return menuRepository.findById(id)
             .orElseThrow(() -> new RuntimeException());
@@ -78,6 +85,11 @@ public class OrderService {
 
     private Store findStoreById(Long id) {
         return storeRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException());
+    }
+
+    private Order findOrderById(Long id) {
+        return orderRepository.findById(id)
             .orElseThrow(() -> new RuntimeException());
     }
 

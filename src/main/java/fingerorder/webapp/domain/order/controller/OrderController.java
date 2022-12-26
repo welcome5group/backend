@@ -6,28 +6,37 @@ import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.service.OrderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/guest/store")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/order")
+    @PostMapping("/guest/store/order")
     public ResponseEntity<?> save(@RequestBody final SaveOrderRequest saveOrderRequest) {
         return orderService.save(saveOrderRequest);
     }
 
-    @GetMapping("/incomp-orders/{storeId}")
+    @GetMapping("/store/{storeId}/orders")
     public ResponseEntity<List<GetIncompOrdersResponse>> getIncompOrders(@PathVariable Long storeId) {
         return ResponseEntity.ok(orderService.getIncompOrders(storeId));
+    }
+
+    @PutMapping("/store/order/{orderId}")
+    public ResponseEntity<?> editOrderStatus(@PathVariable Long orderId) {
+        orderService.editOrderStatus(orderId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
