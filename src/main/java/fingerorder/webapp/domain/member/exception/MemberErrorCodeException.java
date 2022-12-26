@@ -22,6 +22,7 @@ public enum MemberErrorCodeException implements ErrorCode {
 
     NOT_AUTHORIZED_EXCEPTION("M12", "인증처리가 완료되지 않은 사용자 입니다. 이메일 인증"
         + "완료 후 로그인 해주세요"),
+    WITHDRAW_MEMBER("M13", "탈퇴한 사용자 입니다."),
     KAKAO_LOGIN("M20", "카카오 로그인 인증 관련 에러");
 
 

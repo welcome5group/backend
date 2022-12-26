@@ -8,11 +8,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class TokenDto {
-
     private String grantType;
     private String accessToken;
     private Long accessTokenTokenExpirationTime;
     private String refreshToken;
     private Long refreshTokenExpirationTime;
-
 }

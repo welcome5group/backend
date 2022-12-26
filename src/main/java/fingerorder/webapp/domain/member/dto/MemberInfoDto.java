@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberInfoDto {
-
     private String email;
     private MemberType type;
 }

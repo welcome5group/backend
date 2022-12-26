@@ -16,11 +16,7 @@ public class KakaController {
 
 	@RequestMapping("/kakao_callback")
 	public String kakaoCallback(@RequestParam String type,@RequestParam String code, Model model) {
-		TokenDto tokenDto = userService.kakaoSignIn(code,type);
-
-		TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-			.accessToken("Bearer " + tokenDto.getAccessToken())
-			.build();
+		TokenResponseDto tokenResponseDto = this.userService.kakaoSignIn(code,type);
 
 		model.addAttribute(tokenResponseDto);
 		if (type.equals("MEMBER")) {

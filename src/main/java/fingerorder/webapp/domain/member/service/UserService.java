@@ -5,11 +5,13 @@ import fingerorder.webapp.domain.member.dto.MemberEditNickNameDto;
 import fingerorder.webapp.domain.member.dto.MemberEditProfileDto;
 import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
+import fingerorder.webapp.domain.member.dto.MemberWithDrawDto;
 import fingerorder.webapp.domain.member.dto.SignInDto;
 import fingerorder.webapp.domain.member.dto.SignOutDto;
 import fingerorder.webapp.domain.member.dto.SignOutResponseDto;
 import fingerorder.webapp.domain.member.dto.SignUpDto;
 import fingerorder.webapp.domain.member.dto.TokenDto;
+import fingerorder.webapp.domain.member.dto.TokenResponseDto;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.exception.AlreadyUsageEmailException;
 import fingerorder.webapp.domain.member.exception.AlreadyUsageNickNameException;
@@ -20,6 +22,7 @@ import fingerorder.webapp.domain.member.exception.LoginInfoErrorException;
 import fingerorder.webapp.domain.member.exception.NoExistMemberException;
 import fingerorder.webapp.domain.member.exception.NotAuthorizedException;
 import fingerorder.webapp.domain.member.exception.UnauthorizedMemberException;
+import fingerorder.webapp.domain.member.exception.WithdrawMemberException;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.member.status.MemberSignUpType;
 import fingerorder.webapp.domain.member.status.MemberStatus;
@@ -111,7 +114,7 @@ public class UserService implements UserDetailsService {
 		return this.memberRepository.save(findMember).toMemberDto();
 	}
 
-	public TokenDto signIn(SignInDto signInDto) {
+	public TokenResponseDto signIn(SignInDto signInDto) {
 		if (checkInvalidEmail(signInDto.getEmail())) {
 			throw new InvalidEmailFormatException();
 		}
@@ -122,11 +125,7 @@ public class UserService implements UserDetailsService {
 
 		Member findMember = checkInvalidMember(signInDto.getEmail());
 
-		if (findMember.getStatus() != MemberStatus.ACTIVATE) {
-			throw new NotAuthorizedException();
-		}
-
-		TokenDto tokenDto = null;
+		TokenResponseDto tokenResponseDto = null;
 
 		try {
 			// 인증 여부를 확인하기 위한 객체 생성
@@ -141,17 +140,27 @@ public class UserService implements UserDetailsService {
 				authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
 			// 검증이 완료 되었으니 토큰을 만들어 준다.
-			tokenDto = this.jwtTokenProvider.getToken(authentication);
+			TokenDto tokenDto = this.jwtTokenProvider.getToken(authentication);
 
 			// 만들어진 토큰을 Redis 에 담는다.
 			this.saveTokenToRedis(signInDto.getEmail(),tokenDto);
+
+			tokenResponseDto = TokenResponseDto.builder()
+				.id(findMember.getId())
+				.email(findMember.getEmail())
+				.nickName(findMember.getNickName())
+				.memberType(findMember.getMemberType())
+				.accessToken("Bearer " + tokenDto.getAccessToken())
+				.build();
+
 		}catch (Exception e) {
 			throw new LoginInfoErrorException();
 		}
-		return tokenDto;
+
+		return tokenResponseDto;
 	}
 
-	public TokenDto kakaoSignIn(String code,String type) {
+	public TokenResponseDto kakaoSignIn(String code,String type) {
 		String accessToken = "";
 		SignInDto tempSignInDto = null;
 		String reqURL = "https://kauth.kakao.com/oauth/token";
@@ -255,7 +264,6 @@ public class UserService implements UserDetailsService {
 	//유저 정보 가져오기
 	public MemberDto getMemberInfo(MemberInfoDto memberInfoDto) {
 		Member findMember = checkInvalidMember(memberInfoDto.getEmail());
-
 		return findMember.toMemberDto();
 	}
 
@@ -327,8 +335,18 @@ public class UserService implements UserDetailsService {
 	}
 
 	private Member checkInvalidMember(String email) {
-		return this.memberRepository.findByEmail(email)
+		Member findMember = this.memberRepository.findByEmail(email)
 			.orElseThrow(() -> new NoExistMemberException());
+
+		if (findMember.getStatus() != MemberStatus.ACTIVATE) {
+			throw new NotAuthorizedException();
+		}
+
+		if (findMember.getStatus() == MemberStatus.DELETED) {
+			throw new WithdrawMemberException();
+		}
+
+		return findMember;
 	}
 
 	private boolean checkInvalidEmail(String email) {
@@ -387,5 +405,23 @@ public class UserService implements UserDetailsService {
 			.email(email)
 			.nickName(nickName)
 			.build();
+	}
+
+	public MemberDto withdrawMember(MemberWithDrawDto memberWithDrawDto) {
+		Member findMember = checkInvalidMember(memberWithDrawDto.getEmail());
+
+		if (!checkCorrectPassword(memberWithDrawDto.getPassword(), findMember.getPassword())) {
+			throw new LoginInfoErrorException();
+		}
+
+		findMember.changeMemberStatus(MemberStatus.DELETED);
+		return this.memberRepository.save(findMember).toMemberDto();
+	}
+
+	private boolean checkCorrectPassword(String inputPassword,String password) {
+		if (this.passwordEncoder.encode(inputPassword).equals(password)) {
+			return true;
+		}
+		return false;
 	}
 }
