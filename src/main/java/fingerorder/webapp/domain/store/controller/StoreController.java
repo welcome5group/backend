@@ -7,8 +7,9 @@ import fingerorder.webapp.domain.store.dto.PaymentDatailsRequestDto;
 import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreCreateResponse;
-import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
+import fingerorder.webapp.domain.store.dto.StoreLookUpResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
+import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
 import fingerorder.webapp.domain.store.service.StoreService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,9 +77,9 @@ public class StoreController {
 
     //사장의 모든 매장 조회
     @GetMapping
-    public ResponseEntity<Result<List<StoreUpdateResponse>>> findAllStores(@RequestParam Long memberId) {
-        List<StoreUpdateResponse> stores = storeService.findAllStores(memberId);
-        return new ResponseEntity<>(new Result<>(stores), HttpStatus.OK);
+    public ResponseEntity<Result<List<StoreLookUpResponse>>> findAllStores(@RequestParam Long memberId) {
+        List<StoreLookUpResponse> allStores = storeService.findAllStores(memberId);
+        return new ResponseEntity<>(new Result<>(allStores), HttpStatus.OK);
     }
 
     @GetMapping("/payment-details")

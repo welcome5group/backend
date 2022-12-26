@@ -16,7 +16,6 @@ public class MenuQueryService {
     private final EntityManager em;
 
     @Transactional
-
     public List<MenuAndCategory> findMenuAndCategory(
         Long storeId) { // 전체 메뉴 조회인데, 카테고리에 해당하는 전체메뉴 조회
 
@@ -31,7 +30,6 @@ public class MenuQueryService {
     private List<MenuAndCategory> findCategories(Long storeId) {
         return em.createQuery("select distinct new fingerorder.webapp.domain.menu.dto.menuquerydto"
             //왜 distinct 로 해야하는지는 조금 더 생각해보기
-
             + ".MenuAndCategory(c.name) "
             + "from Category c "
             + "left outer join c.menus "
