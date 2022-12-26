@@ -66,7 +66,6 @@ public class MenuService {
     public void menuDisable(Long menuId) { //메뉴 품절로 상태 변경하기
         Menu menu = menuRepository.findById(menuId).orElseThrow(MenuNotFindException::new);
         menu.changeStatus();
-
     }
 
 

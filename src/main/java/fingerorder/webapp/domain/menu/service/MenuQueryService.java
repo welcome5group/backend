@@ -2,6 +2,7 @@ package fingerorder.webapp.domain.menu.service;
 
 import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuAndCategory;
 import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuInCategory;
+import fingerorder.webapp.domain.menu.status.MenuStatus;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -37,12 +38,11 @@ public class MenuQueryService {
             + "where s.id =: storeId", MenuAndCategory.class)
             .setParameter("storeId", storeId)
             .getResultList();
-
     }
 
     private List<MenuInCategory> findMenus(String categoryName, Long storeId) {
         return em.createQuery("select new fingerorder.webapp.domain.menu.dto.menuquerydto"
-                + ".MenuInCategory(m.name,m.description,m.price,m.imageUrl) "
+                + ".MenuInCategory(m.id,m.name,m.description,m.price,m.imageUrl,m.status) "
                 + "from Menu m "
                 + "join m.store s "
                 + "where s.id =:storeId "
