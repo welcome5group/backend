@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,23 +15,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberReviewResponse {
 
-    @NotNull
+    private Long id;
+
     private String storeName;
 
-    @NotNull
     private LocalDateTime createdAt;
 
-    @NotNull
     private ArrayList<String> menuNames;
 
-    @NotNull
     private String content;
 
-    @NotNull
     private MemberReviewCommentResponse comment;
 
     public MemberReviewResponse createResponse(Review review, Optional<Review> comment) {
         return new MemberReviewResponse(
+            review.getId(),
             review.getStore().getName(),
             review.getCreatedAt(),
             createMenuNames(review.getOrder().getOrderMenus()),
@@ -45,7 +42,6 @@ public class MemberReviewResponse {
         for (OrderMenu orderMenu : orderMenuList) {
             names.add(orderMenu.getMenu().getName());
         }
-
         return names;
     }
 

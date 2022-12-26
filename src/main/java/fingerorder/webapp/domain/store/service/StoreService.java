@@ -5,6 +5,7 @@ import fingerorder.webapp.domain.store.dto.OrderDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.OrderMenuInfo;
 import fingerorder.webapp.domain.store.dto.PaymentDatailsRequestDto;
 import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
+import fingerorder.webapp.domain.store.dto.StoreCreateResponse;
 import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import fingerorder.webapp.domain.category.exception.StoreNotFoundException;
@@ -16,10 +17,10 @@ import fingerorder.webapp.domain.order.entity.OrderMenu;
 import fingerorder.webapp.domain.order.repository.OrderRepository;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreLookUpOrderResponse;
-import fingerorder.webapp.domain.store.dto.StoreResponse;
+import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.domain.store.exception.StoreFindException;
+import fingerorder.webapp.domain.store.exception.StoreNotFindException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,23 +40,27 @@ public class StoreService {
 
 
     @Transactional
-    public StoreResponse registerStore(StoreCreateRequest storeCreateRequest) { // 가게 생성
+    public StoreCreateResponse registerStore(StoreCreateRequest storeCreateRequest) { // 가게 생성
 
         Store store = new Store(storeCreateRequest);
         Store savedStore = storeRepository.save(store);
         Member member = memberRepository.findById(storeCreateRequest.getMemberId())
             .orElseThrow(MemberFindException::new);
         member.addStore(savedStore);
-        return savedStore.toStoreRequest(savedStore);
+
+        String orderNumber = storeCreateRequest.getOrderNumber();
+        String tableNumber = storeCreateRequest.getTableNumber();
+
+        return savedStore.toStoreCreateResponse(savedStore, orderNumber , tableNumber);
     }
 
     @Transactional
-    public StoreResponse updateStore(StoreUpdateRequest storeUpdateRequest, Long storeId) {
+    public StoreUpdateResponse updateStore(StoreUpdateRequest storeUpdateRequest, Long storeId) {
 
         Store store = storeRepository.findById(storeId)
-            .orElseThrow(StoreFindException::new);
+            .orElseThrow(StoreNotFindException::new);
         store.changeStore(storeUpdateRequest);
-        return store.toStoreRequest(store);
+        return store.toStoreUpdateResponse(store);
     }
 
     @Transactional
@@ -63,10 +68,10 @@ public class StoreService {
         storeRepository.deleteById(storeId);
     }
 
-    public List<StoreResponse> findAllStores(Long memberId) { //memberId
+    public List<StoreUpdateResponse> findAllStores(Long memberId) { //memberId
         List<Store> stores = storeRepository.findAllByMemberId(memberId);
         return stores.stream()
-            .map(s -> new StoreResponse(s.getId(), s.getName(), s.getStoreLocation())).collect(
+            .map(s -> new StoreUpdateResponse(s.getId(), s.getName(), s.getStoreLocation())).collect(
                 Collectors.toList());
     }
 

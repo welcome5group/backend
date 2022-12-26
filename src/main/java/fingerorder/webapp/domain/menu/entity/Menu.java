@@ -1,5 +1,7 @@
 package fingerorder.webapp.domain.menu.entity;
 
+import fingerorder.webapp.annotation.Trim;
+import fingerorder.webapp.annotation.TrimEntityListener;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
 import fingerorder.webapp.domain.menu.dto.MenuResponse;
@@ -8,6 +10,7 @@ import fingerorder.webapp.domain.menu.status.MenuStatus;
 import fingerorder.webapp.domain.store.entity.Store;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,13 +22,16 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@EntityListeners(TrimEntityListener.class)
 public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "menu_id")
     private Long id;
+    @Trim
     private String name;
+    @Trim
     private String description;
     private Integer price;
     private String imageUrl;
@@ -87,7 +93,7 @@ public class Menu {
     public MenuResponse toMenuResponse(Menu menu) {
 
         MenuResponse menuResponse = new MenuResponse();
-//        menuResponse.setStoreId(menu.getStore().getId());
+        menuResponse.setStoreId(menu.getStore().getId());
         menuResponse.setMenuId(menu.getId());
         menuResponse.setName(menu.getName());
         menuResponse.setPrice(menu.getPrice());

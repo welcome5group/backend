@@ -1,7 +1,9 @@
 package fingerorder.webapp.domain.menu.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,15 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MenuCreateRequest {
 
-    @NotEmpty
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z가-힣0-9 ()].+$")
     private String name;
-    @NotEmpty
+    @NotBlank
     private String description;
     @NotNull
     private Integer price;
-    @NotEmpty
+    @NotBlank
     private String imageUrl;
-    @NotEmpty
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z가-힣0-9 ()].+$")
     private String categoryName;
 
     @Builder

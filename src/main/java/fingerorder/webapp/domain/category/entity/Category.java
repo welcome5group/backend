@@ -13,10 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Table(uniqueConstraints = {@UniqueConstraint( name = "name_unique", columnNames = {"name"})})
 public class Category {
 
     @Id

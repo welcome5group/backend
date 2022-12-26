@@ -48,7 +48,7 @@ public class MenuController {
         return new ResponseEntity<>(menuResponse, HttpStatus.OK);
     }
 
-    //메뉴 수정t
+    //메뉴 수정
     @PutMapping //메뉴 수정에는 storeId가 필요가 없다(o)
     public ResponseEntity<MenuResponse> updateMenu(
         @Validated @RequestBody MenuUpdateRequest menuUpdateRequest, BindingResult bindingResult,
@@ -63,7 +63,7 @@ public class MenuController {
 
     //메뉴 삭제
     @DeleteMapping //메뉴 삭제에는 storeId가 필요가 없다(o)
-    //질문 : 메뉴를 삭제하면 연관관계 편의 메서드로 넣어준 store 상의 menu도 사라질까?
+    //질문 : 메뉴를 삭제하면 연관관계 편의 메서드로 넣어준 store 상의 menu 도 사라질까?
     public ResponseEntity<?> deleteMenu(@RequestParam Long menuId,
         @PathVariable("storeId") Long storeId) {
         menuService.deleteMenu(menuId);

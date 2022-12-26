@@ -1,12 +1,16 @@
 package fingerorder.webapp.domain.review.entity;
 
+import fingerorder.webapp.annotation.Trim;
+import fingerorder.webapp.annotation.TrimEntityListener;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.order.entity.Order;
+import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentResponse;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateResponse;
 import fingerorder.webapp.domain.review.dto.ReviewRequest;
+import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.entity.BaseEntity;
 //import fingerorder.webapp.entity.ReviewCreateRequest;
@@ -15,6 +19,7 @@ import fingerorder.webapp.entity.BaseEntity;
 //import fingerorder.webapp.entity.ReviewUpdateResponse;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,6 +31,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@EntityListeners(TrimEntityListener.class)
 public class Review extends BaseEntity {
 
     @Id
@@ -34,7 +40,7 @@ public class Review extends BaseEntity {
     private Long id;
 
     //    private String nickName;
-    @Column(length = 1000)
+    @Trim
     private String content;
 //    private LocalDateTime deletedAt;
 
@@ -56,19 +62,17 @@ public class Review extends BaseEntity {
     public Review(ReviewCommentRequest reviewCommentRequest) {
         this.parentId = reviewCommentRequest.getParentId();
         this.content = reviewCommentRequest.getContent();
-//        this.createdAt = LocalDateTime.now();
-//        this.updatedAt = LocalDateTime.now();
     }
 
     protected Review() {
 
     }
 
-    public Review(Member member, Store store, Order order, ReviewRequest reviewRequest) {
+    public Review(Member member, Store store, Order order, SaveMemberReviewRequest request) {
         this.member = member;
         this.store = store;
         this.order = order;
-        this.content = reviewRequest.getContent();
+        this.content = request.getContent();
     }
 
     public void addMember(Member member) {
@@ -88,23 +92,14 @@ public class Review extends BaseEntity {
 //
 //    }
 
-    public Review updateReview(ReviewRequest reviewRequest) {
-        this.content = reviewRequest.getContent();
+    public Review updateReview(EditMemberReviewRequest request) {
+        this.content = request.getContent();
         return this;
     }
 
     public Review updateComment(ReviewCommentUpdateRequest reviewCommentUpdateRequest) {
         this.content = reviewCommentUpdateRequest.getContent();
         return this;
-    }
-
-    public void changeMember(Member member) {
-        this.member = member;
-    }
-
-    public void changeStore(Store store) {
-        this.store = store;
-
     }
 
     public ReviewCommentResponse toReviewCommentResponse(Review review) {
@@ -128,5 +123,9 @@ public class Review extends BaseEntity {
 
     public void addStore(Store store) {
         this.store = store;
+    }
+
+    public void addOrder(Order order) {
+        this.order = order;
     }
 }
