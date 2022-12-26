@@ -4,11 +4,13 @@ import fingerorder.webapp.annotation.Trim;
 import fingerorder.webapp.annotation.TrimEntityListener;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.order.entity.Order;
+import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentResponse;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateResponse;
 import fingerorder.webapp.domain.review.dto.ReviewRequest;
+import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.entity.BaseEntity;
 //import fingerorder.webapp.entity.ReviewCreateRequest;
@@ -66,11 +68,11 @@ public class Review extends BaseEntity {
 
     }
 
-    public Review(Member member, Store store, Order order, ReviewRequest reviewRequest) {
+    public Review(Member member, Store store, Order order, SaveMemberReviewRequest request) {
         this.member = member;
         this.store = store;
         this.order = order;
-        this.content = reviewRequest.getContent();
+        this.content = request.getContent();
     }
 
     public void addMember(Member member) {
@@ -90,8 +92,8 @@ public class Review extends BaseEntity {
 //
 //    }
 
-    public Review updateReview(ReviewRequest reviewRequest) {
-        this.content = reviewRequest.getContent();
+    public Review updateReview(EditMemberReviewRequest request) {
+        this.content = request.getContent();
         return this;
     }
 
