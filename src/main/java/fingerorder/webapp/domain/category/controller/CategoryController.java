@@ -35,9 +35,8 @@ public class CategoryController {
     public ResponseEntity<GetCategoryDto> getCategory(
         @PathVariable Long storeId) {
 
-        return new ResponseEntity<>(categoryService.getCategory(storeId), HttpStatus.OK);
+        return ResponseEntity.ok(categoryService.getCategory(storeId));
     }
-
 
     @PostMapping("/{storeId}/category")
     @PreAuthorize("hasRole('MERCHANT')")
@@ -47,20 +46,20 @@ public class CategoryController {
 
         validateCategoryName(bindingResult);
 
-        return new ResponseEntity<>(categoryService.createCategory(
-            storeId, createCategoryDto.getName()), HttpStatus.OK);
+        return ResponseEntity.ok(categoryService.createCategory(
+            storeId, createCategoryDto.getName()));
     }
 
     @PutMapping("/{storeId}/category")
-//    @PreAuthorize("hasRole('MERCHANT')")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<UpdateCategoryDto> updateCategory(
         @PathVariable Long storeId, @Validated @RequestBody UpdateCategoryDto updateCategoryDto,
         BindingResult bindingResult) {
 
         validateCategoryName(bindingResult);
 
-        return new ResponseEntity<>(categoryService.updateCategory(
-            storeId, updateCategoryDto.getCategoryName(), updateCategoryDto.getUpdateName()), HttpStatus.OK);
+        return ResponseEntity.ok(categoryService.updateCategory(
+            storeId, updateCategoryDto.getCategoryName(), updateCategoryDto.getUpdateName()));
     }
 
     @DeleteMapping("/{storeId}/category")
@@ -71,7 +70,8 @@ public class CategoryController {
 
         validateCategoryName(bindingResult);
 
-        return new ResponseEntity<>(categoryService.deleteCategory(storeId, deleteCategoryDto.getName()), HttpStatus.OK);
+        return ResponseEntity.ok(
+            categoryService.deleteCategory(storeId, deleteCategoryDto.getName()));
     }
 
     public void validateCategoryName(BindingResult bindingResult) {

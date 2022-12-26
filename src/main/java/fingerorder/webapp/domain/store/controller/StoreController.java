@@ -75,10 +75,14 @@ public class StoreController {
 
     @GetMapping("/payment-details")
     @PreAuthorize("hasRole('MERCHANT')")
-    public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestParam Long storeId, @RequestParam int year, @RequestParam int month) {
+    public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(
+        @RequestParam Long storeId,
+        @RequestParam int year,
+        @RequestParam int month
+    ) {
 
         PaymentDatailsRequestDto paymentDatailsRequestDto = new PaymentDatailsRequestDto(storeId, year, month);
-        return new ResponseEntity<>(storeService.findPaymentsForMonth(paymentDatailsRequestDto), HttpStatus.OK);
+        return ResponseEntity.ok(storeService.findPaymentsForMonth(paymentDatailsRequestDto));
     }
 
     @GetMapping("/order-details")
@@ -92,7 +96,7 @@ public class StoreController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         OrderDetailsRequestDto orderDetailsRequestDto = new OrderDetailsRequestDto(
-            storeId, LocalDateTime.parse(startDate, formatter), LocalDateTime.parse(endDate, formatter););
+            storeId, LocalDateTime.parse(startDate, formatter), LocalDateTime.parse(endDate, formatter));
 
         return ResponseEntity.ok(storeService.findOrderDetails(orderDetailsRequestDto));
 
