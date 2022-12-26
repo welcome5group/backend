@@ -3,6 +3,7 @@ package fingerorder.webapp.domain.order.controller;
 import fingerorder.webapp.domain.order.dto.GetIncompOrdersResponse;
 import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
 import fingerorder.webapp.domain.order.service.OrderService;
+import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,7 +29,6 @@ public class OrderController {
         return orderService.save(saveOrderRequest);
     }
 
-
     @GetMapping("/store/{storeId}/orders")
     public ResponseEntity<List<GetIncompOrdersResponse>> getIncompOrders(@PathVariable Long storeId) {
         return ResponseEntity.ok(orderService.getIncompOrders(storeId));
@@ -39,5 +40,8 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @GetMapping("/user/orders")
+    public ResponseEntity<?> getOrderList(@RequestParam Long memberId) {
+        return ResponseEntity.ok(orderService.getOrderList(memberId));
+    }
 }

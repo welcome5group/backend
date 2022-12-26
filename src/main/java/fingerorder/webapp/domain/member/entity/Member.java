@@ -35,7 +35,10 @@ public class Member {
     private String password;
     private String nickName;
     private String profile;
+    @Enumerated(EnumType.STRING)
     private MemberStatus status;
+
+    @Enumerated(EnumType.STRING)
     private MemberSignUpType memberSignUpType;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
