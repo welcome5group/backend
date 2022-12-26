@@ -33,7 +33,7 @@ public class MenuQueryService {
             //왜 distinct 로 해야하는지는 조금 더 생각해보기
 
             + ".MenuAndCategory(c.name) "
-            + "from Category c join c.menus", MenuAndCategory.class).getResultList();
+            + "from Category c left outer join c.menus", MenuAndCategory.class).getResultList();
     }
 
     private List<MenuInCategory> findMenus(String categoryName, Long storeId) {

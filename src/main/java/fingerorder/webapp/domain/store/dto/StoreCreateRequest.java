@@ -1,7 +1,6 @@
 package fingerorder.webapp.domain.store.dto;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class StoreCreateRequest {
-
     @NotNull
     private Long memberId; //사장 아이디
     @NotBlank
@@ -23,13 +21,12 @@ public class StoreCreateRequest {
 
     private String tableNumber;
 
-
     public StoreCreateRequest(Long memberId, String name, Integer tableCount,
         String storeLocation) {
+
         this.memberId = memberId;
         this.name = name;
         this.tableCount = tableCount;
         this.storeLocation = storeLocation;
     }
-
 }
