@@ -12,6 +12,6 @@ public class MenuResponse {
     private int price;
     private String imageUrl;
     private String categoryName;
-
+    private String menuStatus;
 
 }

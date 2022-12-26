@@ -25,6 +25,9 @@ public class MenuCreateRequest {
     @Pattern(regexp = "^[a-zA-Z가-힣0-9 ()].+$")
     private String categoryName;
 
+    @NotBlank
+    private String menuStatus;
+
     @Builder
     public MenuCreateRequest(String name, String description, int price,
         String imageUrl,
