@@ -90,6 +90,7 @@ public class MemberReviewService {
     private Review findReviewById(Long id) {
         return reviewRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("리뷰 아이디가 없습니다."));
+
     }
 
     private Order findOrderById(Long id) {
