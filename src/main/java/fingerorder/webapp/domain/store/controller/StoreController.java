@@ -13,6 +13,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -71,12 +72,14 @@ public class StoreController {
     }
 
     @GetMapping("/payment-details")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestBody PaymentDatailsRequestDto paymentDatailsRequestDto) {
 
         return new ResponseEntity<>(storeService.findPaymentsForMonth(paymentDatailsRequestDto), HttpStatus.OK);
     }
 
     @GetMapping("/order-details")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<List<OrderDetailsResponseDto>> getOrderDetails(@RequestBody OrderDetailsRequestDto orderDetailsRequestDto) {
 
         return ResponseEntity.ok(storeService.findOrderDetails(orderDetailsRequestDto));
