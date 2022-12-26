@@ -98,13 +98,11 @@ class UserServiceTest {
 		MemberEditNickNameDto userEditParamMember = MemberEditNickNameDto.builder()
 			.email("testMember@naver.com")
 			.nickName("changedNickName")
-			.type(MEMBER)
 			.build();
 
 		MemberEditNickNameDto userEditParamMerchant = MemberEditNickNameDto.builder()
 			.email("testMerchant@naver.com")
 			.nickName("changedNickNameMerchant")
-			.type(MERCHANT)
 			.build();
 
 		MemberInfoDto userParamMember = MemberInfoDto.builder()

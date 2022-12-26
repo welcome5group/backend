@@ -1,10 +1,13 @@
 package fingerorder.webapp.domain.review.controller;
 
+import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
 import fingerorder.webapp.domain.review.dto.MemberReviewResponse;
-import fingerorder.webapp.domain.review.dto.ReviewRequest;
+import fingerorder.webapp.domain.review.dto.RemoveMemberReviewRequest;
+import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
 import fingerorder.webapp.domain.review.service.MemberReviewService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,23 +27,26 @@ public class MemberReviewController {
     private final MemberReviewService memberReviewService;
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody ReviewRequest reviewRequest) {
-        return memberReviewService.save(reviewRequest);
+    public ResponseEntity<?> saveReview(@RequestBody SaveMemberReviewRequest request) {
+        memberReviewService.saveReview(request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<?> edit(@RequestBody ReviewRequest reviewRequest) {
-        return memberReviewService.edit(reviewRequest);
+    public ResponseEntity<?> editReview(@RequestBody EditMemberReviewRequest request) {
+        memberReviewService.editReview(request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping
-    public ResponseEntity<?> remove(@RequestBody ReviewRequest reviewRequest) {
-        return memberReviewService.remove(reviewRequest);
+    public ResponseEntity<?> removeReview(@RequestBody RemoveMemberReviewRequest request) {
+        memberReviewService.removeReview(request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{memberId}")
-    public List<MemberReviewResponse> find(@PathVariable("memberId") Long memberId) {
-        return memberReviewService.find(memberId);
+    public List<MemberReviewResponse> findReviews(@PathVariable("memberId") Long memberId) {
+        return memberReviewService.findReviews(memberId);
     }
 
 }
