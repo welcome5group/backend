@@ -4,9 +4,12 @@ import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.repository.OrderRepository;
+import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
 import fingerorder.webapp.domain.review.dto.MemberReviewResponse;
-import fingerorder.webapp.domain.review.dto.ReviewRequest;
+import fingerorder.webapp.domain.review.dto.RemoveMemberReviewRequest;
+import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
 import fingerorder.webapp.domain.review.entity.Review;
+import fingerorder.webapp.domain.review.exception.NoUniqueReviewException;
 import fingerorder.webapp.domain.review.repository.ReviewRepository;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberReviewService {
 
@@ -29,41 +33,39 @@ public class MemberReviewService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public ResponseEntity<?> save(ReviewRequest reviewRequest) {
-        Member member = findMemberById(reviewRequest.getMemberId());
-        Store store = findStoreById(reviewRequest.getStoreId());
-        Order order = findOrderById(reviewRequest.getOrdersId());
+    public void saveReview(SaveMemberReviewRequest request) {
+        Member member = findMemberById(request.getMemberId());
 
-        Review review = new Review(member, store, order, reviewRequest);
+        boolean findReview = reviewRepository.existsByMember(member);
+        if (findReview) {
+            throw new NoUniqueReviewException();
+        }
+
+        Store store = findStoreById(request.getStoreId());
+        Order order = findOrderById(request.getOrderId());
+
+        Review review = new Review(member, store, order, request);
 
         reviewRepository.save(review);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     @Transactional
-    public ResponseEntity<?> edit(ReviewRequest reviewRequest) {
-        Review review = findReviewById(reviewRequest.getReviewId());
+    public void editReview(EditMemberReviewRequest request) {
+        Review review = findReviewById(request.getReviewId());
 
-        review.updateReview(reviewRequest);
+        review.updateReview(request);
 
         reviewRepository.save(review);
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
-    public ResponseEntity<?> remove(ReviewRequest reviewRequest) {
-        Review review = findReviewById(reviewRequest.getReviewId());
+    public void removeReview(RemoveMemberReviewRequest request) {
+        Review review = findReviewById(request.getReviewId());
 
         reviewRepository.delete(review);
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Transactional
-    public List<MemberReviewResponse> find(Long memberId) {
+    public List<MemberReviewResponse> findReviews(Long memberId) {
         Member member = findMemberById(memberId);
 
         List<Review> findReviews = reviewRepository.findAllByMember(member);

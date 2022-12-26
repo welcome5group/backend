@@ -13,4 +13,5 @@ public class StoreCreateResponse {
     private String orderNumber = "";
     private String tableNumber = "";
 
+
 }

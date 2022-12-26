@@ -1,22 +1,25 @@
 package fingerorder.webapp.domain.review.dto;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-public class ReviewCommentRequest {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class SaveMemberReviewRequest {
 
     @NotNull
-    private Long parentId;
-    @NotNull
     private Long memberId;
+
+    @NotNull
+    private Long storeId;
+
+    @NotNull
+    private Long orderId;
+
     @NotBlank
     private String content;
-    @NotNull
-    private Long ordersId;
 
 }

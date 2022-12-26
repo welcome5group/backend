@@ -36,6 +36,7 @@ public class MerchantReviewService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
 
+
     //점주의 회원 리뷰에 대한 댓글 생성
     @Transactional
     public ReviewCommentResponse registerComment(ReviewCommentRequest reviewCommentRequest,
@@ -53,6 +54,7 @@ public class MerchantReviewService {
         savedReview.addMember(member);
         savedReview.addStore(store);
         savedReview.addOrder(order);
+
         return savedReview.toReviewCommentResponse(savedReview);
     }
 
@@ -77,7 +79,6 @@ public class MerchantReviewService {
     //손님이 등록한 모든 리뷰 조회 (사장 관점에서)
     public List<ReviewResponse> searchAllReview(Long storeId) {
         List<ReviewResponse> reviewResponses = searchReviewByStore(storeId);
-
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFindException::new);
         List<Comment> comments = searchReviewByParentId(store);
 
@@ -92,11 +93,12 @@ public class MerchantReviewService {
         return reviewResponses;
     }
 
+
+
     private List<ReviewResponse> searchReviewByStore(Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFindException::new);
 
         List<Review> reviews = reviewRepository.findAllByStoreAndParentIdIsNull(store);
-
         List<ReviewResponse> reviewResponses = new ArrayList<>();
 
         for (Review review : reviews) {
@@ -110,6 +112,7 @@ public class MerchantReviewService {
     }
 
     private List<Comment> searchReviewByParentId(Store store) {
+
 
         List<Review> reviews = reviewRepository.findAllByParentIdIsNotNullAndStore(store);
 
