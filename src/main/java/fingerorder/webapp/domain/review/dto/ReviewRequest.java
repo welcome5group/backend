@@ -10,22 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewRequest {
 
-    @NotNull
     private Long reviewId;
 
-    @NotNull
     private Long memberId;
 
-    @NotNull
     private Long storeId;
 
-    @NotNull
     private Long ordersId;
 
-    @NotNull
     private Long parentId;
 
-    @NotEmpty
     private String content;
 
 }

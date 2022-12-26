@@ -16,4 +16,7 @@ public class ReviewCommentRequest {
     private Long memberId;
     @NotBlank
     private String content;
+    @NotNull
+    private Long ordersId;
+
 }

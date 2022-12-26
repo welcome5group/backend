@@ -3,6 +3,10 @@ package fingerorder.webapp.domain.review.service;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.exception.MenuNotFindException;
+import fingerorder.webapp.domain.order.entity.Order;
+import fingerorder.webapp.domain.order.entity.OrderMenu;
+import fingerorder.webapp.domain.order.exception.OrderNotFindException;
+import fingerorder.webapp.domain.order.repository.OrderRepository;
 import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentResponse;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateRequest;
@@ -15,6 +19,7 @@ import fingerorder.webapp.domain.review.repository.ReviewRepository;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.exception.StoreNotFindException;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +34,8 @@ public class MerchantReviewService {
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
+    private final OrderRepository orderRepository;
+
 
     //점주의 회원 리뷰에 대한 댓글 생성
     @Transactional
@@ -41,8 +48,13 @@ public class MerchantReviewService {
             MenuNotFindException::new);
         Store store = storeRepository.findById(storeId).orElseThrow(
             StoreNotFindException::new);
+        Order order = orderRepository.findById(reviewCommentRequest.getOrdersId()).orElseThrow(
+            OrderNotFindException::new);
+
         savedReview.addMember(member);
         savedReview.addStore(store);
+        savedReview.addOrder(order);
+
         return savedReview.toReviewCommentResponse(savedReview);
     }
 
@@ -60,9 +72,7 @@ public class MerchantReviewService {
     //점주의 회원 리뷰에 대한 댓글 삭제
     public void deleteComment(Long reviewId) {
         Review findReview = reviewRepository.findById(reviewId).orElseThrow(ReviewNotFindException::new);
-
         reviewRepository.delete(findReview);
-
     }
 
     @Transactional //트랜잭션을 써야 변경감지가 된다!! -> 트러블슈팅에 넣기
@@ -89,19 +99,26 @@ public class MerchantReviewService {
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFindException::new);
 
         List<Review> reviews = reviewRepository.findAllByStoreAndParentIdIsNull(store);
-        return reviews.stream().map(
-                r -> new ReviewResponse(r.getId(), r.getContent(), r.getMember().getNickName(),
-                    r.getUpdatedAt()))
-            .collect(Collectors.toList());
+        List<ReviewResponse> reviewResponses = new ArrayList<>();
+
+        for (Review review : reviews) {
+            List<OrderMenu> orderMenus = review.getOrder().getOrderMenus();
+            List<String> menuNames = orderMenus.stream()
+                .map(orderMenu -> orderMenu.getMenu().getName()).collect(Collectors.toList());;
+            reviewResponses.add(new ReviewResponse(review.getId(), review.getContent(), review.getMember().getNickName(),
+                review.getUpdatedAt(), menuNames));
+        }
+        return reviewResponses;
     }
 
     private List<Comment> searchReviewByParentId(Store store) {
+
 
         List<Review> reviews = reviewRepository.findAllByParentIdIsNotNullAndStore(store);
 
         return reviews.stream().map(
                 r -> new Comment(r.getMember().getNickName(), r.getId(), r.getParentId(),
-                    r.getUpdatedAt()))
+                    r.getUpdatedAt() ,r.getContent()))
             .collect(Collectors.toList());
     }
 }
