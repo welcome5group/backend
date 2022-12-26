@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,6 +28,7 @@ public class OrderController {
         return orderService.save(saveOrderRequest);
     }
 
+
     @GetMapping("/store/{storeId}/orders")
     public ResponseEntity<List<GetIncompOrdersResponse>> getIncompOrders(@PathVariable Long storeId) {
         return ResponseEntity.ok(orderService.getIncompOrders(storeId));
@@ -39,4 +39,10 @@ public class OrderController {
         orderService.editOrderStatus(orderId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/incomp-orders/{storeId}")
+    public ResponseEntity<List<GetIncompOrdersResponse>> getIncompOrders(@PathVariable Long storeId) {
+        return ResponseEntity.ok(orderService.getIncompOrders(storeId));
+    }
+
 }
