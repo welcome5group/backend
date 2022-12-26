@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MenuService {
-
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
     private final CategoryRepository categoryRepository;
