@@ -20,5 +20,4 @@ public class StoreUpdateRequest {
     @NotBlank
     private String storeLocation;
 
-
 }

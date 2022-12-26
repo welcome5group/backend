@@ -1,9 +1,8 @@
 package fingerorder.webapp.domain.review.service;
 
 import fingerorder.webapp.domain.member.entity.Member;
-import fingerorder.webapp.domain.member.exception.MemberFindException;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
-import fingerorder.webapp.domain.menu.exception.MenuFindException;
+import fingerorder.webapp.domain.menu.exception.MenuNotFindException;
 import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentResponse;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateRequest;
@@ -11,9 +10,10 @@ import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateResponse;
 import fingerorder.webapp.domain.review.dto.ReviewResponse;
 import fingerorder.webapp.domain.review.dto.ReviewResponse.Comment;
 import fingerorder.webapp.domain.review.entity.Review;
+import fingerorder.webapp.domain.review.exception.ReviewNotFindException;
 import fingerorder.webapp.domain.review.repository.ReviewRepository;
 import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.domain.store.exception.StoreFindException;
+import fingerorder.webapp.domain.store.exception.StoreNotFindException;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,34 +30,6 @@ public class MerchantReviewService {
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
 
-//    public void registerReview(ReviewRegisterRequest reviewRegisterRequest) {  //회원의 리뷰 등록
-//
-//        Review review = new Review(reviewRegisterRequest);
-//        Review savedReview = reviewRepository.save(review);
-//
-//    }
-
-//    public void updateReview(ReviewUpdateRequest reviewUpdateRequest) { //회원의 리뷰 수정
-//        Review findReview = reviewRepository.findById(reviewUpdateRequest.getMemberId()).orElseThrow(()
-//            -> new RuntimeException("리뷰가 존재하지 않습니다."));
-//        findReview.updateReview(reviewUpdateRequest);
-//
-//    }
-
-//    public void deleteReviewAndComment(Long reviewId, Long storeId) { //회원의 리뷰 삭제
-//        Review findReview = reviewRepository.findById(reviewId).orElseThrow(()
-//            -> new RuntimeException("리뷰가 존재하지 않습니다."));
-//
-//        Store findStore = storeRepository.findById(storeId).orElseThrow(StoreFindException::new);
-//
-//        Optional<Review> review = reviewRepository.findByParentIdAndStore(memberId, findStore);
-//
-//        review.ifPresent(r -> reviewRepository.delete(r));
-//
-//        reviewRepository.delete(findReview);
-//
-//    }
-
     //점주의 회원 리뷰에 대한 댓글 생성
     @Transactional
     public ReviewCommentResponse registerComment(ReviewCommentRequest reviewCommentRequest,
@@ -66,9 +38,9 @@ public class MerchantReviewService {
         Review review = new Review(reviewCommentRequest);
         Review savedReview = reviewRepository.save(review);
         Member member = memberRepository.findById(reviewCommentRequest.getMemberId()).orElseThrow(
-            MenuFindException::new);
+            MenuNotFindException::new);
         Store store = storeRepository.findById(storeId).orElseThrow(
-            StoreFindException::new);
+            StoreNotFindException::new);
         savedReview.addMember(member);
         savedReview.addStore(store);
         return savedReview.toReviewCommentResponse(savedReview);
@@ -79,8 +51,7 @@ public class MerchantReviewService {
     public ReviewCommentUpdateResponse updateComment(
         ReviewCommentUpdateRequest reviewCommentUpdateRequest) {
         Review findReview = reviewRepository.findById(reviewCommentUpdateRequest.getReviewId())
-            .orElseThrow(()
-                -> new RuntimeException("리뷰가 존재하지 않습니다."));
+            .orElseThrow(ReviewNotFindException::new);
         Review review = findReview.updateComment(reviewCommentUpdateRequest);
         return review.toReviewCommentUpdateResponse(review);
     }
@@ -88,8 +59,7 @@ public class MerchantReviewService {
     @Transactional
     //점주의 회원 리뷰에 대한 댓글 삭제
     public void deleteComment(Long reviewId) {
-        Review findReview = reviewRepository.findById(reviewId).orElseThrow(()
-            -> new RuntimeException("리뷰가 존재하지 않습니다."));
+        Review findReview = reviewRepository.findById(reviewId).orElseThrow(ReviewNotFindException::new);
 
         reviewRepository.delete(findReview);
 
@@ -99,7 +69,7 @@ public class MerchantReviewService {
     //손님이 등록한 모든 리뷰 조회 (사장 관점에서)
     public List<ReviewResponse> searchAllReview(Long storeId) {
         List<ReviewResponse> reviewResponses = searchReviewByStore(storeId);
-        Store store = storeRepository.findById(storeId).orElseThrow(StoreFindException::new);
+        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFindException::new);
         List<Comment> comments = searchReviewByParentId(store);
 
         for (ReviewResponse reviewResponse : reviewResponses) {
@@ -116,7 +86,7 @@ public class MerchantReviewService {
 
 
     private List<ReviewResponse> searchReviewByStore(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(StoreFindException::new);
+        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFindException::new);
 
         List<Review> reviews = reviewRepository.findAllByStoreAndParentIdIsNull(store);
         return reviews.stream().map(
@@ -124,7 +94,6 @@ public class MerchantReviewService {
                     r.getUpdatedAt()))
             .collect(Collectors.toList());
     }
-
 
     private List<Comment> searchReviewByParentId(Store store) {
 

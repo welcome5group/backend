@@ -14,12 +14,14 @@ public class StoreCreateRequest {
     private Long memberId; //사장 아이디
     @NotBlank
     private String name; //가게 이름
-
     @NotNull
     private Integer tableCount;
-
     @NotBlank
     private String storeLocation;
+
+    private String orderNumber;
+
+    private String tableNumber;
 
 
     public StoreCreateRequest(Long memberId, String name, Integer tableCount,

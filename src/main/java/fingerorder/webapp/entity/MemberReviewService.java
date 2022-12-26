@@ -6,7 +6,7 @@ import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.review.entity.Review;
 import fingerorder.webapp.domain.review.repository.ReviewRepository;
 import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.domain.store.exception.StoreFindException;
+import fingerorder.webapp.domain.store.exception.StoreNotFindException;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class MemberReviewService {
         Member member = memberRepository.findById(reviewCreateRequest.getMemberId())
             .orElseThrow(MemberFindException::new);
         Store store = storeRepository.findById(reviewCreateRequest.getStoreId())
-            .orElseThrow(StoreFindException::new);
+            .orElseThrow(StoreNotFindException::new);
         savedReview.addMember(member);
         savedReview.addStore(store);
         return review.toReviewCreateResponse(savedReview);

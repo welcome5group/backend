@@ -7,10 +7,10 @@ import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
 import fingerorder.webapp.domain.menu.dto.MenuResponse;
 import fingerorder.webapp.domain.menu.dto.MenuUpdateRequest;
 import fingerorder.webapp.domain.menu.entity.Menu;
-import fingerorder.webapp.domain.menu.exception.MenuFindException;
+import fingerorder.webapp.domain.menu.exception.MenuNotFindException;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
 import fingerorder.webapp.domain.store.entity.Store;
-import fingerorder.webapp.domain.store.exception.StoreFindException;
+import fingerorder.webapp.domain.store.exception.StoreNotFindException;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class MenuService {
         Category category = categoryRepository.findByName(
             menuCreateRequest.getCategoryName()).orElseThrow(CategoryNotFoundException::new);
         Store store = storeRepository.findById(storeId).orElseThrow(
-            StoreFindException::new);
+            StoreNotFindException::new);
         Menu savedMenu = menuRepository.save(menu);
         savedMenu.changeStore(store);
         savedMenu.add(category);
@@ -43,7 +43,7 @@ public class MenuService {
     public MenuResponse updateMenu(MenuUpdateRequest menuUpdateRequest) { // 매장 내의 메뉴 수정
 
         Menu menu = menuRepository.findById(menuUpdateRequest.getMenuId()).orElseThrow(
-            MenuFindException::new);
+            MenuNotFindException::new);
         Category category = categoryRepository.findByName(
             menuUpdateRequest.getCategoryName()).orElseThrow(CategoryNotFoundException::new);
         Menu updatedMenu = menu.updateMenu(menuUpdateRequest, category);
@@ -65,8 +65,7 @@ public class MenuService {
 
     @Transactional
     public void menuDisable(Long menuId) { //메뉴 품절로 상태 변경하기
-        Menu menu = menuRepository.findById(menuId).orElseThrow(()
-            -> new RuntimeException("존재하는 메뉴가 없습니다."));
+        Menu menu = menuRepository.findById(menuId).orElseThrow(MenuNotFindException::new);
         menu.changeStatus();
 
     }
