@@ -9,11 +9,12 @@ import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.store.service.StoreService;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -72,16 +73,27 @@ public class StoreController {
     }
 
     @GetMapping("/payment-details")
-    @PreAuthorize("hasRole('MERCHANT')")
-    public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestBody PaymentDatailsRequestDto paymentDatailsRequestDto) {
+//    @PreAuthorize("hasRole('MERCHANT')")
+    public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestParam Long storeId, @RequestParam int year, @RequestParam int month) {
 
+        PaymentDatailsRequestDto paymentDatailsRequestDto = new PaymentDatailsRequestDto(storeId, year, month);
         return new ResponseEntity<>(storeService.findPaymentsForMonth(paymentDatailsRequestDto), HttpStatus.OK);
     }
 
     @GetMapping("/order-details")
-    @PreAuthorize("hasRole('MERCHANT')")
-    public ResponseEntity<List<OrderDetailsResponseDto>> getOrderDetails(@RequestBody OrderDetailsRequestDto orderDetailsRequestDto) {
+//    @PreAuthorize("hasRole('MERCHANT')")
+    public ResponseEntity<List<OrderDetailsResponseDto>> getOrderDetails(
+        @RequestParam Long storeId,
+        @RequestParam String startDate,
+        @RequestParam String endDate
+    ) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        OrderDetailsRequestDto orderDetailsRequestDto = new OrderDetailsRequestDto(
+            storeId, LocalDateTime.parse(startDate, formatter), LocalDateTime.parse(endDate, formatter););
 
         return ResponseEntity.ok(storeService.findOrderDetails(orderDetailsRequestDto));
+
     }
 }

@@ -19,16 +19,19 @@ import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
 
+    private final EntityManager em;
     private final CategoryRepository categoryRepository;
     private final StoreRepository storeRepository;
     private final CategoryQueryRepository categoryQueryRepository;
@@ -60,11 +63,12 @@ public class CategoryService {
         return new CreateCategoryDto(categoryName);
     }
 
+
     public UpdateCategoryDto updateCategory(Long storeId, String categoryName, String updateName) {
         try {
             editName(storeId, categoryName, updateName);
-        } catch (PersistenceException e){
-            System.err.println("================" + e);
+        } catch (DataIntegrityViolationException e) {
+            throw new NoUniqueCategoryException();
         }
 
         return new UpdateCategoryDto(categoryName, updateName);
@@ -85,6 +89,7 @@ public class CategoryService {
     public void editName(Long storeId, String categoryName, String updateName) {
         Category category = findCategory(storeId, categoryName);
         category.editName(updateName);
+        categoryRepository.save(category);
     }
 
     private List<Category> findCategories(Long storeId) {
