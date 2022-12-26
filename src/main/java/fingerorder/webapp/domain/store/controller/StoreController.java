@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,8 +45,15 @@ public class StoreController {
     //매장 생성
     @PostMapping
     public ResponseEntity<StoreCreateResponse> registerStore(
-        @Validated @RequestBody StoreCreateRequest storeCreateRequest
-        , BindingResult bindingResult) {
+        @Validated @RequestBody StoreCreateRequest storeCreateRequest) {
+
+//        if(bindingResult.hasErrors()) {
+//            List<ObjectError> allErrors = bindingResult.getAllErrors();
+//            for (ObjectError allError : allErrors) {
+//                System.out.println(allError.getDefaultMessage());
+//            }
+//            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+//        }
         StoreCreateResponse storeCreateResponse = storeService.registerStore(storeCreateRequest);
         return ResponseEntity.ok(storeCreateResponse);
     }

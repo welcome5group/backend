@@ -41,6 +41,9 @@ public class MerchantReviewController {
         @Validated @RequestBody ReviewCommentRequest reviewCommentRequest,
         BindingResult bindingResult,
         @PathVariable("storeId") Long storeId) {
+        if(bindingResult.hasErrors()) {
+
+        }
         ReviewCommentResponse response = merchantReviewService.registerComment(
             reviewCommentRequest, storeId);
         return new ResponseEntity<>(response, HttpStatus.OK);
