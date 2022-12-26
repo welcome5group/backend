@@ -1,6 +1,7 @@
 package fingerorder.webapp.domain.review.entity;
 
 import fingerorder.webapp.domain.member.entity.Member;
+import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentResponse;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateRequest;
@@ -20,6 +21,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import lombok.Getter;
 
 @Entity
@@ -46,6 +48,11 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orders_id")
+    private Order order;
+
+
     public Review(ReviewCommentRequest reviewCommentRequest) {
         this.parentId = reviewCommentRequest.getParentId();
         this.content = reviewCommentRequest.getContent();
@@ -57,9 +64,10 @@ public class Review extends BaseEntity {
 
     }
 
-    public Review(Member member, Store store, ReviewRequest reviewRequest) {
+    public Review(Member member, Store store, Order order, ReviewRequest reviewRequest) {
         this.member = member;
         this.store = store;
+        this.order = order;
         this.content = reviewRequest.getContent();
     }
 
