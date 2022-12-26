@@ -12,18 +12,17 @@ public class ReviewResponse {
     private Long reviewId;
     private String content;
     private String nickName;
-    private LocalDateTime updatedAt;
-
+    private LocalDateTime createdAt;
     private List<String> menuNames = new ArrayList<>();
 
     private Comment comment;
 
 
-    public ReviewResponse(Long reviewId, String content, String nickName, LocalDateTime updatedAt, List<String> menuNames) {
+    public ReviewResponse(Long reviewId, String content, String nickName, LocalDateTime createdAt, List<String> menuNames) {
         this.reviewId = reviewId;
         this.content = content;
         this.nickName = nickName;
-        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
         this.menuNames = menuNames;
     }
 

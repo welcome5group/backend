@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class StoreUpdateRequest {
 
     //    private Long memberId; 우선은 필요없으니 나중에 추가하든지 하자
-    @NotBlank
+    @NotBlank(message = "이름은 공백일수없습니다")
     private String name;
     @NotNull
     private Integer tableCount;
