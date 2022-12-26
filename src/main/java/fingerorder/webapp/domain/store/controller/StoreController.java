@@ -10,6 +10,8 @@ import fingerorder.webapp.domain.store.dto.StoreCreateResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.store.service.StoreService;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -74,15 +76,31 @@ public class StoreController {
 
     @GetMapping("/payment-details")
     @PreAuthorize("hasRole('MERCHANT')")
-    public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestBody PaymentDatailsRequestDto paymentDatailsRequestDto) {
+    public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(
+        @RequestParam Long storeId,
+        @RequestParam int year,
+        @RequestParam int month
+    ) {
 
-        return new ResponseEntity<>(storeService.findSalesForMonth(paymentDatailsRequestDto), HttpStatus.OK);
+        PaymentDatailsRequestDto paymentDatailsRequestDto = new PaymentDatailsRequestDto(storeId, year, month);
+        return ResponseEntity.ok(storeService.findPaymentsForMonth(paymentDatailsRequestDto));
+
     }
 
     @GetMapping("/order-details")
     @PreAuthorize("hasRole('MERCHANT')")
-    public ResponseEntity<List<OrderDetailsResponseDto>> getOrderDetails(@RequestBody OrderDetailsRequestDto orderDetailsRequestDto) {
+    public ResponseEntity<List<OrderDetailsResponseDto>> getOrderDetails(
+        @RequestParam Long storeId,
+        @RequestParam String startDate,
+        @RequestParam String endDate
+    ) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        OrderDetailsRequestDto orderDetailsRequestDto = new OrderDetailsRequestDto(
+            storeId, LocalDateTime.parse(startDate, formatter), LocalDateTime.parse(endDate, formatter));
 
         return ResponseEntity.ok(storeService.findOrderDetails(orderDetailsRequestDto));
+
     }
 }

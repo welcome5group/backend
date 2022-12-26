@@ -13,10 +13,8 @@ import lombok.NoArgsConstructor;
 public class OrderDetailsRequestDto {
 
 	Long storeId;
-
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	LocalDateTime startDate;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-
 	LocalDateTime endDate;
 }
