@@ -20,6 +20,9 @@ public class ReviewRequest {
     private Long storeId;
 
     @NotNull
+    private Long ordersId;
+
+    @NotNull
     private Long parentId;
 
     @NotEmpty
