@@ -6,6 +6,7 @@
 //import fingerorder.webapp.domain.review.entity.Review;
 //import fingerorder.webapp.domain.review.repository.ReviewRepository;
 //import fingerorder.webapp.domain.store.entity.Store;
+//import fingerorder.webapp.domain.store.exception.StoreFindException;
 //import fingerorder.webapp.domain.store.repository.StoreRepository;
 //import java.util.List;
 //import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@
 //
 //@Service
 //@RequiredArgsConstructor
-//public class MemberReviewService {
+//public class MemberReviewService2 {
 //
 //    private final ReviewRepository reviewRepository;
 //    private final StoreRepository storeRepository;

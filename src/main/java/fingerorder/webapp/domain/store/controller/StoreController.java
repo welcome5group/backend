@@ -6,6 +6,7 @@ import fingerorder.webapp.domain.store.dto.OrderDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.PaymentDatailsRequestDto;
 import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
+import fingerorder.webapp.domain.store.dto.StoreCreateResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.store.service.StoreService;
@@ -13,6 +14,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,11 +41,11 @@ public class StoreController {
 
     //매장 생성
     @PostMapping
-    public ResponseEntity<StoreUpdateResponse> registerStore(
+    public ResponseEntity<StoreCreateResponse> registerStore(
         @Validated @RequestBody StoreCreateRequest storeCreateRequest
         , BindingResult bindingResult) {
-        StoreUpdateResponse storeUpdateResponse = storeService.registerStore(storeCreateRequest);
-        return ResponseEntity.ok(storeUpdateResponse);
+        StoreCreateResponse storeCreateResponse = storeService.registerStore(storeCreateRequest);
+        return ResponseEntity.ok(storeCreateResponse);
     }
 
     //매장 수정
@@ -71,12 +73,14 @@ public class StoreController {
     }
 
     @GetMapping("/payment-details")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestBody PaymentDatailsRequestDto paymentDatailsRequestDto) {
 
         return new ResponseEntity<>(storeService.findSalesForMonth(paymentDatailsRequestDto), HttpStatus.OK);
     }
 
     @GetMapping("/order-details")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<List<OrderDetailsResponseDto>> getOrderDetails(@RequestBody OrderDetailsRequestDto orderDetailsRequestDto) {
 
         return ResponseEntity.ok(storeService.findOrderDetails(orderDetailsRequestDto));

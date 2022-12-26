@@ -1,16 +1,15 @@
 package fingerorder.webapp.domain.member.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class MemberEditNickNameDto {
+@NoArgsConstructor
+public class MemberWithDrawDto {
 	private String email;
-	private String nickName;
+	private String password;
 }

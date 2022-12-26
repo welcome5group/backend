@@ -10,6 +10,7 @@ import fingerorder.webapp.domain.category.vo.CategoryVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/{storeId}/category")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<GetCategoryDto> getCategory(@PathVariable Long storeId) {
 
         CategoriesVo categoriesVo = categoryService.getCategory(storeId);
@@ -36,6 +38,7 @@ public class CategoryController {
     }
 
     @PostMapping("/{storeId}/category")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<CreateCategoryDto> createCategory(@PathVariable Long storeId,
         @RequestBody CreateCategoryDto createCategoryDto) {
 
@@ -46,6 +49,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{storeId}/category")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<UpdateCategoryDto> updateCategory(@PathVariable Long storeId,
         @RequestBody UpdateCategoryDto updateCategoryDto) {
 
@@ -57,6 +61,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{storeId}/category")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<DeleteCategoryDto> deleteCategory(@PathVariable Long storeId,
         @RequestBody DeleteCategoryDto deleteCategoryDto) {
 

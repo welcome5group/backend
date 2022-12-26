@@ -1,6 +1,5 @@
 package fingerorder.webapp.domain.member.controller;
 
-import fingerorder.webapp.domain.member.dto.TokenDto;
 import fingerorder.webapp.domain.member.dto.TokenResponseDto;
 import fingerorder.webapp.domain.member.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,16 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-public class KakaController {
+public class KakaoController {
 	private final UserService userService;
 
 	@RequestMapping("/kakao_callback")
 	public String kakaoCallback(@RequestParam String type,@RequestParam String code, Model model) {
-		TokenDto tokenDto = userService.kakaoSignIn(code,type);
-
-		TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-			.accessToken("Bearer " + tokenDto.getAccessToken())
-			.build();
+		TokenResponseDto tokenResponseDto = this.userService.kakaoSignIn(code,type);
 
 		model.addAttribute(tokenResponseDto);
 		if (type.equals("MEMBER")) {
