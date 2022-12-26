@@ -43,6 +43,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice.OffsetMapping.Target.ForField.ReadOnly;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -59,9 +60,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
@@ -72,6 +75,7 @@ public class UserService implements UserDetailsService {
 	@Value("${api.key}")
 	private String API_KEY;
 
+	@Transactional
 	public MemberDto signUp(SignUpDto signUpDto) {
 		if (checkInvalidEmail(signUpDto.getEmail())) {
 			throw new InvalidEmailFormatException();
@@ -118,7 +122,7 @@ public class UserService implements UserDetailsService {
 
 		return this.memberRepository.save(newMember).toMemberDto();
 	}
-
+	@Transactional
 	public MemberDto signUpSubmit(String uuid) {
 		Member findMember = this.memberRepository.findByUuid(uuid)
 			.orElseThrow(() -> new UnauthorizedMemberException());
@@ -127,7 +131,7 @@ public class UserService implements UserDetailsService {
 
 		return this.memberRepository.save(findMember).toMemberDto();
 	}
-
+	@Transactional
 	public TokenResponseDto signIn(SignInDto signInDto) {
 		if (checkInvalidEmail(signInDto.getEmail())) {
 			throw new InvalidEmailFormatException();
@@ -174,6 +178,7 @@ public class UserService implements UserDetailsService {
 		return tokenResponseDto;
 	}
 
+	@Transactional
 	public TokenResponseDto kakaoSignIn(String code,String type) {
 		String accessToken = "";
 		SignInDto tempSignInDto = null;
@@ -251,6 +256,7 @@ public class UserService implements UserDetailsService {
 		return this.signIn(tempSignInDto);
 	}
 
+	@Transactional
 	public SignOutResponseDto signOut(SignOutDto signOutDto) {
 		String email = jwtTokenProvider.getEmail(signOutDto.getAccessToken());
 
@@ -282,6 +288,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	// user 정보 수정(nickName 밖에 없음)
+	@Transactional
 	public MemberDto editMemberNickName(MemberEditNickNameDto memberEditNickNameDto) {
 		Member findMember = checkInvalidMember(memberEditNickNameDto.getEmail());
 
@@ -298,6 +305,7 @@ public class UserService implements UserDetailsService {
 		return findMember.toMemberDto();
 	}
 
+	@Transactional
 	public MemberDto editMemberProfile(MemberEditProfileDto memberEditProfileDto) {
 		Member findMember = checkInvalidMember(memberEditProfileDto.getEmail());
 
@@ -306,6 +314,7 @@ public class UserService implements UserDetailsService {
 		return this.memberRepository.save(findMember).toMemberDto();
 	}
 
+	@Transactional
 	public boolean resetPassword(
 		String uuid,
 		MemberPasswordResetDto memberPasswordResetDto) {
@@ -421,6 +430,7 @@ public class UserService implements UserDetailsService {
 			.build();
 	}
 
+	@Transactional
 	public MemberDto withdrawMember(MemberWithDrawDto memberWithDrawDto) {
 		Member findMember = checkInvalidMember(memberWithDrawDto.getEmail());
 
