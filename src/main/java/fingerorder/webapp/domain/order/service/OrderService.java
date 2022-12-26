@@ -4,6 +4,7 @@ import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
+import fingerorder.webapp.domain.order.dto.GetIncompOrdersResponse;
 import fingerorder.webapp.domain.order.dto.OrderMenuDto;
 import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
 import fingerorder.webapp.domain.order.entity.Order;
@@ -15,6 +16,7 @@ import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -55,6 +57,18 @@ public class OrderService {
         }
 
         return orderMenus;
+    }
+
+    public List<GetIncompOrdersResponse> getIncompOrders(Long storeId) {
+        List<Order> getOrders = orderRepository.findAllByStoreIdAndOrderStatus(storeId, OrderStatus.INCOMP)
+            .orElseThrow(() -> new RuntimeException());
+
+        List<GetIncompOrdersResponse> orders = new ArrayList<>();
+        for (Order getOrder : getOrders) {
+            orders.add(new GetIncompOrdersResponse(getOrder));
+        }
+
+        return orders;
     }
 
     private Menu findMenuById(Long id) {
