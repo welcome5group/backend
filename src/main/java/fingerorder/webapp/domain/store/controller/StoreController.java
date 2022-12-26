@@ -6,7 +6,8 @@ import fingerorder.webapp.domain.store.dto.OrderDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.PaymentDatailsRequestDto;
 import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
-import fingerorder.webapp.domain.store.dto.StoreResponse;
+import fingerorder.webapp.domain.store.dto.StoreCreateResponse;
+import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
 import fingerorder.webapp.domain.store.service.StoreService;
 import java.util.List;
@@ -40,21 +41,21 @@ public class StoreController {
 
     //매장 생성
     @PostMapping
-    public ResponseEntity<StoreResponse> registerStore(
+    public ResponseEntity<StoreCreateResponse> registerStore(
         @Validated @RequestBody StoreCreateRequest storeCreateRequest
         , BindingResult bindingResult) {
-        StoreResponse storeResponse = storeService.registerStore(storeCreateRequest);
-        return ResponseEntity.ok(storeResponse);
+        StoreCreateResponse storeCreateResponse = storeService.registerStore(storeCreateRequest);
+        return ResponseEntity.ok(storeCreateResponse);
     }
 
-    //매장수정
+    //매장 수정
     @PutMapping("/{storeId}")
-    public ResponseEntity<StoreResponse> updateStore(
+    public ResponseEntity<StoreUpdateResponse> updateStore(
         @Validated @RequestBody StoreUpdateRequest storeUpdateRequest,
         BindingResult bindingResult,
         @PathVariable("storeId") Long storeId) {
-        StoreResponse storeResponse = storeService.updateStore(storeUpdateRequest, storeId);
-        return ResponseEntity.ok(storeResponse);
+        StoreUpdateResponse storeUpdateResponse = storeService.updateStore(storeUpdateRequest, storeId);
+        return ResponseEntity.ok(storeUpdateResponse);
     }
 
     //매장 삭제
@@ -66,8 +67,8 @@ public class StoreController {
 
     //사장의 모든 매장 조회
     @GetMapping
-    public ResponseEntity<Result<List<StoreResponse>>> findAllStores(@RequestParam Long memberId) {
-        List<StoreResponse> stores = storeService.findAllStores(memberId);
+    public ResponseEntity<Result<List<StoreUpdateResponse>>> findAllStores(@RequestParam Long memberId) {
+        List<StoreUpdateResponse> stores = storeService.findAllStores(memberId);
         return new ResponseEntity<>(new Result<>(stores), HttpStatus.OK);
     }
 
@@ -75,7 +76,7 @@ public class StoreController {
     @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<List<PaymentDetailsResponseDto>> getPaymentDetails(@RequestBody PaymentDatailsRequestDto paymentDatailsRequestDto) {
 
-        return new ResponseEntity<>(storeService.findPaymentsForMonth(paymentDatailsRequestDto), HttpStatus.OK);
+        return new ResponseEntity<>(storeService.findSalesForMonth(paymentDatailsRequestDto), HttpStatus.OK);
     }
 
     @GetMapping("/order-details")
