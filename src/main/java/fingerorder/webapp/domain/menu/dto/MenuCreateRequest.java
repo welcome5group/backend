@@ -30,11 +30,12 @@ public class MenuCreateRequest {
     @Builder
     public MenuCreateRequest(String name, String description, int price,
         String imageUrl,
-        String categoryName) {
+        String categoryName, String menuStatus) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryName = categoryName;
+        this.menuStatus = menuStatus;
     }
 }

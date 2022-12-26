@@ -50,13 +50,13 @@ public class Menu {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    public Menu(MenuCreateRequest menuCreateRequest) {
+    public Menu(MenuCreateRequest menuCreateRequest, Category category) {
         this.name = menuCreateRequest.getName();
         this.description = menuCreateRequest.getDescription();
         this.price = menuCreateRequest.getPrice();
         this.imageUrl = menuCreateRequest.getImageUrl();
         this.status = Enum.valueOf(MenuStatus.class, menuCreateRequest.getMenuStatus());
-//        this.category = menuCreateRequest.getCategoryName();
+        this.category = category;
     }
 
     protected Menu() {
