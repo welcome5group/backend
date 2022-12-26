@@ -2,13 +2,16 @@ package fingerorder.webapp.domain.review.service;
 
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
+import fingerorder.webapp.domain.member.status.MemberType;
 import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.repository.OrderRepository;
+import fingerorder.webapp.domain.order.status.ReviewStatus;
 import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
 import fingerorder.webapp.domain.review.dto.MemberReviewResponse;
 import fingerorder.webapp.domain.review.dto.RemoveMemberReviewRequest;
 import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
 import fingerorder.webapp.domain.review.entity.Review;
+import fingerorder.webapp.domain.review.exception.NoAuthReviewException;
 import fingerorder.webapp.domain.review.exception.NoUniqueReviewException;
 import fingerorder.webapp.domain.review.repository.ReviewRepository;
 import fingerorder.webapp.domain.store.entity.Store;
@@ -33,8 +36,12 @@ public class MemberReviewService {
     @Transactional
     public void saveReview(SaveMemberReviewRequest request) {
         Member member = findMemberById(request.getMemberId());
+        if (MemberType.MERCHANT.equals(member.getMemberType())) {
+            throw new NoAuthReviewException();
+        }
 
-        boolean findReview = reviewRepository.existsByMember(member);
+        boolean findReview = reviewRepository.existsByMemberIdAndOrderId(request.getMemberId(),
+            request.getOrderId());
         if (findReview) {
             throw new NoUniqueReviewException();
         }
@@ -45,6 +52,7 @@ public class MemberReviewService {
         Review review = new Review(member, store, order, request);
 
         reviewRepository.save(review);
+        order.editOrderReviewStatus(ReviewStatus.COMP);
     }
 
     @Transactional
