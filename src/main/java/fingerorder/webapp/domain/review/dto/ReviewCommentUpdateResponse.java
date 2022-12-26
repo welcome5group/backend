@@ -2,8 +2,6 @@ package fingerorder.webapp.domain.review.dto;
 
 import fingerorder.webapp.domain.review.entity.Review;
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -1,6 +1,5 @@
 package fingerorder.webapp.domain.menu.dto.menuquerydto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

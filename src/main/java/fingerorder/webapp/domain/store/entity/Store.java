@@ -8,9 +8,10 @@ import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreCreateResponse;
 import fingerorder.webapp.domain.store.dto.StoreResponse;
-import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
+import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
 import fingerorder.webapp.entity.BaseEntity;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -63,7 +64,7 @@ public class Store extends BaseEntity {
     }
 
     @Builder
-    public Store(String name, Integer tableCount, String storeLocation) {
+    public Store(String name, LocalDateTime now, LocalDateTime localDateTime, Integer tableCount, String storeLocation) {
         this.name = name;
         this.tableCount = tableCount;
         this.storeLocation = storeLocation;

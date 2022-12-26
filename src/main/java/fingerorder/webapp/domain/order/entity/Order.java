@@ -4,7 +4,6 @@ import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.order.status.OrderStatus;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.entity.BaseEntity;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -25,7 +24,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity

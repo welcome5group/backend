@@ -7,24 +7,18 @@ import fingerorder.webapp.domain.category.dto.UpdateCategoryDto;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.exception.CategoryNotFoundException;
 import fingerorder.webapp.domain.category.exception.NoMatchingCategoryException;
-import fingerorder.webapp.domain.category.exception.NoProperCategoryException;
 import fingerorder.webapp.domain.category.exception.NoUniqueCategoryException;
 import fingerorder.webapp.domain.category.exception.StoreNotFoundException;
 import fingerorder.webapp.domain.category.repository.CategoryQueryRepository;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
-import fingerorder.webapp.domain.category.vo.CategoriesVo;
-import fingerorder.webapp.domain.category.vo.CategoryVo;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service

@@ -4,7 +4,6 @@ import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.entity.OrderMenu;
 import fingerorder.webapp.domain.store.dto.StoreResponse;
-import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
 import fingerorder.webapp.domain.store.entity.Store;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

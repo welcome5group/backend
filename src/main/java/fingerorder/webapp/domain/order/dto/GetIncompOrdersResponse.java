@@ -2,7 +2,6 @@ package fingerorder.webapp.domain.order.dto;
 
 import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.entity.OrderMenu;
-import fingerorder.webapp.domain.order.status.OrderStatus;
 import fingerorder.webapp.domain.store.dto.OrderMenuInfo;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

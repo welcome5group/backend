@@ -2,7 +2,6 @@ package fingerorder.webapp.domain.menu.service;
 
 import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuAndCategory;
 import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuInCategory;
-import fingerorder.webapp.domain.menu.status.MenuStatus;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,6 @@ package fingerorder.webapp.domain.order.controller;
 
 import fingerorder.webapp.domain.order.dto.GetIncompOrdersResponse;
 import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
-import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.service.OrderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -40,9 +39,5 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/incomp-orders/{storeId}")
-    public ResponseEntity<List<GetIncompOrdersResponse>> getIncompOrders(@PathVariable Long storeId) {
-        return ResponseEntity.ok(orderService.getIncompOrders(storeId));
-    }
 
 }

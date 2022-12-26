@@ -2,7 +2,6 @@ package fingerorder.webapp.service;
 
 import static fingerorder.webapp.domain.member.status.MemberStatus.ACTIVATE;
 import static fingerorder.webapp.domain.member.status.MemberType.MERCHANT;
-import static fingerorder.webapp.domain.menu.status.MenuStatus.ABLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import fingerorder.webapp.domain.category.entity.Category;
@@ -18,7 +17,6 @@ import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
 import fingerorder.webapp.domain.store.service.StoreService;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -91,7 +89,7 @@ class StoreServiceTest {
     @Test
     void updateStoreTest() {
         //given
-        Store store = new Store("일식집", 4, "수원시");
+        Store store = new Store("일식집", LocalDateTime.now(), LocalDateTime.now(), 4, "수원시");
         Store savedStore = storeRepository.save(store);
         Long storeId = savedStore.getId();
         StoreUpdateRequest storeUpdateRequest = new StoreUpdateRequest("중국집", 10, "서울시");

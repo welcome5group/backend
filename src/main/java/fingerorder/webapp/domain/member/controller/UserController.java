@@ -9,8 +9,6 @@ import fingerorder.webapp.domain.member.dto.MemberWithDrawDto;
 import fingerorder.webapp.domain.member.dto.SignInDto;
 import fingerorder.webapp.domain.member.dto.SignOutDto;
 import fingerorder.webapp.domain.member.dto.SignUpDto;
-import fingerorder.webapp.domain.member.dto.TokenDto;
-import fingerorder.webapp.domain.member.dto.TokenResponseDto;
 import fingerorder.webapp.domain.member.service.MailService;
 import fingerorder.webapp.domain.member.service.UserService;
 import lombok.RequiredArgsConstructor;

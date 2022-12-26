@@ -22,7 +22,6 @@ import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.exception.StoreNotFindException;
 import fingerorder.webapp.domain.store.repository.SalesQueryRepository;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
