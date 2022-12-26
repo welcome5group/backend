@@ -5,6 +5,7 @@ import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
 import fingerorder.webapp.domain.order.dto.GetIncompOrdersResponse;
+import fingerorder.webapp.domain.order.dto.OrderListResponse;
 import fingerorder.webapp.domain.order.dto.OrderMenuDto;
 import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
 import fingerorder.webapp.domain.order.entity.Order;
@@ -14,6 +15,7 @@ import fingerorder.webapp.domain.order.status.OrderStatus;
 import fingerorder.webapp.domain.order.status.ReviewStatus;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.domain.store.repository.StoreRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -107,9 +109,24 @@ public class OrderService {
         }
     }
 
-    //손님의 주문 내역 조회
-    public void searchOrderMenuList(Long memberId) {
+    public List<OrderListResponse> getOrderList(Long memberId) {
+        LocalDateTime date = LocalDateTime.now().minusDays(3);
+        List<Order> orderList = this.orderRepository.findByMemberIdAndDate(memberId,date)
+            .orElseThrow(() -> new RuntimeException());
 
+        List<OrderListResponse> orderListResponses = new ArrayList<>();
+
+        for (Order order : orderList) {
+            OrderListResponse orderListItem = OrderListResponse.builder()
+                .orderId(order.getId())
+                .orderStatus(order.getOrderStatus())
+                .reviewStatus(order.getReviewStatus())
+                .orderDate(order.getCreatedAt())
+                .totalPrice(order.getTotalPrice())
+                .build();
+            orderListItem.insertMenu(order.getOrderMenus());
+            orderListResponses.add(orderListItem);
+        }
+        return orderListResponses;
     }
-
 }
