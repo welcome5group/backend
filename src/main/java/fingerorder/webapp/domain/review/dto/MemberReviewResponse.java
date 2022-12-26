@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 public class MemberReviewResponse {
 
     @NotNull
+    private Long id;
+
+    @NotNull
     private String storeName;
 
     @NotNull
@@ -33,6 +36,7 @@ public class MemberReviewResponse {
 
     public MemberReviewResponse createResponse(Review review, Optional<Review> comment) {
         return new MemberReviewResponse(
+            review.getId(),
             review.getStore().getName(),
             review.getCreatedAt(),
             createMenuNames(review.getOrder().getOrderMenus()),
