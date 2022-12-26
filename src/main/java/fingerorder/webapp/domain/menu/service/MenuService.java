@@ -27,11 +27,11 @@ public class MenuService {
     @Transactional
     public MenuResponse registerMenu(MenuCreateRequest menuCreateRequest,
         Long storeId) { // 매장 내의 메뉴 등록
-        Menu menu = new Menu(menuCreateRequest);
         Category category = categoryRepository.findByName(
             menuCreateRequest.getCategoryName()).orElseThrow(CategoryNotFoundException::new);
         Store store = storeRepository.findById(storeId).orElseThrow(
             StoreNotFindException::new);
+        Menu menu = new Menu(menuCreateRequest, category);
         Menu savedMenu = menuRepository.save(menu);
         savedMenu.changeStore(store);
         savedMenu.add(category);

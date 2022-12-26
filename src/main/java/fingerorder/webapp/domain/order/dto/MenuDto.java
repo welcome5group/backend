@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class MenuDto {
     String name;
-    Integer menuNum;
+    int count;
 }
