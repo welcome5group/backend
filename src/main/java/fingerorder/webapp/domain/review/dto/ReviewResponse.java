@@ -37,5 +37,6 @@ public class ReviewResponse {
         private LocalDateTime updatedAt;
         private String content;
 
+
     }
 }
