@@ -39,6 +39,7 @@ public class MenuQueryService {
             + "where s.id =: storeId", MenuAndCategory.class)
             .setParameter("storeId", storeId)
             .getResultList();
+
     }
 
     private List<MenuInCategory> findMenus(String categoryName, Long storeId) {
