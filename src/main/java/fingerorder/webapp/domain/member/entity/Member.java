@@ -85,6 +85,11 @@ public class Member {
     public void changeMemberStatus(MemberStatus status) {
         this.status = status;
         this.updatedAt = LocalDateTime.now();
+
+        if (status == MemberStatus.DELETED) {
+            this.updatedAt = LocalDateTime.now();
+            this.deletedAt = LocalDateTime.now();
+        }
     }
 
     public MemberDto toMemberDto() {
