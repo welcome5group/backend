@@ -32,7 +32,6 @@ public class MenuController {
 
     private final MenuService menuService;
     private final MenuQueryService menuQueryService;
-
     // → 정규식(영소문자, 영대문자, 한글, 숫자, 공백, 소괄호)
 
     //메뉴 추가

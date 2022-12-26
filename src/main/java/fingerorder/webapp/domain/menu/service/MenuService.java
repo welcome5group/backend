@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MenuService {
-
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
     private final CategoryRepository categoryRepository;
@@ -67,7 +66,6 @@ public class MenuService {
     public void menuDisable(Long menuId) { //메뉴 품절로 상태 변경하기
         Menu menu = menuRepository.findById(menuId).orElseThrow(MenuNotFindException::new);
         menu.changeStatus();
-
     }
 
 

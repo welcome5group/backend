@@ -4,6 +4,7 @@ import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
+import fingerorder.webapp.domain.order.dto.GetIncompOrdersResponse;
 import fingerorder.webapp.domain.order.dto.OrderMenuDto;
 import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
 import fingerorder.webapp.domain.order.entity.Order;
@@ -57,6 +58,25 @@ public class OrderService {
         return orderMenus;
     }
 
+    public List<GetIncompOrdersResponse> getIncompOrders(Long storeId) {
+        List<Order> getOrders = orderRepository.findAllByStoreIdAndOrderStatus(storeId, OrderStatus.INCOMP)
+            .orElseThrow(() -> new RuntimeException());
+
+        List<GetIncompOrdersResponse> orders = new ArrayList<>();
+        for (Order getOrder : getOrders) {
+            orders.add(new GetIncompOrdersResponse(getOrder));
+        }
+
+        return orders;
+    }
+
+    @Transactional
+    public void editOrderStatus(Long orderId) {
+        Order order = findOrderById(orderId);
+
+        order.editOrderStatus(OrderStatus.COMP);
+    }
+
     private Menu findMenuById(Long id) {
         return menuRepository.findById(id)
             .orElseThrow(() -> new RuntimeException());
@@ -64,6 +84,11 @@ public class OrderService {
 
     private Store findStoreById(Long id) {
         return storeRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException());
+    }
+
+    private Order findOrderById(Long id) {
+        return orderRepository.findById(id)
             .orElseThrow(() -> new RuntimeException());
     }
 
@@ -76,6 +101,12 @@ public class OrderService {
         if (orderMenus.isEmpty()) {
             throw new RuntimeException("주문한 메뉴가 없습니다.");
         }
+    }
+
+    //손님의 주문 내역 조회
+    public void searchOrderMenuList(Long memberId) {
+
+
     }
 
 }

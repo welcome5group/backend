@@ -1,7 +1,6 @@
 package fingerorder.webapp.security;
 
 import fingerorder.webapp.domain.member.dto.TokenDto;
-import fingerorder.webapp.domain.member.dto.TokenResponseDto;
 import fingerorder.webapp.domain.member.exception.ExpiredTokenException;
 import fingerorder.webapp.domain.member.exception.NoAuthorizedInfoTokenException;
 import io.jsonwebtoken.Claims;

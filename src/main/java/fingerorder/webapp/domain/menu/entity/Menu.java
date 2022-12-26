@@ -1,5 +1,7 @@
 package fingerorder.webapp.domain.menu.entity;
 
+import static javax.persistence.EnumType.STRING;
+
 import fingerorder.webapp.annotation.Trim;
 import fingerorder.webapp.annotation.TrimEntityListener;
 import fingerorder.webapp.domain.category.entity.Category;
@@ -11,6 +13,7 @@ import fingerorder.webapp.domain.store.entity.Store;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,7 +38,8 @@ public class Menu {
     private String description;
     private Integer price;
     private String imageUrl;
-    private int star;
+
+    @Enumerated(STRING)
     private MenuStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,16 +50,14 @@ public class Menu {
     @JoinColumn(name = "store_id")
     private Store store;
 
-
     public Menu(MenuCreateRequest menuCreateRequest) {
         this.name = menuCreateRequest.getName();
         this.description = menuCreateRequest.getDescription();
         this.price = menuCreateRequest.getPrice();
         this.imageUrl = menuCreateRequest.getImageUrl();
-
+        this.status = Enum.valueOf(MenuStatus.class, menuCreateRequest.getMenuStatus());
 //        this.category = menuCreateRequest.getCategoryName();
     }
-
 
     protected Menu() {
 
@@ -79,15 +81,14 @@ public class Menu {
         this.description = menuUpdateRequest.getDescription();
         this.price = menuUpdateRequest.getPrice();
         this.imageUrl = menuUpdateRequest.getImageUrl();
-
+        this.status = Enum.valueOf(MenuStatus.class, menuUpdateRequest.getMenuStatus());
         this.category = category;
 
         return this;
-
     }
 
     public void changeStatus() {
-        this.status = MenuStatus.ENABLE;
+        this.status = MenuStatus.SOLDOUT;
     }
 
     public MenuResponse toMenuResponse(Menu menu) {
@@ -100,6 +101,7 @@ public class Menu {
         menuResponse.setDescription(menu.getDescription());
         menuResponse.setImageUrl(menu.getImageUrl());
         menuResponse.setCategoryName(menu.getCategory().getName());
+        menuResponse.setMenuStatus(String.valueOf(menu.getStatus()));
 
         return menuResponse;
     }

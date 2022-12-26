@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReviewCommentUpdateResponse {
 
+
     private String content;
     private LocalDateTime updatedAt;
 

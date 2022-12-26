@@ -7,8 +7,9 @@ import fingerorder.webapp.domain.store.dto.PaymentDatailsRequestDto;
 import fingerorder.webapp.domain.store.dto.PaymentDetailsResponseDto;
 import fingerorder.webapp.domain.store.dto.StoreCreateRequest;
 import fingerorder.webapp.domain.store.dto.StoreCreateResponse;
-import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
+import fingerorder.webapp.domain.store.dto.StoreLookUpResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateRequest;
+import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
 import fingerorder.webapp.domain.store.service.StoreService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -44,8 +45,15 @@ public class StoreController {
     //매장 생성
     @PostMapping
     public ResponseEntity<StoreCreateResponse> registerStore(
-        @Validated @RequestBody StoreCreateRequest storeCreateRequest
-        , BindingResult bindingResult) {
+        @Validated @RequestBody StoreCreateRequest storeCreateRequest) {
+
+//        if(bindingResult.hasErrors()) {
+//            List<ObjectError> allErrors = bindingResult.getAllErrors();
+//            for (ObjectError allError : allErrors) {
+//                System.out.println(allError.getDefaultMessage());
+//            }
+//            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+//        }
         StoreCreateResponse storeCreateResponse = storeService.registerStore(storeCreateRequest);
         return ResponseEntity.ok(storeCreateResponse);
     }
@@ -69,9 +77,9 @@ public class StoreController {
 
     //사장의 모든 매장 조회
     @GetMapping
-    public ResponseEntity<Result<List<StoreUpdateResponse>>> findAllStores(@RequestParam Long memberId) {
-        List<StoreUpdateResponse> stores = storeService.findAllStores(memberId);
-        return new ResponseEntity<>(new Result<>(stores), HttpStatus.OK);
+    public ResponseEntity<Result<List<StoreLookUpResponse>>> findAllStores(@RequestParam Long memberId) {
+        List<StoreLookUpResponse> allStores = storeService.findAllStores(memberId);
+        return new ResponseEntity<>(new Result<>(allStores), HttpStatus.OK);
     }
 
     @GetMapping("/payment-details")

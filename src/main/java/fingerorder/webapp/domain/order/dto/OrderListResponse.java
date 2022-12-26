@@ -12,21 +12,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderListResponse {
-	private String storeName;
-	private String orderStatus;
-	private String orderDate;
-	private int totalPrice;
-	private List<MenuResponse> menuList = new ArrayList<>();
+    private String storeName;
+    private String orderStatus;
+    private String orderDate;
+    private int totalPrice;
+    private List<MenuDto> menuList = new ArrayList<>();
 
-	public OrderListResponse(String storeName, String orderStatus, String orderDate,
-		int totalPrice) {
-		this.storeName = storeName;
-		this.orderStatus = orderStatus;
-		this.orderDate = orderDate;
-		this.totalPrice = totalPrice;
-	}
+    public OrderListResponse(String storeName, String orderStatus, String orderDate,
+        int totalPrice) {
+        this.storeName = storeName;
+        this.orderStatus = orderStatus;
+        this.orderDate = orderDate;
+        this.totalPrice = totalPrice;
+    }
 
-	public void insertMenu() {
+    public void insertMenu() {
 
-	}
+    }
 }
