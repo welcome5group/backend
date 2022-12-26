@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				  .and()
 					  .authorizeRequests()
 						  .antMatchers(
-							  "/**", "/**/sign-up"
+							  "/**/sign-up"
 							  ,"/**/sign-in"
 							  ,"/api/auth/password"
 							  ,"/api/auth/resetPassword"

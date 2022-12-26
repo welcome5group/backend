@@ -91,7 +91,7 @@ class StoreServiceTest {
     @Test
     void updateStoreTest() {
         //given
-        Store store = new Store("일식집", LocalDateTime.now(), LocalDateTime.now(), 4, "수원시");
+        Store store = new Store("일식집", 4, "수원시");
         Store savedStore = storeRepository.save(store);
         Long storeId = savedStore.getId();
         StoreUpdateRequest storeUpdateRequest = new StoreUpdateRequest("중국집", 10, "서울시");
@@ -148,8 +148,6 @@ class StoreServiceTest {
 
         return Store.builder()
             .storeLocation(storeLocation)
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
             .tableCount(tableCount)
             .name(name)
             .build();

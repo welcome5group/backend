@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberReviewResponse {
 
-    @NotNull
+    @NotEmpty
     private String storeName;
 
     @NotNull
@@ -45,7 +46,6 @@ public class MemberReviewResponse {
         for (OrderMenu orderMenu : orderMenuList) {
             names.add(orderMenu.getMenu().getName());
         }
-
         return names;
     }
 

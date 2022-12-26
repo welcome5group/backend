@@ -19,5 +19,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findAllByMember(Member member);
 
+    List<Review> findAllByParentIdIsNotNullAndStore(Store store);
+
     Optional<Review> findOneByParentId(Long id);
 }
