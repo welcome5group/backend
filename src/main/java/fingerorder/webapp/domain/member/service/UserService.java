@@ -27,6 +27,8 @@ import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.member.status.MemberSignUpType;
 import fingerorder.webapp.domain.member.status.MemberStatus;
 import fingerorder.webapp.domain.member.status.MemberType;
+import fingerorder.webapp.domain.order.entity.Order;
+import fingerorder.webapp.domain.order.repository.OrderRepository;
 import fingerorder.webapp.security.JwtTokenProvider;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
