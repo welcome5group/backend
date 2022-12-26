@@ -1,6 +1,7 @@
 package fingerorder.webapp.security;
 
 import fingerorder.webapp.domain.member.dto.TokenDto;
+import fingerorder.webapp.domain.member.dto.TokenResponseDto;
 import fingerorder.webapp.domain.member.exception.ExpiredTokenException;
 import fingerorder.webapp.domain.member.exception.NoAuthorizedInfoTokenException;
 import io.jsonwebtoken.Claims;
@@ -57,11 +58,10 @@ public class JwtTokenProvider {
             .compact();
 
         return TokenDto.builder()
-            .grantType(BEARER_TYPE)
             .accessToken(accessToken)
-            .accessTokenTokenExpirationTime(TOKEN_EXPIRE_TIME)
+            .accessTokenTokenExpirationTime(this.TOKEN_EXPIRE_TIME)
             .refreshToken(refreshToken)
-            .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+            .refreshTokenExpirationTime(this.REFRESH_TOKEN_EXPIRE_TIME)
             .build();
     }
 
