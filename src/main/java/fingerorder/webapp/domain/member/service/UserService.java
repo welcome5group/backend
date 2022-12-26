@@ -81,6 +81,20 @@ public class UserService implements UserDetailsService {
 			throw new InvalidPasswordFormatException();
 		}
 
+		Optional<Member> optionalMember = this.memberRepository.findByEmail(signUpDto.getEmail());
+
+		if (optionalMember.isPresent()) {
+			Member findMember = optionalMember.get();
+
+			if (findMember.getStatus() == MemberStatus.DELETED) {
+				findMember.changeMemberStatus(MemberStatus.ACTIVATE);
+			} else if (findMember.getStatus() == MemberStatus.UNAUTHORIZED){
+				throw new NotAuthorizedException();
+			}
+
+			return this.memberRepository.save(findMember).toMemberDto();
+		}
+
 		boolean existsEmail = this.memberRepository.existsByEmail(signUpDto.getEmail());
 		boolean existsNickName = this.memberRepository.existsByNickName(signUpDto.getNickName());
 
@@ -338,7 +352,7 @@ public class UserService implements UserDetailsService {
 		Member findMember = this.memberRepository.findByEmail(email)
 			.orElseThrow(() -> new NoExistMemberException());
 
-		if (findMember.getStatus() != MemberStatus.ACTIVATE) {
+		if (findMember.getStatus() == MemberStatus.UNAUTHORIZED) {
 			throw new NotAuthorizedException();
 		}
 
