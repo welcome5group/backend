@@ -42,7 +42,6 @@ public class MemberReviewResponse {
         for (OrderMenu orderMenu : orderMenuList) {
             names.add(orderMenu.getMenu().getName());
         }
-
         return names;
     }
 
