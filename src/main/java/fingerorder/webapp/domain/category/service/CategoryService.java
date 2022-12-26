@@ -1,5 +1,9 @@
 package fingerorder.webapp.domain.category.service;
 
+import fingerorder.webapp.domain.category.dto.CreateCategoryDto;
+import fingerorder.webapp.domain.category.dto.DeleteCategoryDto;
+import fingerorder.webapp.domain.category.dto.GetCategoryDto;
+import fingerorder.webapp.domain.category.dto.UpdateCategoryDto;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.exception.CategoryNotFoundException;
 import fingerorder.webapp.domain.category.exception.NoMatchingCategoryException;
@@ -15,7 +19,9 @@ import fingerorder.webapp.domain.store.repository.StoreRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import javax.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,20 +33,8 @@ public class CategoryService {
     private final StoreRepository storeRepository;
     private final CategoryQueryRepository categoryQueryRepository;
 
-    public CategoryVo createCategory(Long storeId, String categoryName) {
-        validateName(categoryName);
-        isUnique(categoryName);
-
-        Category category = new Category(categoryName);
-        Store store = findStore(storeId);
-        category.setCategoryAndStore(store);
-        categoryRepository.save(category);
-
-        return new CategoryVo(categoryName);
-    }
-
     @Transactional(readOnly = true)
-    public CategoriesVo getCategory(Long storeId) {
+    public GetCategoryDto getCategory(Long storeId) {
         List<Category> categories = findCategories(storeId);
 
         List<String> categoryNames = new ArrayList<>();
@@ -49,29 +43,48 @@ public class CategoryService {
             categoryNames.add(category.getName());
         }
 
-        return new CategoriesVo(categoryNames);
+        return new GetCategoryDto(categoryNames);
     }
 
     @Transactional
-    public CategoryVo updateCategory(Long storeId, String categoryName, String updateName) {
-        validateName(updateName);
-        isUnique(updateName);
+    public CreateCategoryDto createCategory(Long storeId, String categoryName) {
+        try{
+            Category category = new Category(categoryName);
+            Store store = findStore(storeId);
+            category.setCategoryAndStore(store);
+            categoryRepository.save(category);	// 추상화된 Repository -> 스프링 예외
+        } catch (DataIntegrityViolationException e) {
+            throw new NoUniqueCategoryException();
+        }
 
-        Category category = findCategory(storeId, categoryName);
-        category.editName(updateName);
+        return new CreateCategoryDto(categoryName);
+    }
 
-        return new CategoryVo(updateName);
+    public UpdateCategoryDto updateCategory(Long storeId, String categoryName, String updateName) {
+        try {
+            editName(storeId, categoryName, updateName);
+        } catch (PersistenceException e){
+            System.err.println("================" + e);
+        }
+
+        return new UpdateCategoryDto(categoryName, updateName);
     }
 
     @Transactional
-    public CategoryVo deleteCategory(Long storeId, String categoryName) {
-        validateName(categoryName);
+    public DeleteCategoryDto deleteCategory(Long storeId, String categoryName) {
+//		validateName(categoryName);
 
         Category category = findCategory(storeId, categoryName);
 
         categoryRepository.delete(category);
 
-        return new CategoryVo(categoryName);
+        return new DeleteCategoryDto(categoryName);
+    }
+
+    @Transactional
+    public void editName(Long storeId, String categoryName, String updateName) {
+        Category category = findCategory(storeId, categoryName);
+        category.editName(updateName);
     }
 
     private List<Category> findCategories(Long storeId) {
@@ -84,23 +97,9 @@ public class CategoryService {
             .orElseThrow(StoreNotFoundException::new);
     }
 
-    private Category findCategory(Long storeId, String categoryName) {
+    public Category findCategory(Long storeId, String categoryName) {
         return categoryQueryRepository.findCategory(storeId, categoryName)
             .orElseThrow(NoMatchingCategoryException::new);
-    }
-
-    private void validateName(String categoryName) {
-        if (categoryName == null || categoryName.equals("")) {
-            throw new NoProperCategoryException();
-        } else if (!Pattern.matches("^[a-zA-Z가-힣0-9 ()]*$", categoryName)) {
-            throw new NoProperCategoryException();
-        }
-    }
-
-    private void isUnique(String categoryName) {
-        if (categoryRepository.findByName(categoryName).isPresent()) {
-            throw new NoUniqueCategoryException();
-        }
     }
 
 }

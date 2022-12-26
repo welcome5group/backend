@@ -4,6 +4,7 @@ import fingerorder.webapp.domain.category.dto.CreateCategoryDto;
 import fingerorder.webapp.domain.category.dto.DeleteCategoryDto;
 import fingerorder.webapp.domain.category.dto.GetCategoryDto;
 import fingerorder.webapp.domain.category.dto.UpdateCategoryDto;
+import fingerorder.webapp.domain.category.exception.NoProperCategoryException;
 import fingerorder.webapp.domain.category.service.CategoryService;
 import fingerorder.webapp.domain.category.vo.CategoriesVo;
 import fingerorder.webapp.domain.category.vo.CategoryVo;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,46 +32,51 @@ public class CategoryController {
 
     @GetMapping("/{storeId}/category")
     @PreAuthorize("hasRole('MERCHANT')")
-    public ResponseEntity<GetCategoryDto> getCategory(@PathVariable Long storeId) {
+    public ResponseEntity<GetCategoryDto> getCategory(
+        @PathVariable Long storeId) {
 
-        CategoriesVo categoriesVo = categoryService.getCategory(storeId);
-
-        return new ResponseEntity<>(new GetCategoryDto(categoriesVo.getNames()), HttpStatus.OK);
-
+        return new ResponseEntity<>(categoryService.getCategory(storeId), HttpStatus.OK);
     }
+
 
     @PostMapping("/{storeId}/category")
     @PreAuthorize("hasRole('MERCHANT')")
-    public ResponseEntity<CreateCategoryDto> createCategory(@PathVariable Long storeId,
-        @RequestBody CreateCategoryDto createCategoryDto) {
+    public ResponseEntity<CreateCategoryDto> createCategory(
+        @PathVariable Long storeId, @Validated @RequestBody CreateCategoryDto createCategoryDto,
+        BindingResult bindingResult) {
 
-        CategoryVo categoryVo = categoryService.createCategory(storeId,
-            createCategoryDto.getName());
+        validateCategoryName(bindingResult);
 
-        return new ResponseEntity<>(new CreateCategoryDto(categoryVo.getName()), HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.createCategory(
+            storeId, createCategoryDto.getName()), HttpStatus.OK);
     }
 
     @PutMapping("/{storeId}/category")
     @PreAuthorize("hasRole('MERCHANT')")
-    public ResponseEntity<UpdateCategoryDto> updateCategory(@PathVariable Long storeId,
-        @RequestBody UpdateCategoryDto updateCategoryDto) {
+    public ResponseEntity<UpdateCategoryDto> updateCategory(
+        @PathVariable Long storeId, @Validated @RequestBody UpdateCategoryDto updateCategoryDto,
+        BindingResult bindingResult) {
 
-        CategoryVo categoryVo = categoryService.updateCategory(storeId,
-            updateCategoryDto.getCategoryName(), updateCategoryDto.getUpdateName());
+        validateCategoryName(bindingResult);
 
-        return new ResponseEntity<>(
-            new UpdateCategoryDto(categoryVo.getName(), categoryVo.getName()), HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.updateCategory(
+            storeId, updateCategoryDto.getCategoryName(), updateCategoryDto.getUpdateName()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{storeId}/category")
     @PreAuthorize("hasRole('MERCHANT')")
-    public ResponseEntity<DeleteCategoryDto> deleteCategory(@PathVariable Long storeId,
-        @RequestBody DeleteCategoryDto deleteCategoryDto) {
+    public ResponseEntity<DeleteCategoryDto> deleteCategory(
+        @PathVariable Long storeId, @Validated @RequestBody DeleteCategoryDto deleteCategoryDto,
+        BindingResult bindingResult) {
 
-        CategoryVo categoryVo = categoryService.deleteCategory(storeId,
-            deleteCategoryDto.getName());
+        validateCategoryName(bindingResult);
 
-        return new ResponseEntity<>(new DeleteCategoryDto(categoryVo.getName()), HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.deleteCategory(storeId, deleteCategoryDto.getName()), HttpStatus.OK);
     }
 
+    public void validateCategoryName(BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new NoProperCategoryException();
+        }
+    }
 }
