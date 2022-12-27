@@ -3,7 +3,6 @@ package fingerorder.webapp.domain.member.service;
 import fingerorder.webapp.domain.member.dto.MemberDto;
 import fingerorder.webapp.domain.member.dto.MemberEditNickNameDto;
 import fingerorder.webapp.domain.member.dto.MemberEditProfileDto;
-import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.dto.MemberWithDrawDto;
 import fingerorder.webapp.domain.member.dto.SignInDto;
@@ -27,8 +26,6 @@ import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.member.status.MemberSignUpType;
 import fingerorder.webapp.domain.member.status.MemberStatus;
 import fingerorder.webapp.domain.member.status.MemberType;
-import fingerorder.webapp.domain.order.entity.Order;
-import fingerorder.webapp.domain.order.repository.OrderRepository;
 import fingerorder.webapp.security.JwtTokenProvider;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -45,7 +42,6 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice.OffsetMapping.Target.ForField.ReadOnly;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -197,6 +193,7 @@ public class UserService implements UserDetailsService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id="+this.API_KEY);
+			//sb.append("&redirect_uri=http://localhost:8080/kakao_callback?type="+type);
 			sb.append("&redirect_uri=https://www.fingerorder.ga/kakao_callback?type="+type);
 			sb.append("&code="+code);
 			bw.write(sb.toString());
@@ -218,7 +215,6 @@ public class UserService implements UserDetailsService {
 
 			MemberDto memberDto = getEmailByKakaoAccessToken(accessToken);
 
-			System.out.println("kakao Access Token : " + accessToken);
 			boolean exist = memberRepository.existsByEmail(memberDto.getEmail());
 
 			if (exist) {
@@ -287,8 +283,8 @@ public class UserService implements UserDetailsService {
 	}
 
 	//유저 정보 가져오기
-	public MemberDto getMemberInfo(MemberInfoDto memberInfoDto) {
-		Member findMember = checkInvalidMember(memberInfoDto.getEmail());
+	public MemberDto getMemberInfo(String email) {
+		Member findMember = checkInvalidMember(email);
 		return findMember.toMemberDto();
 	}
 
@@ -397,29 +393,21 @@ public class UserService implements UserDetailsService {
 			conn.setRequestProperty("Authorization", "Bearer " + kakaoToken);
 			int responseCode = conn.getResponseCode();
 
-			System.out.println("log1");
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-			System.out.println("log2");
 			String brLine = "";
 			String result = "";
 
 			while ((brLine = br.readLine()) != null) {
-				System.out.println("log3");
 				result += brLine;
 			}
 
 			JSONParser parser = new JSONParser();
-			System.out.println("log4");
 			JSONObject elem = (JSONObject) parser.parse(result);
-			System.out.println("log5");
 			JSONObject properties = (JSONObject) elem.get("properties");
-			System.out.println("log6");
 			JSONObject kakaoAccount = (JSONObject) elem.get("kakao_account");
-			System.out.println("log7");
 
 			nickName = properties.get("nickname").toString();
-			System.out.println("log8");
 			email = kakaoAccount.get("email").toString();
 
 			boolean existByNickName = memberRepository.existsByNickName(nickName);
