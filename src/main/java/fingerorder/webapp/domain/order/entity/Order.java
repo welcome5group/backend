@@ -2,6 +2,7 @@ package fingerorder.webapp.domain.order.entity;
 
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.order.status.OrderStatus;
+import fingerorder.webapp.domain.order.status.ReviewStatus;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.entity.BaseEntity;
 import java.util.ArrayList;
@@ -37,11 +38,13 @@ public class Order extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
     private Long id;
-    private Integer tableNum;
-    private Integer totalPrice;
-
+    private int tableNum;
+    private int totalPrice;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
+    @Enumerated(EnumType.STRING)
+    private ReviewStatus reviewStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -61,10 +64,12 @@ public class Order extends BaseEntity {
         this.store = store;
     }
 
-    private Order(Member member, Store store, List<OrderMenu> orderMenus, OrderStatus orderStatus) {
+    private Order(Member member, Store store, List<OrderMenu> orderMenus, OrderStatus orderStatus,
+        ReviewStatus reviewStatus) {
         this.member = member;
         this.store = store;
         this.orderStatus = orderStatus;
+        this.reviewStatus = reviewStatus;
 
         for (OrderMenu orderMenu : orderMenus) {
             makeTotalPrice(orderMenu.getTotalPrice());
@@ -73,8 +78,8 @@ public class Order extends BaseEntity {
     }
 
     public static Order createOrder(Member member, Store store, OrderStatus orderStatus,
-        List<OrderMenu> orderMenus) {
-        return new Order(member, store, orderMenus, orderStatus);
+        ReviewStatus reviewStatus, List<OrderMenu> orderMenus) {
+        return new Order(member, store, orderMenus, orderStatus, reviewStatus);
     }
 
     private void addMenuItems(OrderMenu orderMenu) {
@@ -88,5 +93,9 @@ public class Order extends BaseEntity {
 
     public void editOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public void editOrderReviewStatus(ReviewStatus reviewStatus) {
+        this.reviewStatus = reviewStatus;
     }
 }

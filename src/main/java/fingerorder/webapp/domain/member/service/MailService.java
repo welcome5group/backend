@@ -17,14 +17,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MailService {
 
     private final MemberRepository memberRepository;
     private final JavaMailSender mailSender;
-
+    @Transactional
     public void sendUserAuthMail(MemberDto memberDto) {
         if (checkInvalidEmail(memberDto.getEmail())) {
             throw new InvalidEmailFormatException();
@@ -45,7 +47,7 @@ public class MailService {
 
         sendEmail(memberDto.getEmail(), uuid, subject, htmlContent);
     }
-
+    @Transactional
     public MailSendResultDto sendResetPasswordMail(MemberInfoDto memberInfoDto) {
         if (checkInvalidEmail(memberInfoDto.getEmail())) {
             throw new InvalidEmailFormatException();
