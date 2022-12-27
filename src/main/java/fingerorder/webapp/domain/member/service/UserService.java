@@ -410,14 +410,19 @@ public class UserService implements UserDetailsService {
 			}
 
 			JSONParser parser = new JSONParser();
+			System.out.println("log4");
 			JSONObject elem = (JSONObject) parser.parse(result);
+			System.out.println("log5");
 			JSONObject properties = (JSONObject) elem.get("properties");
+			System.out.println("log6");
 			JSONObject kakaoAccount = (JSONObject) elem.get("kakao_account");
+			System.out.println("log7");
 
 			nickName = properties.get("nickname").toString();
+			System.out.println("log8");
 			email = kakaoAccount.get("email").toString();
 
-			System.out.println("log3");
+			System.out.println("log9");
 			boolean existByNickName = memberRepository.existsByNickName(nickName);
 			List<Member> members = memberRepository.findAll();
 
