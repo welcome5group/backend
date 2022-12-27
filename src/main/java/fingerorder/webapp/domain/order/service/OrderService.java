@@ -117,7 +117,11 @@ public class OrderService {
         List<OrderListResponse> orderListResponses = new ArrayList<>();
 
         for (Order order : orderList) {
+            //가게 아이디
+            //가게 이름
             OrderListResponse orderListItem = OrderListResponse.builder()
+                .storeId(order.getStore().getId())
+                .storeName(order.getStore().getName())
                 .orderId(order.getId())
                 .orderStatus(order.getOrderStatus())
                 .reviewStatus(order.getReviewStatus())
