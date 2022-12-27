@@ -44,11 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						  .antMatchers(
 							  "/**/sign-up"
 							  ,"/**/sign-in"
+							  ,"/**/sign-out"
 							  ,"/api/auth/password"
 							  ,"/api/auth/resetPassword"
 							  ,"/**/kakao_callback"
 							  ,"/api/auth/sign-up/submit"
-							  ,"/api/**"
+							  //,"/api/**"
 							  ).permitAll()
 				  .and()
 					  .addFilterBefore(this.authenticationFilter,
