@@ -202,6 +202,7 @@ public class UserService implements UserDetailsService {
 			bw.write(sb.toString());
 			bw.flush();
 
+			System.out.println("kakao Sign-In code :" + code);
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			String brLine = "";
 			String result = "";
@@ -216,6 +217,8 @@ public class UserService implements UserDetailsService {
 			accessToken = elem.get("access_token").toString();
 
 			MemberDto memberDto = getEmailByKakaoAccessToken(accessToken);
+
+			System.out.println("kakao Access Token : " + accessToken);
 			boolean exist = memberRepository.existsByEmail(memberDto.getEmail());
 
 			if (exist) {
@@ -394,8 +397,10 @@ public class UserService implements UserDetailsService {
 			conn.setRequestProperty("Authorization", "Bearer " + kakaoToken);
 			int responseCode = conn.getResponseCode();
 
+			System.out.println("log1");
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
+			System.out.println("log2");
 			String brLine = "";
 			String result = "";
 
@@ -411,6 +416,7 @@ public class UserService implements UserDetailsService {
 			nickName = properties.get("nickname").toString();
 			email = kakaoAccount.get("email").toString();
 
+			System.out.println("log3");
 			boolean existByNickName = memberRepository.existsByNickName(nickName);
 			List<Member> members = memberRepository.findAll();
 
