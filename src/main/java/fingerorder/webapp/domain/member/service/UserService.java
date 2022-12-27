@@ -422,7 +422,6 @@ public class UserService implements UserDetailsService {
 			System.out.println("log8");
 			email = kakaoAccount.get("email").toString();
 
-			System.out.println("log9");
 			boolean existByNickName = memberRepository.existsByNickName(nickName);
 			List<Member> members = memberRepository.findAll();
 
