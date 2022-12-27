@@ -65,8 +65,8 @@ class UserServiceTest {
 		memberRepository.save(merchant);
 
 		//then
-		MemberDto resultMember = userService.getMemberInfo(userParamMember);
-		MemberDto resultMerchant = userService.getMemberInfo(userParamMerchant);
+		MemberDto resultMember = userService.getMemberInfo(userParamMember.getEmail());
+		MemberDto resultMerchant = userService.getMemberInfo(userParamMerchant.getEmail());
 
 		assertEquals(resultMember.getEmail(),"testMember@naver.com");
 		assertEquals(resultMember.getNickName(),"testNickName");
@@ -121,8 +121,8 @@ class UserServiceTest {
 		MemberDto resultMember = userService.editMemberNickName(userEditParamMember);
 		MemberDto resultMerchant = userService.editMemberNickName(userEditParamMerchant);
 
-		MemberDto checkMemberDto = userService.getMemberInfo(userParamMember);
-		MemberDto checkMerchantDto = userService.getMemberInfo(userParamMerchant);
+		MemberDto checkMemberDto = userService.getMemberInfo(userParamMember.getEmail());
+		MemberDto checkMerchantDto = userService.getMemberInfo(userParamMerchant.getEmail());
 
 		assertEquals(resultMember.getNickName(),checkMemberDto.getNickName());
 		assertEquals(resultMerchant.getNickName(),checkMerchantDto.getNickName());

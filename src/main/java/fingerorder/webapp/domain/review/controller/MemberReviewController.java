@@ -2,7 +2,6 @@ package fingerorder.webapp.domain.review.controller;
 
 import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
 import fingerorder.webapp.domain.review.dto.MemberReviewResponse;
-import fingerorder.webapp.domain.review.dto.RemoveMemberReviewRequest;
 import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
 import fingerorder.webapp.domain.review.service.MemberReviewService;
 import java.util.List;
@@ -38,9 +37,9 @@ public class MemberReviewController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> removeReview(@RequestBody RemoveMemberReviewRequest request) {
-        memberReviewService.removeReview(request);
+    @DeleteMapping("{reviewId}")
+    public ResponseEntity<?> removeReview(@PathVariable("reviewId") Long reviewId) {
+        memberReviewService.removeReview(reviewId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
