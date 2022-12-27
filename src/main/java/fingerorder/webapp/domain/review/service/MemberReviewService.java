@@ -8,7 +8,6 @@ import fingerorder.webapp.domain.order.repository.OrderRepository;
 import fingerorder.webapp.domain.order.status.ReviewStatus;
 import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
 import fingerorder.webapp.domain.review.dto.MemberReviewResponse;
-import fingerorder.webapp.domain.review.dto.RemoveMemberReviewRequest;
 import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
 import fingerorder.webapp.domain.review.entity.Review;
 import fingerorder.webapp.domain.review.exception.NoAuthReviewException;
@@ -65,8 +64,8 @@ public class MemberReviewService {
     }
 
     @Transactional
-    public void removeReview(RemoveMemberReviewRequest request) {
-        Review review = findReviewById(request.getReviewId());
+    public void removeReview(Long reviewId) {
+        Review review = findReviewById(reviewId);
 
         reviewRepository.delete(review);
     }
