@@ -103,9 +103,9 @@ public class UserController {
 		loginUrl.append(this.API_KEY);
 		loginUrl.append("&redirect_uri=");
 		if (type.equals("MEMBER")) {
-			loginUrl.append("http://localhost:8080/kakao_callback?type=MEMBER");
+			loginUrl.append("https://www.fingerorder.ga/kakao_callback?type=MEMBER");
 		} else {
-			loginUrl.append("http://localhost:8080/kakao_callback?type=MERCHANT");
+			loginUrl.append("https://www.fingerorder.ga/kakao_callback?type=MERCHANT");
 		}
 		loginUrl.append("&response_type=code");
 
