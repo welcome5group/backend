@@ -18,15 +18,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderListResponse {
     private Long orderId;
+    private Long storeId;
+    private String storeName;
     private OrderStatus orderStatus;
     private ReviewStatus reviewStatus;
     private LocalDateTime orderDate;
     private int totalPrice;
     private List<OrderMenuInfo> menuList;
 
-    public OrderListResponse(Long orderId, OrderStatus orderStatus, ReviewStatus reviewStatus,
-        LocalDateTime orderDate, int totalPrice) {
+
+    public OrderListResponse(Long orderId, Long storeId, String storeName, OrderStatus orderStatus,
+        ReviewStatus reviewStatus, LocalDateTime orderDate, int totalPrice) {
         this.orderId = orderId;
+        this.storeId = storeId;
+        this.storeName = storeName;
         this.orderStatus = orderStatus;
         this.reviewStatus = reviewStatus;
         this.orderDate = orderDate;
