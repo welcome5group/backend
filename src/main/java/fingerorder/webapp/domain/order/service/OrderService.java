@@ -35,14 +35,14 @@ public class OrderService {
     private final MenuRepository menuRepository;
 
     @Transactional
-    public ResponseEntity<?> save(final SaveOrderRequest saveOrderRequest) {
+    public ResponseEntity<?> save(final SaveOrderRequest request) {
 
-        checkEmptyOrderMenus(saveOrderRequest.getOrderMenus());
+        checkEmptyOrderMenus(request.getOrderMenus());
 
-        Member member = findMemberById(saveOrderRequest.getMemberId());
-        Store store = findStoreById(saveOrderRequest.getStoreId());
+        Member member = findMemberById(request.getMemberId());
+        Store store = findStoreById(request.getStoreId());
         List<OrderMenu> orderMenus = createOrderMenus(
-            saveOrderRequest.getOrderMenus());
+            request.getOrderMenus());
 
         Order order = Order.createOrder(member, store, OrderStatus.INCOMP, ReviewStatus.INCOMP,
             orderMenus);
