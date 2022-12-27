@@ -196,8 +196,8 @@ public class UserService implements UserDetailsService {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
-			sb.append("&client_id=API_KEY");
-			sb.append("&redirect_uri=http://localhost:8080/kakao_callback?type="+type);
+			sb.append("&client_id="+this.API_KEY);
+			sb.append("&redirect_uri=https://www.fingerorder.ga/kakao_callback?type="+type);
 			sb.append("&code="+code);
 			bw.write(sb.toString());
 			bw.flush();
