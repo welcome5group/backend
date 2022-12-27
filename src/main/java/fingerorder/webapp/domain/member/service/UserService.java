@@ -405,6 +405,7 @@ public class UserService implements UserDetailsService {
 			String result = "";
 
 			while ((brLine = br.readLine()) != null) {
+				System.out.println("log3");
 				result += brLine;
 			}
 
