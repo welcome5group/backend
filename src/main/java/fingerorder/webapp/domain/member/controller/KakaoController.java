@@ -15,6 +15,7 @@ public class KakaoController {
 
 	@RequestMapping("/kakao_callback")
 	public String kakaoCallback(@RequestParam String type,@RequestParam String code, Model model) {
+		System.out.println(code);
 		TokenResponseDto tokenResponseDto = this.userService.kakaoSignIn(code,type);
 
 		model.addAttribute(tokenResponseDto);
