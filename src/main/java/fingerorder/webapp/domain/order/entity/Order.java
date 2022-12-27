@@ -39,9 +39,9 @@ public class Order extends BaseEntity {
     @Column(name = "orders_id")
     private Long id;
 
-    private Integer tableNum;
+    private int tableNum;
 
-    private Integer totalPrice;
+    private int totalPrice;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;

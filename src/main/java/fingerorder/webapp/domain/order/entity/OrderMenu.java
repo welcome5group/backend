@@ -1,6 +1,7 @@
 package fingerorder.webapp.domain.order.entity;
 
 import fingerorder.webapp.domain.menu.entity.Menu;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ public class OrderMenu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "orders_menu_id")
     private Long id;
 
     private int count;
@@ -30,7 +32,7 @@ public class OrderMenu {
     @JoinColumn(name = "orders_id")
     private Order order;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
