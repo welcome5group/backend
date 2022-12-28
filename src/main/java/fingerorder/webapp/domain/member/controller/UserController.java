@@ -54,7 +54,7 @@ public class UserController {
 		return ResponseEntity.ok(this.userService.signOut(signOutDto));
 	}
 
-	@DeleteMapping("api/users")
+	@PostMapping("api/users/delete")
 	public ResponseEntity<?> withdrawMember(@RequestBody MemberWithDrawDto memberWithDrawDto) {
 		return ResponseEntity.ok(this.userService.withdrawMember(memberWithDrawDto));
 	}
