@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -111,14 +112,13 @@ public class OrderService {
 
     public List<OrderListResponse> getOrderList(Long memberId) {
         LocalDateTime date = LocalDateTime.now().minusDays(3);
-        List<Order> orderList = this.orderRepository.findByMemberIdAndDate(memberId,date)
+        Sort sort = sortByDate();
+        List<Order> orderList = this.orderRepository.findByMemberIdAndDate(memberId,date,sort)
             .orElseThrow(() -> new RuntimeException());
 
         List<OrderListResponse> orderListResponses = new ArrayList<>();
 
         for (Order order : orderList) {
-            //가게 아이디
-            //가게 이름
             OrderListResponse orderListItem = OrderListResponse.builder()
                 .storeId(order.getStore().getId())
                 .storeName(order.getStore().getName())
@@ -132,5 +132,9 @@ public class OrderService {
             orderListResponses.add(orderListItem);
         }
         return orderListResponses;
+    }
+
+    private Sort sortByDate() {
+        return Sort.by(Sort.Direction.DESC,"createdAt");
     }
 }
