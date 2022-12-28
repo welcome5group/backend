@@ -50,9 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 							  ,"/**/kakao_callback"
 							  ,"/api/auth/sign-up/submit"
 							  ,"/api/**"
-
-
-
 							  ).permitAll()
 				  .and()
 					  .addFilterBefore(this.authenticationFilter,
