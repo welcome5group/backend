@@ -37,8 +37,8 @@ public class MailService {
         String url = "https://fingerorder.vercel.app/login/signupauthok/uuid=" + uuid;
 
         if (memberDto.getMemberType() == MemberType.MEMBER) {
-            url = "http://localhost:3000/signUpCheck?uuid=" + uuid;
-            //url = "https://fingeroreder-order.netlify.app/signUpCheck?uuid" + uuid;
+            //url = "http://localhost:3000/signUpCheck?uuid=" + uuid;
+            url = "https://fingeroreder-order.netlify.app/signupCheck?uuid" + uuid;
         }
 
         String htmlContent = "<p>핑거오더 회원가입 인증 이메일 입니다.</p>"
@@ -58,7 +58,8 @@ public class MailService {
         String url = "https://fingerorder.vercel.app/login/resetpassword/uuid=" + uuid;
 
         if (memberInfoDto.getType() == MemberType.MEMBER) {
-            url = "http://localhost:3000/changePassword?uuid=" + uuid;
+            //url = "http://localhost:3000/changePassword?uuid=" + uuid;
+            url = "https://fingeroreder-order.netlify.app/changePassword?uuid=" + uuid;
         }
 
         String htmlContent = "<p>핑거오더 비밀번호 재설정 이메일 입니다.</p>"
