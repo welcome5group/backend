@@ -63,10 +63,7 @@ public class CategoryController {
     @DeleteMapping("/{storeId}/category")
 //    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<DeleteCategoryDto> deleteCategory(
-        @PathVariable Long storeId, @RequestParam String name,
-        BindingResult bindingResult) {
-
-        validateCategoryName(bindingResult);
+        @PathVariable Long storeId, @RequestParam("name") String name) {
 
         return ResponseEntity.ok(
             categoryService.deleteCategory(storeId, name));
