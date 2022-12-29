@@ -2,6 +2,7 @@ package fingerorder.webapp.domain.menu.controller;
 
 import fingerorder.webapp.core.dto.Result;
 import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
+import fingerorder.webapp.domain.menu.dto.MenuImgResponse;
 import fingerorder.webapp.domain.menu.dto.MenuResponse;
 import fingerorder.webapp.domain.menu.dto.MenuUpdateRequest;
 import fingerorder.webapp.domain.menu.dto.menuquerydto.MenuAndCategory;
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -80,4 +83,14 @@ public class MenuController {
         List<MenuAndCategory> menuAndCategory = menuQueryService.findMenuAndCategory(storeId);
         return new Result<>(menuAndCategory);
     }
+
+    @PutMapping("/{menuId}")
+    public ResponseEntity<MenuImgResponse> updateMyProfileImg(
+        @PathVariable("menuId") Long menuId,
+        @RequestPart(value = "file") MultipartFile multipartFile
+    ) {
+        return ResponseEntity.ok(menuService.updateMenuImg(menuId, multipartFile));
+    }
+
 }
+

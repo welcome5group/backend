@@ -122,4 +122,7 @@ public class Menu {
         this.category = category;
     }
 
+    public void editProfileImg(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
