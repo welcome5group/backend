@@ -40,7 +40,6 @@ public class Order extends BaseEntity {
     private Long id;
 
     private int tableNum;
-
     private int totalPrice;
 
     @Enumerated(EnumType.STRING)

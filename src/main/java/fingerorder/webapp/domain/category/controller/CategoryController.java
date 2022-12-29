@@ -28,7 +28,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/{storeId}/category")
-    @PreAuthorize("hasRole('MERCHANT')")
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<GetCategoryDto> getCategory(
         @PathVariable Long storeId) {
 
@@ -36,7 +36,7 @@ public class CategoryController {
     }
 
     @PostMapping("/{storeId}/category")
-    @PreAuthorize("hasRole('MERCHANT')")
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<CreateCategoryDto> createCategory(
         @PathVariable Long storeId, @Validated @RequestBody CreateCategoryDto createCategoryDto,
         BindingResult bindingResult) {
@@ -48,7 +48,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{storeId}/category")
-    @PreAuthorize("hasRole('MERCHANT')")
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<UpdateCategoryDto> updateCategory(
         @PathVariable Long storeId, @Validated @RequestBody UpdateCategoryDto updateCategoryDto,
         BindingResult bindingResult) {
@@ -60,7 +60,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{storeId}/category")
-    @PreAuthorize("hasRole('MERCHANT')")
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<DeleteCategoryDto> deleteCategory(
         @PathVariable Long storeId, @Validated @RequestBody DeleteCategoryDto deleteCategoryDto,
         BindingResult bindingResult) {

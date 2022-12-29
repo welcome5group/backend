@@ -44,6 +44,7 @@ public class StoreController {
 
     //매장 생성
     @PostMapping
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<StoreCreateResponse> registerStore(
         @Validated @RequestBody StoreCreateRequest storeCreateRequest) {
 
@@ -60,6 +61,7 @@ public class StoreController {
 
     //매장 수정
     @PutMapping("/{storeId}")
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<StoreUpdateResponse> updateStore(
         @Validated @RequestBody StoreUpdateRequest storeUpdateRequest,
         BindingResult bindingResult,
@@ -70,6 +72,7 @@ public class StoreController {
 
     //매장 삭제
     @DeleteMapping("/{storeId}")
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<?> deleteStore(@PathVariable Long storeId) {
         storeService.deleteStore(storeId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -77,6 +80,7 @@ public class StoreController {
 
     //사장의 모든 매장 조회
     @GetMapping
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<Result<List<StoreLookUpResponse>>> findAllStores(@RequestParam Long memberId) {
         List<StoreLookUpResponse> allStores = storeService.findAllStores(memberId);
         return new ResponseEntity<>(new Result<>(allStores), HttpStatus.OK);

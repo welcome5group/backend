@@ -61,6 +61,9 @@ public class Store extends BaseEntity {
     public Store(StoreCreateRequest storeCreateRequest) {
         this.name = storeCreateRequest.getName();
         this.storeLocation = storeCreateRequest.getStoreLocation();
+        this.tableCount = storeCreateRequest.getTableCount();
+        this.orderNumber = storeCreateRequest.getOrderNumber();
+        this.tableNumber = storeCreateRequest.getTableNumber();
     }
 
     @Builder
@@ -78,18 +81,20 @@ public class Store extends BaseEntity {
         this.name = storeUpdateRequest.getName();
         this.storeLocation = storeUpdateRequest.getStoreLocation();
         this.tableCount = storeUpdateRequest.getTableCount();
+        this.tableNumber = storeUpdateRequest.getTableNumber();
+        this.orderNumber = storeUpdateRequest.getOrderNumber();
     }
 
-    public StoreCreateResponse toStoreCreateResponse(Store store, String orderNumber, String tableNumber) {
+    public StoreCreateResponse toStoreCreateResponse(Store store) {
 
         return new StoreCreateResponse(store.getId(), store.getName(), store.getStoreLocation(),
-            orderNumber, tableNumber);
+            store.getOrderNumber(), store.getTableNumber(), store.getTableCount());
     }
 
-    public StoreUpdateResponse toStoreUpdateResponse(Store store, String orderNumber, String tableNumber) {
+    public StoreUpdateResponse toStoreUpdateResponse(Store store) {
 
         return new StoreUpdateResponse(store.getId(), store.getName(), store.getStoreLocation(),
-            orderNumber, tableNumber);
+            store.getOrderNumber(), store.getTableNumber(), store.getTableCount());
 
     }
 

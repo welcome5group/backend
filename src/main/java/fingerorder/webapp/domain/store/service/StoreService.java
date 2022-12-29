@@ -49,10 +49,7 @@ public class StoreService {
             .orElseThrow(MemberFindException::new);
         member.addStore(savedStore);
 
-        String orderNumber = storeCreateRequest.getOrderNumber();
-        String tableNumber = storeCreateRequest.getTableNumber();
-
-        return savedStore.toStoreCreateResponse(savedStore, orderNumber, tableNumber);
+        return savedStore.toStoreCreateResponse(savedStore);
     }
 
     @Transactional
@@ -61,10 +58,7 @@ public class StoreService {
         Store store = storeRepository.findById(storeId)
             .orElseThrow(StoreNotFindException::new);
         store.changeStore(storeUpdateRequest);
-
-        String orderNumber = storeUpdateRequest.getOrderNumber();
-        String tableNumber = storeUpdateRequest.getTableNumber();
-        return store.toStoreUpdateResponse(store, orderNumber, tableNumber);
+        return store.toStoreUpdateResponse(store);
     }
 
     @Transactional
