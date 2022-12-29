@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -62,13 +63,13 @@ public class CategoryController {
     @DeleteMapping("/{storeId}/category")
 //    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<DeleteCategoryDto> deleteCategory(
-        @PathVariable Long storeId, @Validated @RequestBody DeleteCategoryDto deleteCategoryDto,
+        @PathVariable Long storeId, @RequestParam String name,
         BindingResult bindingResult) {
 
         validateCategoryName(bindingResult);
 
         return ResponseEntity.ok(
-            categoryService.deleteCategory(storeId, deleteCategoryDto.getName()));
+            categoryService.deleteCategory(storeId, name));
     }
 
     public void validateCategoryName(BindingResult bindingResult) {
