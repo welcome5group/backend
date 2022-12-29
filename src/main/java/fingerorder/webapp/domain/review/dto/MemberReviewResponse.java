@@ -1,5 +1,6 @@
 package fingerorder.webapp.domain.review.dto;
 
+import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.order.entity.OrderMenu;
 import fingerorder.webapp.domain.review.entity.Review;
 import java.time.LocalDateTime;
@@ -17,7 +18,11 @@ public class MemberReviewResponse {
 
     private Long id;
 
+    private Long storeId;
+
     private String storeName;
+
+    private Member member;
 
     private LocalDateTime createdAt;
 
@@ -30,7 +35,9 @@ public class MemberReviewResponse {
     public MemberReviewResponse createResponse(Review review, Optional<Review> comment) {
         return new MemberReviewResponse(
             review.getId(),
+            review.getStore().getId(),
             review.getStore().getName(),
+            review.getMember(),
             review.getCreatedAt(),
             createMenuNames(review.getOrder().getOrderMenus()),
             review.getContent(),
