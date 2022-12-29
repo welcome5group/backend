@@ -38,8 +38,10 @@ public class Order extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
     private Long id;
+
     private int tableNum;
     private int totalPrice;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 

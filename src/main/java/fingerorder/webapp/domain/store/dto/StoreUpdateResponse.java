@@ -13,5 +13,6 @@ public class StoreUpdateResponse {
 
     private String orderNumber ="";
     private String tableNumber = "";
+    private int tableCount;
 
 }

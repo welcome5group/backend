@@ -3,7 +3,6 @@ package fingerorder.webapp.domain.member.service;
 import fingerorder.webapp.domain.member.dto.MemberDto;
 import fingerorder.webapp.domain.member.dto.MemberEditNickNameDto;
 import fingerorder.webapp.domain.member.dto.MemberEditProfileDto;
-import fingerorder.webapp.domain.member.dto.MemberInfoDto;
 import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
 import fingerorder.webapp.domain.member.dto.MemberWithDrawDto;
 import fingerorder.webapp.domain.member.dto.SignInDto;
@@ -27,8 +26,6 @@ import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.member.status.MemberSignUpType;
 import fingerorder.webapp.domain.member.status.MemberStatus;
 import fingerorder.webapp.domain.member.status.MemberType;
-import fingerorder.webapp.domain.order.entity.Order;
-import fingerorder.webapp.domain.order.repository.OrderRepository;
 import fingerorder.webapp.security.JwtTokenProvider;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -45,7 +42,6 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice.OffsetMapping.Target.ForField.ReadOnly;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -60,6 +56,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -196,12 +193,14 @@ public class UserService implements UserDetailsService {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
-			sb.append("&client_id=API_KEY");
-			sb.append("&redirect_uri=http://localhost:8080/kakao_callback?type="+type);
+			sb.append("&client_id="+this.API_KEY);
+			//sb.append("&redirect_uri=http://localhost:8080/kakao_callback?type="+type);
+			sb.append("&redirect_uri=https://www.fingerorder.ga/kakao_callback?type="+type);
 			sb.append("&code="+code);
 			bw.write(sb.toString());
 			bw.flush();
 
+			System.out.println("kakao Sign-In code :" + code);
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			String brLine = "";
 			String result = "";
@@ -216,6 +215,7 @@ public class UserService implements UserDetailsService {
 			accessToken = elem.get("access_token").toString();
 
 			MemberDto memberDto = getEmailByKakaoAccessToken(accessToken);
+
 			boolean exist = memberRepository.existsByEmail(memberDto.getEmail());
 
 			if (exist) {
@@ -284,8 +284,8 @@ public class UserService implements UserDetailsService {
 	}
 
 	//유저 정보 가져오기
-	public MemberDto getMemberInfo(MemberInfoDto memberInfoDto) {
-		Member findMember = checkInvalidMember(memberInfoDto.getEmail());
+	public MemberDto getMemberInfo(String email) {
+		Member findMember = checkInvalidMember(email);
 		return findMember.toMemberDto();
 	}
 
@@ -392,10 +392,8 @@ public class UserService implements UserDetailsService {
 			conn.setRequestMethod("GET");
 
 			conn.setRequestProperty("Authorization", "Bearer " + kakaoToken);
-			int responseCode = conn.getResponseCode();
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
 			String brLine = "";
 			String result = "";
 
@@ -411,6 +409,7 @@ public class UserService implements UserDetailsService {
 			nickName = properties.get("nickname").toString();
 			email = kakaoAccount.get("email").toString();
 
+			System.out.println("log3");
 			boolean existByNickName = memberRepository.existsByNickName(nickName);
 			List<Member> members = memberRepository.findAll();
 
@@ -445,9 +444,6 @@ public class UserService implements UserDetailsService {
 	}
 
 	private boolean checkCorrectPassword(String inputPassword,String password) {
-		if (this.passwordEncoder.encode(inputPassword).equals(password)) {
-			return true;
-		}
-		return false;
+		return BCrypt.checkpw(inputPassword,password);
 	}
 }

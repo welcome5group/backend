@@ -12,6 +12,7 @@ public class StoreCreateResponse {
     private String location;
     private String orderNumber = "";
     private String tableNumber = "";
+    private int tableCount;
 
 
 }
