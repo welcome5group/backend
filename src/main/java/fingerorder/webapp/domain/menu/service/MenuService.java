@@ -1,11 +1,13 @@
 package fingerorder.webapp.domain.menu.service;
 
+import fingerorder.webapp.core.s3.AwsS3Service;
 import fingerorder.webapp.domain.category.entity.Category;
 import fingerorder.webapp.domain.category.exception.CategoryNotFoundException;
 import fingerorder.webapp.domain.category.repository.CategoryRepository;
 import fingerorder.webapp.domain.menu.dto.MenuCreateRequest;
 import fingerorder.webapp.domain.menu.dto.MenuResponse;
 import fingerorder.webapp.domain.menu.dto.MenuUpdateRequest;
+import fingerorder.webapp.domain.menu.dto.MenuImgResponse;
 import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.menu.exception.MenuNotFindException;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
@@ -15,11 +17,13 @@ import fingerorder.webapp.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MenuService {
+    private final AwsS3Service awsS3Service;
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
     private final CategoryRepository categoryRepository;
@@ -36,6 +40,7 @@ public class MenuService {
         savedMenu.changeStore(store);
         savedMenu.add(category);
         return savedMenu.toMenuResponse(savedMenu);
+
     }
 
     @Transactional
@@ -68,5 +73,24 @@ public class MenuService {
         menu.changeStatus();
     }
 
+    @Transactional
+    public MenuImgResponse updateMenuImg(Long menuId, MultipartFile multipartFile) {
 
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> {
+            throw new RuntimeException("id 에 해당하는 menu 가 존재하지 않습니다.");
+        });
+
+        String imageUrl = "";
+
+        try {
+            imageUrl = awsS3Service.uploadFile("menus", multipartFile);
+        } catch (Exception e) {
+            throw new RuntimeException("이미지 파일이 정상적으로 업로드되지 않았습니다.");
+        }
+
+        menu.editProfileImg(imageUrl);
+
+        return MenuImgResponse.builder().imageUrl(imageUrl).build();
+
+    }
 }

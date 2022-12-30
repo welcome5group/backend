@@ -17,6 +17,7 @@ public class OrderQueryService {
 
     public void searchOrderList() {
 
+
 //        em.createQuery("select new fingerorder.webapp.domain.order.dto"
 //                + ".OrderListResponse(o.store.name, o.orderStatus, o.createdAt, o.totalPrice)"
 //            + "from Order o")

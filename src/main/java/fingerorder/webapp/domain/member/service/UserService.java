@@ -56,6 +56,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -391,10 +392,8 @@ public class UserService implements UserDetailsService {
 			conn.setRequestMethod("GET");
 
 			conn.setRequestProperty("Authorization", "Bearer " + kakaoToken);
-			int responseCode = conn.getResponseCode();
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
 			String brLine = "";
 			String result = "";
 
@@ -445,9 +444,6 @@ public class UserService implements UserDetailsService {
 	}
 
 	private boolean checkCorrectPassword(String inputPassword,String password) {
-		if (this.passwordEncoder.encode(inputPassword).equals(password)) {
-			return true;
-		}
-		return false;
+		return BCrypt.checkpw(inputPassword,password);
 	}
 }

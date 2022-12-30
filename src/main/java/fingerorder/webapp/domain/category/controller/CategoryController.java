@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,7 +29,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/{storeId}/category")
-    @PreAuthorize("hasRole('MERCHANT')")
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<GetCategoryDto> getCategory(
         @PathVariable Long storeId) {
 
@@ -36,7 +37,7 @@ public class CategoryController {
     }
 
     @PostMapping("/{storeId}/category")
-    @PreAuthorize("hasRole('MERCHANT')")
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<CreateCategoryDto> createCategory(
         @PathVariable Long storeId, @Validated @RequestBody CreateCategoryDto createCategoryDto,
         BindingResult bindingResult) {
@@ -48,7 +49,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{storeId}/category")
-    @PreAuthorize("hasRole('MERCHANT')")
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<UpdateCategoryDto> updateCategory(
         @PathVariable Long storeId, @Validated @RequestBody UpdateCategoryDto updateCategoryDto,
         BindingResult bindingResult) {
@@ -60,15 +61,12 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{storeId}/category")
-    @PreAuthorize("hasRole('MERCHANT')")
+//    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<DeleteCategoryDto> deleteCategory(
-        @PathVariable Long storeId, @Validated @RequestBody DeleteCategoryDto deleteCategoryDto,
-        BindingResult bindingResult) {
-
-        validateCategoryName(bindingResult);
+        @PathVariable Long storeId, @RequestParam("name") String name) {
 
         return ResponseEntity.ok(
-            categoryService.deleteCategory(storeId, deleteCategoryDto.getName()));
+            categoryService.deleteCategory(storeId, name));
     }
 
     public void validateCategoryName(BindingResult bindingResult) {

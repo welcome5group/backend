@@ -43,3 +43,15 @@ jasypt:
     password: 5678
 api:
   key: ${API_KEY}
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${ACCESS_KEY}
+      secretKey: ${SECRET_KEY}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    s3:
+      bucket: ${BUCKET_NAME}

@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderListResponse {
+
     private Long orderId;
     private Long storeId;
     private String storeName;
@@ -38,6 +39,7 @@ public class OrderListResponse {
         this.totalPrice = totalPrice;
         this.menuList = new ArrayList<>();
     }
+
 
     public void insertMenu(List<OrderMenu> orderMenuList) {
         this.menuList = new ArrayList<>();

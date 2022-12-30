@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +23,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("select o from Order o where o.member.id=:memberId and o.createdAt >= :date")
     Optional<List<Order>> findByMemberIdAndDate(@Param("memberId") Long memberId,
-        @Param("date") LocalDateTime date);
+        @Param("date") LocalDateTime date, Sort sort);
 }
