@@ -1,6 +1,9 @@
 package fingerorder.webapp.domain.menu.entity;
 
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.*;
+import static javax.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 import fingerorder.webapp.annotation.Trim;
 import fingerorder.webapp.annotation.TrimEntityListener;
@@ -14,39 +17,40 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @EntityListeners(TrimEntityListener.class)
+@NoArgsConstructor(access = PROTECTED)
 public class Menu {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "menu_id")
     private Long id;
     @Trim
     private String name;
     @Trim
     private String description;
-    private Integer price;
+    private int price;
     private String imageUrl;
 
     @Enumerated(STRING)
     private MenuStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 
@@ -59,22 +63,6 @@ public class Menu {
         this.category = category;
     }
 
-    protected Menu() {
-
-    }
-
-    @Builder
-    public Menu(String name, String description, Integer price, String imageUrl,
-        MenuStatus status, Category category) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.status = status;
-        this.category = category;
-    }
-
-
     public Menu updateMenu(MenuUpdateRequest menuUpdateRequest, Category category) {
 
         this.name = menuUpdateRequest.getName();
@@ -83,15 +71,14 @@ public class Menu {
         this.imageUrl = menuUpdateRequest.getImageUrl();
         this.status = Enum.valueOf(MenuStatus.class, menuUpdateRequest.getMenuStatus());
         this.category = category;
-
         return this;
     }
 
-    public void changeStatus() {
+    public void editStatus() {
         this.status = MenuStatus.SOLDOUT;
     }
 
-    public MenuResponse toMenuResponse(Menu menu) {
+    public MenuResponse toMenuResponse(Menu menu) { // response, request 로 모든 dto 변환
 
         MenuResponse menuResponse = new MenuResponse();
         menuResponse.setStoreId(menu.getStore().getId());
@@ -106,20 +93,14 @@ public class Menu {
         return menuResponse;
     }
 
-    public void changeStore(Store store) { //비즈니스 메서드
+    public void addStore(Store store) { //비즈니스 메서드
         this.store = store;
         store.getMenus().add(this);
     }
 
-    public void changeCategory(Category category) {
+    public void addCategory(Category category) {
         this.category = category;
         category.getMenus().add(this);
-
-    }
-
-
-    public void add(Category category) { // dto에서 가져온 name으로 카테고리 가져와서 주입
-        this.category = category;
     }
 
     public void editProfileImg(String imageUrl) {

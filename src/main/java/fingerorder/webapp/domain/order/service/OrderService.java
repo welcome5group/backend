@@ -4,7 +4,7 @@ import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
-import fingerorder.webapp.domain.order.dto.GetIncompOrdersResponse;
+import fingerorder.webapp.domain.order.dto.GetInCompOrdersResponse;
 import fingerorder.webapp.domain.order.dto.OrderListResponse;
 import fingerorder.webapp.domain.order.dto.OrderMenuDto;
 import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
@@ -64,14 +64,14 @@ public class OrderService {
         return orderMenus;
     }
 
-    public List<GetIncompOrdersResponse> getIncompOrders(Long storeId) {
+    public List<GetInCompOrdersResponse> getInCompOrders(Long storeId) {
         List<Order> getOrders = orderRepository.findAllByStoreIdAndOrderStatus(storeId,
                 OrderStatus.INCOMP)
             .orElseThrow(() -> new RuntimeException());
 
-        List<GetIncompOrdersResponse> orders = new ArrayList<>();
+        List<GetInCompOrdersResponse> orders = new ArrayList<>();
         for (Order getOrder : getOrders) {
-            orders.add(new GetIncompOrdersResponse(getOrder));
+            orders.add(new GetInCompOrdersResponse(getOrder));
         }
 
         return orders;

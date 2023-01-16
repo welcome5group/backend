@@ -48,7 +48,7 @@ public class CategoryService {
         try{
             Category category = new Category(categoryName);
             Store store = findStore(storeId);
-            category.setCategoryAndStore(store);
+            category.addStore(store);
             categoryRepository.save(category);	// 추상화된 Repository -> 스프링 예외
         } catch (DataIntegrityViolationException e) {
             throw new NoUniqueCategoryException();
