@@ -58,9 +58,9 @@ public class MemberReviewService {
     public void editReview(EditMemberReviewRequest request) {
         Review review = findReviewById(request.getReviewId());
 
-        review.updateReview(request);
+        Review updateReview = review.updateReview(request);
 
-        reviewRepository.save(review);
+        reviewRepository.save(updateReview);
     }
 
     @Transactional

@@ -79,7 +79,7 @@ public class MailService {
 
         MimeMessage message = mailSender.createMimeMessage();
 
-        findMember.giveUUID(uuid);
+        findMember.editUUID(uuid);
         this.memberRepository.save(findMember);
 
         try {

@@ -90,7 +90,7 @@ public class UserService implements UserDetailsService {
 			Member findMember = optionalMember.get();
 
 			if (findMember.getStatus() == MemberStatus.DELETED) {
-				findMember.changeMemberStatus(MemberStatus.ACTIVATE);
+				findMember.editMemberStatus(MemberStatus.ACTIVATE);
 			} else if (findMember.getStatus() == MemberStatus.UNAUTHORIZED){
 				throw new NotAuthorizedException();
 			}
@@ -115,8 +115,6 @@ public class UserService implements UserDetailsService {
 			.memberSignUpType(MemberSignUpType.NORMAL)
 			.memberType(signUpDto.getType())
 			.status(MemberStatus.UNAUTHORIZED)
-			.createdAt(LocalDateTime.now())
-			.updatedAt(LocalDateTime.now())
 			.build();
 
 		return this.memberRepository.save(newMember).toMemberDto();
@@ -126,7 +124,7 @@ public class UserService implements UserDetailsService {
 		Member findMember = this.memberRepository.findByUuid(uuid)
 			.orElseThrow(() -> new UnauthorizedMemberException());
 
-		findMember.changeMemberStatus(MemberStatus.ACTIVATE);
+		findMember.editMemberStatus(MemberStatus.ACTIVATE);
 
 		return this.memberRepository.save(findMember).toMemberDto();
 	}
@@ -235,8 +233,6 @@ public class UserService implements UserDetailsService {
 					.memberType(MemberType.MEMBER)
 					.memberSignUpType(MemberSignUpType.KAKAO)
 					.status(MemberStatus.ACTIVATE)
-					.createdAt(LocalDateTime.now())
-					.updatedAt(LocalDateTime.now())
 					.build();
 				memberRepository.save(newMember);
 
@@ -329,7 +325,7 @@ public class UserService implements UserDetailsService {
 
 		String newPassword = memberPasswordResetDto.getPassword();
 
-		findMember.resetPassword(this.passwordEncoder.encode(newPassword));
+		findMember.editPassword(this.passwordEncoder.encode(newPassword));
 
 		this.memberRepository.save(findMember);
 
@@ -439,7 +435,7 @@ public class UserService implements UserDetailsService {
 			throw new LoginInfoErrorException();
 		}
 
-		findMember.changeMemberStatus(MemberStatus.DELETED);
+		findMember.editMemberStatus(MemberStatus.DELETED);
 		return this.memberRepository.save(findMember).toMemberDto();
 	}
 

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GetIncompOrdersResponse {
+public class GetInCompOrdersResponse {
 
     private Long id;
     private Integer tableNum;
@@ -21,7 +21,7 @@ public class GetIncompOrdersResponse {
     private List<OrderMenuInfo> orderMenus;
 
 
-    public GetIncompOrdersResponse(Order order) {
+    public GetInCompOrdersResponse(Order order) {
         this.id = order.getId();
         this.tableNum = order.getTableNum();
         this.totalPrice = order.getTotalPrice();

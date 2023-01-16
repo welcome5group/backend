@@ -46,8 +46,8 @@ class MenuQueryServiceTest {
         menuRepository.save(menuA);
         menuRepository.save(menuB);
 
-        menuA.changeCategory(categoryA);
-        menuB.changeCategory(categoryB);
+        menuA.addCategory(categoryA);
+        menuB.addCategory(categoryB);
 
         store.addMenu(menuA);
         store.addMenu(menuB);

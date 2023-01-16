@@ -1,5 +1,7 @@
 package fingerorder.webapp.domain.review.entity;
 
+import static javax.persistence.FetchType.LAZY;
+
 import fingerorder.webapp.annotation.Trim;
 import fingerorder.webapp.annotation.TrimEntityListener;
 import fingerorder.webapp.domain.member.entity.Member;
@@ -22,34 +24,35 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Entity
 @Getter
-@EntityListeners(TrimEntityListener.class)
+@EntityListeners({TrimEntityListener.class, EnableJpaAuditing.class})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
     private Long id;
-
-    //    private String nickName;
     @Trim
     private String content;
-//    private LocalDateTime deletedAt;
 
     private Long parentId; //comment 의 parentId는 review_id 이다.
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "orders_id")
     private Order order;
 
@@ -57,10 +60,6 @@ public class Review extends BaseEntity {
     public Review(ReviewCommentRequest reviewCommentRequest) {
         this.parentId = reviewCommentRequest.getParentId();
         this.content = reviewCommentRequest.getContent();
-    }
-
-    protected Review() {
-
     }
 
     public Review(Member member, Store store, Order order, SaveMemberReviewRequest request) {
@@ -72,20 +71,7 @@ public class Review extends BaseEntity {
 
     public void addMember(Member member) {
         this.member = member;
-
     }
-
-    //    public void updateReview(ReviewUpdateRequest reviewUpdateRequest) {
-//        this.content = reviewUpdateRequest.getContent();
-//        this.updatedAt = LocalDateTime.now();
-//
-//    }
-
-//    public Review updateReview(ReviewUpdateRequest reviewUpdateRequest) {
-//        this.content = reviewUpdateRequest.getContent();
-//        return this;
-//
-//    }
 
     public Review updateReview(EditMemberReviewRequest request) {
         this.content = request.getContent();
@@ -105,16 +91,6 @@ public class Review extends BaseEntity {
     public ReviewCommentUpdateResponse toReviewCommentUpdateResponse(Review review) {
         return new ReviewCommentUpdateResponse(review);
     }
-
-//    public ReviewCreateResponse toReviewCreateResponse(Review review) {
-//        return new ReviewCreateResponse(review);
-//
-//    }
-//
-//    public ReviewUpdateResponse toReviewUpdateResponse(Review review) {
-//        return new ReviewUpdateResponse(review);
-//    }
-
 
     public void addStore(Store store) {
         this.store = store;

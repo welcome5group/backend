@@ -37,8 +37,8 @@ public class MenuService {
             StoreNotFindException::new);
         Menu menu = new Menu(menuCreateRequest, category);
         Menu savedMenu = menuRepository.save(menu);
-        savedMenu.changeStore(store);
-        savedMenu.add(category);
+        savedMenu.addStore(store);
+        savedMenu.addCategory(category);
         return savedMenu.toMenuResponse(savedMenu);
 
     }
@@ -70,7 +70,7 @@ public class MenuService {
     @Transactional
     public void menuDisable(Long menuId) { //메뉴 품절로 상태 변경하기
         Menu menu = menuRepository.findById(menuId).orElseThrow(MenuNotFindException::new);
-        menu.changeStatus();
+        menu.editStatus();
     }
 
     @Transactional

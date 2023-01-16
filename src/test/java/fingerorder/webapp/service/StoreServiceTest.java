@@ -120,8 +120,8 @@ class StoreServiceTest {
         Menu menu = createMenu();
 
         menuRepository.save(menu);
-        menu.changeStore(store);
-        menu.changeCategory(category);
+        menu.addStore(store);
+        menu.addCategory(category);
         //when
         Long storeId = store.getId();
         storeRepository.deleteById(storeId);

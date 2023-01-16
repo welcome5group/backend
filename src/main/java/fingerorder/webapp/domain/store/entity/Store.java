@@ -1,5 +1,7 @@
 package fingerorder.webapp.domain.store.entity;
 
+import static javax.persistence.FetchType.LAZY;
+
 import fingerorder.webapp.annotation.Trim;
 import fingerorder.webapp.annotation.TrimEntityListener;
 import fingerorder.webapp.domain.category.entity.Category;
@@ -27,10 +29,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Entity
 @Getter
-@EntityListeners(TrimEntityListener.class)
+@EntityListeners({TrimEntityListener.class, EnableJpaAuditing.class})
 public class Store extends BaseEntity {
 
     @Id
@@ -47,7 +50,7 @@ public class Store extends BaseEntity {
 
     private String tableNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -66,7 +69,6 @@ public class Store extends BaseEntity {
         this.tableNumber = storeCreateRequest.getTableNumber();
     }
 
-    @Builder
     public Store(String name, LocalDateTime now, LocalDateTime localDateTime, Integer tableCount, String storeLocation) {
         this.name = name;
         this.tableCount = tableCount;
@@ -110,11 +112,11 @@ public class Store extends BaseEntity {
 
     public void addMenu(Menu menu) {
         this.menus.add(menu);
-        menu.changeStore(this);
+        menu.addStore(this);
     }
 
     public void addCategory(Category category) {
         this.categories.add(category);
-        category.setCategoryAndStore(this);
+        category.addStore(this);
     }
 }

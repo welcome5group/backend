@@ -1,9 +1,12 @@
 package fingerorder.webapp.domain.order.entity;
 
+import static javax.persistence.FetchType.*;
+import static javax.persistence.GenerationType.*;
+import static lombok.AccessLevel.*;
+
 import fingerorder.webapp.domain.menu.entity.Menu;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,11 +19,11 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
 public class OrderMenu {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "orders_menu_id")
     private Long id;
 
@@ -28,18 +31,18 @@ public class OrderMenu {
 
     private int totalPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "orders_id")
     private Order order;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
     private OrderMenu(Menu menu, int count) {
         this.menu = menu;
         this.count = count;
-        makeTotalPrice(menu.getPrice(), count);
+        calculateTotalPrice(menu.getPrice(), count);
     }
 
     public static OrderMenu createOrderMenu(Menu menu, int count) {
@@ -50,7 +53,7 @@ public class OrderMenu {
         this.order = order;
     }
 
-    private void makeTotalPrice(int price, int count) {
+    private void calculateTotalPrice(int price, int count) {
         this.totalPrice = price * count;
     }
 

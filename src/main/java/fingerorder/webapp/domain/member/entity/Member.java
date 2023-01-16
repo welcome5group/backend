@@ -1,33 +1,41 @@
 package fingerorder.webapp.domain.member.entity;
 
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
+
 import fingerorder.webapp.domain.member.dto.MemberDto;
 import fingerorder.webapp.domain.member.status.MemberSignUpType;
 import fingerorder.webapp.domain.member.status.MemberStatus;
 import fingerorder.webapp.domain.member.status.MemberType;
 import fingerorder.webapp.domain.store.entity.Store;
+import fingerorder.webapp.entity.BaseEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
+import javax.persistence.EntityListeners;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @Entity
-public class Member {
+@NoArgsConstructor(access = PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
+public class Member extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "member_id")
     private Long id;
     private String uuid;
@@ -35,67 +43,49 @@ public class Member {
     private String password;
     private String nickName;
     private String profile;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private MemberStatus status;
 
-    @Enumerated(EnumType.STRING)
-    private MemberSignUpType memberSignUpType;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    @Enumerated(STRING)
+    private MemberSignUpType memberSignUpType; // 카카오 회원가입, 일반 회원가입
     private LocalDateTime deletedAt;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private MemberType memberType;
 
     @OneToMany(mappedBy = "member")
     private List<Store> stores = new ArrayList<>();
 
-    @Builder
-    public Member(String email, String password, String nickName, MemberStatus status,
-        MemberType memberType) {
-        this.email = email;
-        this.password = password;
-        this.nickName = nickName;
-        this.status = status;
-        this.memberType = memberType;
-    }
-
-    protected Member() {
-
-    }
-
     public void addStore(Store store) {
         this.stores.add(store);
         store.changeMember(this);
-
     }
-
 
     public void editNickName(String nickName) {
         this.nickName = nickName;
-        this.createdAt = LocalDateTime.now();
     }
 
-    public void resetPassword(String password) {
+    public void editPassword(String password) {
         this.password = password;
-        this.updatedAt = LocalDateTime.now();
     }
 
-    public void giveUUID(String uuid) {
+    public void editUUID(String uuid) {
         this.uuid = uuid;
     }
 
-    public void changeMemberStatus(MemberStatus status) {
+    public void editProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public void editMemberStatus(MemberStatus status) {
         this.status = status;
-        this.updatedAt = LocalDateTime.now();
 
         if (status == MemberStatus.DELETED) {
-            this.updatedAt = LocalDateTime.now();
             this.deletedAt = LocalDateTime.now();
         }
     }
 
-    public MemberDto toMemberDto() {
+    public MemberDto toMemberDto() {  // 생성자로 리팩토링
         return MemberDto.builder()
             .id(this.id)
             .email(this.email)
@@ -103,13 +93,7 @@ public class Member {
             .profile(this.profile)
             .memberType(this.memberType)
             .status(this.status)
-            .createdAt(this.createdAt)
-            .updatedAt(this.updatedAt)
             .build();
     }
 
-    public void editProfile(String profile) {
-        this.profile = profile;
-        this.updatedAt = LocalDateTime.now();
-    }
 }
