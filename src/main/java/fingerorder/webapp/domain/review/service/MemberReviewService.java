@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +35,7 @@ public class MemberReviewService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public void saveReview(SaveMemberReviewRequest request) {
+    public ResponseEntity<?> saveReview(SaveMemberReviewRequest request) {
         Member member = findMemberById(request.getMemberId());
         if (MemberType.MERCHANT.equals(member.getMemberType())) {
             throw new NoAuthReviewException();
@@ -52,22 +54,28 @@ public class MemberReviewService {
 
         reviewRepository.save(review);
         order.editOrderReviewStatus(ReviewStatus.COMP);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
-    public void editReview(EditMemberReviewRequest request) {
+    public ResponseEntity<?> editReview(EditMemberReviewRequest request) {
         Review review = findReviewById(request.getReviewId());
 
         Review updateReview = review.updateReview(request);
 
         reviewRepository.save(updateReview);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
-    public void removeReview(Long reviewId) {
+    public ResponseEntity<?> removeReview(Long reviewId) {
         Review review = findReviewById(reviewId);
 
         reviewRepository.delete(review);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public List<MemberReviewResponse> findReviews(Long memberId) {

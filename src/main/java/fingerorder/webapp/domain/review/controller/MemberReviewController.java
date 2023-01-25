@@ -6,7 +6,6 @@ import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
 import fingerorder.webapp.domain.review.service.MemberReviewService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,28 +28,26 @@ public class MemberReviewController {
     @PostMapping
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<?> saveReview(@RequestBody SaveMemberReviewRequest request) {
-        memberReviewService.saveReview(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(memberReviewService.saveReview(request));
     }
 
     @PutMapping
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<?> editReview(@RequestBody EditMemberReviewRequest request) {
-        memberReviewService.editReview(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(memberReviewService.editReview(request));
     }
 
     @DeleteMapping("{reviewId}")
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<?> removeReview(@PathVariable("reviewId") Long reviewId) {
-        memberReviewService.removeReview(reviewId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(memberReviewService.removeReview(reviewId));
     }
 
     @GetMapping("/{memberId}")
     @PreAuthorize("hasRole('MEMBER')")
-    public List<MemberReviewResponse> findReviews(@PathVariable("memberId") Long memberId) {
-        return memberReviewService.findReviews(memberId);
+    public ResponseEntity<List<MemberReviewResponse>> findReviews(
+        @PathVariable("memberId") Long memberId) {
+        return ResponseEntity.ok(memberReviewService.findReviews(memberId));
     }
 
 }

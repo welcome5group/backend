@@ -5,7 +5,6 @@ import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
 import fingerorder.webapp.domain.order.service.OrderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +26,13 @@ public class OrderController {
     @PostMapping("/guest/store/order")
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<?> save(@RequestBody final SaveOrderRequest saveOrderRequest) {
-        return orderService.save(saveOrderRequest);
+        return ResponseEntity.ok(orderService.save(saveOrderRequest));
     }
 
     @GetMapping("/store/{storeId}/orders")
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<List<GetInCompOrdersResponse>> getIncompOrders(@PathVariable Long storeId) {
+    public ResponseEntity<List<GetInCompOrdersResponse>> getIncompOrders(
+        @PathVariable Long storeId) {
         return ResponseEntity.ok(orderService.getInCompOrders(storeId));
     }
 
@@ -40,7 +40,7 @@ public class OrderController {
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<?> editOrderStatus(@PathVariable Long orderId) {
         orderService.editOrderStatus(orderId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(orderService.editOrderStatus(orderId));
     }
 
     @GetMapping("/user/orders")
