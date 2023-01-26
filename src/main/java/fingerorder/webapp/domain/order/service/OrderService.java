@@ -78,10 +78,12 @@ public class OrderService {
     }
 
     @Transactional
-    public void editOrderStatus(Long orderId) {
+    public ResponseEntity<?> editOrderStatus(Long orderId) {
         Order order = findOrderById(orderId);
 
         order.editOrderStatus(OrderStatus.COMP);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private Menu findMenuById(Long id) {
@@ -113,7 +115,7 @@ public class OrderService {
     public List<OrderListResponse> getOrderList(Long memberId) {
         LocalDateTime date = LocalDateTime.now().minusDays(3);
         Sort sort = sortByDate();
-        List<Order> orderList = this.orderRepository.findByMemberIdAndDate(memberId,date,sort)
+        List<Order> orderList = this.orderRepository.findByMemberIdAndDate(memberId, date, sort)
             .orElseThrow(() -> new RuntimeException());
 
         List<OrderListResponse> orderListResponses = new ArrayList<>();
@@ -137,6 +139,6 @@ public class OrderService {
     }
 
     private Sort sortByDate() {
-        return Sort.by(Sort.Direction.DESC,"createdAt");
+        return Sort.by(Sort.Direction.DESC, "createdAt");
     }
 }
