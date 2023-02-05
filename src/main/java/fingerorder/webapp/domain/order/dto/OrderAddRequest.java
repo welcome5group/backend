@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SaveOrderRequest {
+public class OrderAddRequest {
 
     private Long memberId;
     private Long storeId;

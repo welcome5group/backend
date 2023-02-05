@@ -7,21 +7,21 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SaveOrderResponse {
+public class OrderAddResponse {
 
     private Long ordersId;
 
 
-    private SaveOrderResponse(Order order) {
+    private OrderAddResponse(Order order) {
         this.ordersId = order.getId();
     }
 
-    private SaveOrderResponse(Long id) {
+    private OrderAddResponse(Long id) {
         this.ordersId = id;
     }
 
-    public static SaveOrderResponse saveOrderResponse(Long id) {
-        return new SaveOrderResponse(id);
+    public static OrderAddResponse saveOrderResponse(Long id) {
+        return new OrderAddResponse(id);
     }
 
 }

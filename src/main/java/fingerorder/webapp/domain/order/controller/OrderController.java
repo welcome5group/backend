@@ -1,7 +1,7 @@
 package fingerorder.webapp.domain.order.controller;
 
-import fingerorder.webapp.domain.order.dto.GetInCompOrdersResponse;
-import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
+import fingerorder.webapp.domain.order.dto.IncompOrderListResponse;
+import fingerorder.webapp.domain.order.dto.OrderAddRequest;
 import fingerorder.webapp.domain.order.service.OrderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,28 +25,28 @@ public class OrderController {
 
     @PostMapping("/guest/store/order")
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<?> save(@RequestBody final SaveOrderRequest saveOrderRequest) {
-        return ResponseEntity.ok(orderService.save(saveOrderRequest));
+    public ResponseEntity<?> orderAdd(@RequestBody final OrderAddRequest orderAddRequest) {
+        return ResponseEntity.ok(orderService.addOrder(orderAddRequest));
     }
 
     @GetMapping("/store/{storeId}/orders")
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<List<GetInCompOrdersResponse>> getIncompOrders(
+    public ResponseEntity<List<IncompOrderListResponse>> incompOrderList(
         @PathVariable Long storeId) {
-        return ResponseEntity.ok(orderService.getInCompOrders(storeId));
+        return ResponseEntity.ok(orderService.findIncompOrders(storeId));
     }
 
     @PutMapping("/store/order/{orderId}")
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<?> editOrderStatus(@PathVariable Long orderId) {
-        orderService.editOrderStatus(orderId);
-        return ResponseEntity.ok(orderService.editOrderStatus(orderId));
+    public ResponseEntity<?> orderStatusModify(@PathVariable Long orderId) {
+        orderService.modifyOrderStatus(orderId);
+        return ResponseEntity.ok(orderService.modifyOrderStatus(orderId));
     }
 
     @GetMapping("/user/orders")
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<?> getOrderList(@RequestParam Long memberId) {
-        return ResponseEntity.ok(orderService.getOrderList(memberId));
+    public ResponseEntity<?> orderList(@RequestParam Long memberId) {
+        return ResponseEntity.ok(orderService.findOrders(memberId));
     }
 }
 

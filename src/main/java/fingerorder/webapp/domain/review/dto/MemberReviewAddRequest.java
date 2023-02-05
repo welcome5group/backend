@@ -8,11 +8,18 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class EditMemberReviewRequest {
+public class MemberReviewAddRequest {
 
     @NotNull
-    private Long reviewId;
+    private Long memberId;
+
+    @NotNull
+    private Long storeId;
+
+    @NotNull
+    private Long orderId;
 
     @NotBlank
     private String content;
+
 }

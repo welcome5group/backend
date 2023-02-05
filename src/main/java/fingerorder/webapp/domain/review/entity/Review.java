@@ -6,18 +6,17 @@ import fingerorder.webapp.annotation.Trim;
 import fingerorder.webapp.annotation.TrimEntityListener;
 import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.order.entity.Order;
-import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
+import fingerorder.webapp.domain.review.dto.MemberReviewModifyRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentResponse;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateRequest;
 import fingerorder.webapp.domain.review.dto.ReviewCommentUpdateResponse;
-import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
+import fingerorder.webapp.domain.review.dto.MemberReviewAddRequest;
 import fingerorder.webapp.domain.store.entity.Store;
 import fingerorder.webapp.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -62,7 +61,7 @@ public class Review extends BaseEntity {
         this.content = reviewCommentRequest.getContent();
     }
 
-    public Review(Member member, Store store, Order order, SaveMemberReviewRequest request) {
+    public Review(Member member, Store store, Order order, MemberReviewAddRequest request) {
         this.member = member;
         this.store = store;
         this.order = order;
@@ -73,7 +72,7 @@ public class Review extends BaseEntity {
         this.member = member;
     }
 
-    public Review updateReview(EditMemberReviewRequest request) {
+    public Review updateReview(MemberReviewModifyRequest request) {
         this.content = request.getContent();
         return this;
     }

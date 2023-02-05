@@ -6,9 +6,9 @@ import fingerorder.webapp.domain.member.status.MemberType;
 import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.repository.OrderRepository;
 import fingerorder.webapp.domain.order.status.ReviewStatus;
-import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
+import fingerorder.webapp.domain.review.dto.MemberReviewModifyRequest;
 import fingerorder.webapp.domain.review.dto.MemberReviewResponse;
-import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
+import fingerorder.webapp.domain.review.dto.MemberReviewAddRequest;
 import fingerorder.webapp.domain.review.entity.Review;
 import fingerorder.webapp.domain.review.exception.NoAuthReviewException;
 import fingerorder.webapp.domain.review.exception.NoUniqueReviewException;
@@ -35,7 +35,7 @@ public class MemberReviewService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public ResponseEntity<?> saveReview(SaveMemberReviewRequest request) {
+    public ResponseEntity<?> addReview(MemberReviewAddRequest request) {
         Member member = findMemberById(request.getMemberId());
         if (MemberType.MERCHANT.equals(member.getMemberType())) {
             throw new NoAuthReviewException();
@@ -59,7 +59,7 @@ public class MemberReviewService {
     }
 
     @Transactional
-    public ResponseEntity<?> editReview(EditMemberReviewRequest request) {
+    public ResponseEntity<?> modifyReview(MemberReviewModifyRequest request) {
         Review review = findReviewById(request.getReviewId());
 
         Review updateReview = review.updateReview(request);

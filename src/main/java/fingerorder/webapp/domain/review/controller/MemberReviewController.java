@@ -1,8 +1,8 @@
 package fingerorder.webapp.domain.review.controller;
 
-import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
+import fingerorder.webapp.domain.review.dto.MemberReviewModifyRequest;
 import fingerorder.webapp.domain.review.dto.MemberReviewResponse;
-import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
+import fingerorder.webapp.domain.review.dto.MemberReviewAddRequest;
 import fingerorder.webapp.domain.review.service.MemberReviewService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,25 +27,25 @@ public class MemberReviewController {
 
     @PostMapping
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<?> saveReview(@RequestBody SaveMemberReviewRequest request) {
-        return ResponseEntity.ok(memberReviewService.saveReview(request));
+    public ResponseEntity<?> reviewAdd(@RequestBody MemberReviewAddRequest request) {
+        return ResponseEntity.ok(memberReviewService.addReview(request));
     }
 
     @PutMapping
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<?> editReview(@RequestBody EditMemberReviewRequest request) {
-        return ResponseEntity.ok(memberReviewService.editReview(request));
+    public ResponseEntity<?> reviewModify(@RequestBody MemberReviewModifyRequest request) {
+        return ResponseEntity.ok(memberReviewService.modifyReview(request));
     }
 
     @DeleteMapping("{reviewId}")
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<?> removeReview(@PathVariable("reviewId") Long reviewId) {
+    public ResponseEntity<?> reviewRemove(@PathVariable("reviewId") Long reviewId) {
         return ResponseEntity.ok(memberReviewService.removeReview(reviewId));
     }
 
     @GetMapping("/{memberId}")
     @PreAuthorize("hasRole('MEMBER')")
-    public ResponseEntity<List<MemberReviewResponse>> findReviews(
+    public ResponseEntity<List<MemberReviewResponse>> reviewList(
         @PathVariable("memberId") Long memberId) {
         return ResponseEntity.ok(memberReviewService.findReviews(memberId));
     }
