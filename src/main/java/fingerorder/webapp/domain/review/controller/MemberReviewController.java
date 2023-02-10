@@ -1,13 +1,13 @@
 package fingerorder.webapp.domain.review.controller;
 
-import fingerorder.webapp.domain.review.dto.EditMemberReviewRequest;
+import fingerorder.webapp.domain.review.dto.MemberReviewModifyRequest;
 import fingerorder.webapp.domain.review.dto.MemberReviewResponse;
-import fingerorder.webapp.domain.review.dto.SaveMemberReviewRequest;
+import fingerorder.webapp.domain.review.dto.MemberReviewAddRequest;
 import fingerorder.webapp.domain.review.service.MemberReviewService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,26 +26,28 @@ public class MemberReviewController {
     private final MemberReviewService memberReviewService;
 
     @PostMapping
-    public ResponseEntity<?> saveReview(@RequestBody SaveMemberReviewRequest request) {
-        memberReviewService.saveReview(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<?> reviewAdd(@RequestBody MemberReviewAddRequest request) {
+        return ResponseEntity.ok(memberReviewService.addReview(request));
     }
 
     @PutMapping
-    public ResponseEntity<?> editReview(@RequestBody EditMemberReviewRequest request) {
-        memberReviewService.editReview(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<?> reviewModify(@RequestBody MemberReviewModifyRequest request) {
+        return ResponseEntity.ok(memberReviewService.modifyReview(request));
     }
 
     @DeleteMapping("{reviewId}")
-    public ResponseEntity<?> removeReview(@PathVariable("reviewId") Long reviewId) {
-        memberReviewService.removeReview(reviewId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<?> reviewRemove(@PathVariable("reviewId") Long reviewId) {
+        return ResponseEntity.ok(memberReviewService.removeReview(reviewId));
     }
 
     @GetMapping("/{memberId}")
-    public List<MemberReviewResponse> findReviews(@PathVariable("memberId") Long memberId) {
-        return memberReviewService.findReviews(memberId);
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<List<MemberReviewResponse>> reviewList(
+        @PathVariable("memberId") Long memberId) {
+        return ResponseEntity.ok(memberReviewService.findReviews(memberId));
     }
 
 }

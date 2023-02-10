@@ -1,12 +1,12 @@
 package fingerorder.webapp.domain.order.controller;
 
-import fingerorder.webapp.domain.order.dto.GetInCompOrdersResponse;
-import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
+import fingerorder.webapp.domain.order.dto.IncompOrderListResponse;
+import fingerorder.webapp.domain.order.dto.OrderAddRequest;
 import fingerorder.webapp.domain.order.service.OrderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,24 +24,29 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/guest/store/order")
-    public ResponseEntity<?> save(@RequestBody final SaveOrderRequest saveOrderRequest) {
-        return orderService.save(saveOrderRequest);
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<?> orderAdd(@RequestBody final OrderAddRequest orderAddRequest) {
+        return ResponseEntity.ok(orderService.addOrder(orderAddRequest));
     }
 
     @GetMapping("/store/{storeId}/orders")
-    public ResponseEntity<List<GetInCompOrdersResponse>> getIncompOrders(@PathVariable Long storeId) {
-        return ResponseEntity.ok(orderService.getInCompOrders(storeId));
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<List<IncompOrderListResponse>> incompOrderList(
+        @PathVariable Long storeId) {
+        return ResponseEntity.ok(orderService.findIncompOrders(storeId));
     }
 
     @PutMapping("/store/order/{orderId}")
-    public ResponseEntity<?> editOrderStatus(@PathVariable Long orderId) {
-        orderService.editOrderStatus(orderId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<?> orderStatusModify(@PathVariable Long orderId) {
+        orderService.modifyOrderStatus(orderId);
+        return ResponseEntity.ok(orderService.modifyOrderStatus(orderId));
     }
 
     @GetMapping("/user/orders")
-    public ResponseEntity<?> getOrderList(@RequestParam Long memberId) {
-        return ResponseEntity.ok(orderService.getOrderList(memberId));
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<?> orderList(@RequestParam Long memberId) {
+        return ResponseEntity.ok(orderService.findOrders(memberId));
     }
 }
 

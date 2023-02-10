@@ -40,7 +40,7 @@ public class MenuController {
 
     //메뉴 추가
     @PostMapping
-//    @PreAuthorize("hasRole('MERCHANT')")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<MenuResponse> createMenu(
         @Validated @RequestBody MenuCreateRequest menuCreateRequest, BindingResult bindingResult,
         @PathVariable("storeId") Long storeId) {
@@ -54,7 +54,7 @@ public class MenuController {
 
     //메뉴 수정
     @PutMapping //메뉴 수정에는 storeId가 필요가 없다(o)
-//    @PreAuthorize("hasRole('MERCHANT')")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<MenuResponse> updateMenu(
         @Validated @RequestBody MenuUpdateRequest menuUpdateRequest, BindingResult bindingResult,
         @PathVariable("storeId") Long storeId) {
@@ -69,7 +69,7 @@ public class MenuController {
     //메뉴 삭제
     @DeleteMapping //메뉴 삭제에는 storeId가 필요가 없다(o)
     //질문 : 메뉴를 삭제하면 연관관계 편의 메서드로 넣어준 store 상의 menu 도 사라질까?
-//    @PreAuthorize("hasRole('MERCHANT')")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<?> deleteMenu(@RequestParam Long menuId,
         @PathVariable("storeId") Long storeId) {
         menuService.deleteMenu(menuId);
@@ -78,7 +78,7 @@ public class MenuController {
 
     //메뉴와 카테고리 넘겨주기
     @GetMapping
-//    @PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
     public Result<?> findMenuAndCategory(@PathVariable("storeId") Long storeId) {
         List<MenuAndCategory> menuAndCategory = menuQueryService.findMenuAndCategory(storeId);
         return new Result<>(menuAndCategory);

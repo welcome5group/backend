@@ -4,10 +4,10 @@ import fingerorder.webapp.domain.member.entity.Member;
 import fingerorder.webapp.domain.member.repository.MemberRepository;
 import fingerorder.webapp.domain.menu.entity.Menu;
 import fingerorder.webapp.domain.menu.repository.MenuRepository;
-import fingerorder.webapp.domain.order.dto.GetInCompOrdersResponse;
+import fingerorder.webapp.domain.order.dto.IncompOrderListResponse;
 import fingerorder.webapp.domain.order.dto.OrderListResponse;
 import fingerorder.webapp.domain.order.dto.OrderMenuDto;
-import fingerorder.webapp.domain.order.dto.SaveOrderRequest;
+import fingerorder.webapp.domain.order.dto.OrderAddRequest;
 import fingerorder.webapp.domain.order.entity.Order;
 import fingerorder.webapp.domain.order.entity.OrderMenu;
 import fingerorder.webapp.domain.order.repository.OrderRepository;
@@ -36,7 +36,7 @@ public class OrderService {
     private final MenuRepository menuRepository;
 
     @Transactional
-    public ResponseEntity<?> save(final SaveOrderRequest request) {
+    public ResponseEntity<?> addOrder(final OrderAddRequest request) {
 
         checkEmptyOrderMenus(request.getOrderMenus());
 
@@ -64,24 +64,26 @@ public class OrderService {
         return orderMenus;
     }
 
-    public List<GetInCompOrdersResponse> getInCompOrders(Long storeId) {
+    public List<IncompOrderListResponse> findIncompOrders(Long storeId) {
         List<Order> getOrders = orderRepository.findAllByStoreIdAndOrderStatus(storeId,
                 OrderStatus.INCOMP)
             .orElseThrow(() -> new RuntimeException());
 
-        List<GetInCompOrdersResponse> orders = new ArrayList<>();
+        List<IncompOrderListResponse> orders = new ArrayList<>();
         for (Order getOrder : getOrders) {
-            orders.add(new GetInCompOrdersResponse(getOrder));
+            orders.add(new IncompOrderListResponse(getOrder));
         }
 
         return orders;
     }
 
     @Transactional
-    public void editOrderStatus(Long orderId) {
+    public ResponseEntity<?> modifyOrderStatus(Long orderId) {
         Order order = findOrderById(orderId);
 
         order.editOrderStatus(OrderStatus.COMP);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private Menu findMenuById(Long id) {
@@ -110,10 +112,10 @@ public class OrderService {
         }
     }
 
-    public List<OrderListResponse> getOrderList(Long memberId) {
+    public List<OrderListResponse> findOrders(Long memberId) {
         LocalDateTime date = LocalDateTime.now().minusDays(3);
         Sort sort = sortByDate();
-        List<Order> orderList = this.orderRepository.findByMemberIdAndDate(memberId,date,sort)
+        List<Order> orderList = this.orderRepository.findByMemberIdAndDate(memberId, date, sort)
             .orElseThrow(() -> new RuntimeException());
 
         List<OrderListResponse> orderListResponses = new ArrayList<>();
@@ -137,6 +139,6 @@ public class OrderService {
     }
 
     private Sort sortByDate() {
-        return Sort.by(Sort.Direction.DESC,"createdAt");
+        return Sort.by(Sort.Direction.DESC, "createdAt");
     }
 }
