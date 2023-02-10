@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class TokenResponseDto {
+public class TokenResponse {
     private String accessToken;
     private Long id;
     private String email;

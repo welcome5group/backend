@@ -4,7 +4,7 @@ import static javax.persistence.EnumType.STRING;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-import fingerorder.webapp.domain.member.dto.MemberDto;
+import fingerorder.webapp.domain.member.dto.MemberResponse;
 import fingerorder.webapp.domain.member.status.MemberSignUpType;
 import fingerorder.webapp.domain.member.status.MemberStatus;
 import fingerorder.webapp.domain.member.status.MemberType;
@@ -85,15 +85,9 @@ public class Member extends BaseEntity {
         }
     }
 
-    public MemberDto toMemberDto() {  // 생성자로 리팩토링
-        return MemberDto.builder()
-            .id(this.id)
-            .email(this.email)
-            .nickName(this.nickName)
-            .profile(this.profile)
-            .memberType(this.memberType)
-            .status(this.status)
-            .build();
+    public MemberResponse toMemberResponse() {
+        return new MemberResponse(this.id, this.email, this.nickName, this.profile, this.status,
+                this.memberType, this.getCreatedAt(), this.getUpdatedAt());
     }
 
 }

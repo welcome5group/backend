@@ -1,6 +1,6 @@
 package fingerorder.webapp.domain.order.dto;
 
-import fingerorder.webapp.domain.member.dto.MemberDto;
+import fingerorder.webapp.domain.member.dto.MemberResponse;
 import fingerorder.webapp.domain.store.dto.StoreUpdateResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class OrderDto {
 
     private LocalDateTime createdAt;
 
-    private MemberDto userDto;
+    private MemberResponse userDto;
 
     private StoreUpdateResponse storeDto;
 

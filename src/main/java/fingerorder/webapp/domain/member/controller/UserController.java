@@ -1,21 +1,23 @@
 package fingerorder.webapp.domain.member.controller;
 
-import fingerorder.webapp.domain.member.dto.MemberDto;
-import fingerorder.webapp.domain.member.dto.MemberEditNickNameDto;
-import fingerorder.webapp.domain.member.dto.MemberEditProfileDto;
-import fingerorder.webapp.domain.member.dto.MemberInfoDto;
-import fingerorder.webapp.domain.member.dto.MemberPasswordResetDto;
-import fingerorder.webapp.domain.member.dto.MemberWithDrawDto;
-import fingerorder.webapp.domain.member.dto.SignInDto;
-import fingerorder.webapp.domain.member.dto.SignOutDto;
-import fingerorder.webapp.domain.member.dto.SignUpDto;
+import fingerorder.webapp.domain.member.dto.MailSendResponse;
+import fingerorder.webapp.domain.member.dto.MemberResponse;
+import fingerorder.webapp.domain.member.dto.MemberEditNickNameRequest;
+import fingerorder.webapp.domain.member.dto.MemberEditProfileRequest;
+import fingerorder.webapp.domain.member.dto.MemberInfoRequest;
+import fingerorder.webapp.domain.member.dto.MemberPasswordResetRequest;
+import fingerorder.webapp.domain.member.dto.MemberWithDrawRequest;
+import fingerorder.webapp.domain.member.dto.SignInRequest;
+import fingerorder.webapp.domain.member.dto.SignOutRequest;
+import fingerorder.webapp.domain.member.dto.SignOutResponse;
+import fingerorder.webapp.domain.member.dto.SignUpRequest;
+import fingerorder.webapp.domain.member.dto.TokenResponse;
 import fingerorder.webapp.domain.member.service.MailService;
 import fingerorder.webapp.domain.member.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,67 +34,66 @@ public class UserController {
 	private String API_KEY;
 
 	@PostMapping("/api/auth/sign-up")
-	public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpParam) {
-		MemberDto unAuthMember = this.userService.signUp(signUpParam);
+	public ResponseEntity<MemberResponse> signUp(@RequestBody SignUpRequest signUpParam) {
+		MemberResponse unAuthMember = this.userService.signUp(signUpParam);
 		this.mailService.sendUserAuthMail(unAuthMember);
 		return ResponseEntity.ok(unAuthMember);
 	}
 
 	@PutMapping("/api/auth/sign-up")
-	public ResponseEntity<?> signUpSubmit(@RequestParam String uuid) {
-		MemberDto result = this.userService.signUpSubmit(uuid);
+	public ResponseEntity<MemberResponse> signUpSubmit(@RequestParam String uuid) {
+		MemberResponse result = this.userService.signUpSubmit(uuid);
 		return ResponseEntity.ok(result);
 	}
 
 	@PostMapping("/api/auth/sign-in")
-	public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
-		return ResponseEntity.ok(this.userService.signIn(signInDto));
+	public ResponseEntity<TokenResponse> signIn(@RequestBody SignInRequest signInRequest) {
+		return ResponseEntity.ok(this.userService.signIn(signInRequest));
 	}
 
 	@PostMapping("/api/auth/sign-out")
-	public ResponseEntity<?> signOut(@RequestBody SignOutDto signOutDto) {
-		return ResponseEntity.ok(this.userService.signOut(signOutDto));
+	public ResponseEntity<SignOutResponse> signOut(@RequestBody SignOutRequest signOutRequest) {
+		return ResponseEntity.ok(this.userService.signOut(signOutRequest));
 	}
 
 	@PostMapping("api/users/delete")
-	public ResponseEntity<?> withdrawMember(@RequestBody MemberWithDrawDto memberWithDrawDto) {
-		return ResponseEntity.ok(this.userService.withdrawMember(memberWithDrawDto));
+	public ResponseEntity<MemberResponse> withdrawMember(
+		@RequestBody MemberWithDrawRequest memberWithDrawRequest) {
+		return ResponseEntity.ok(this.userService.withdrawMember(memberWithDrawRequest));
 	}
 
 	@GetMapping("/api/users")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> memberInfo(@RequestParam String email) {
-		var result = this.userService.getMemberInfo(email);
-		return ResponseEntity.ok(result);
+	public ResponseEntity<MemberResponse> memberInfo(@RequestParam String email) {
+		return ResponseEntity.ok(this.userService.getMemberInfo(email));
 	}
 
 	@PutMapping("/api/users/edit/nickname")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> memberEditNickName(
-		@RequestBody MemberEditNickNameDto memberEditNickNameDto) {
-		var result = this.userService.editMemberNickName(memberEditNickNameDto);
-		return ResponseEntity.ok(result);
+	public ResponseEntity<MemberResponse> memberEditNickName(
+		@RequestBody MemberEditNickNameRequest memberEditNickNameRequest) {
+		return ResponseEntity.ok(this.userService.editMemberNickName(memberEditNickNameRequest));
 	}
 
 	@PutMapping("/api/users/edit/profile")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<?> memberEditProfile(
-		@RequestBody MemberEditProfileDto memberEditProfileDto) {
-		var result = this.userService.editMemberProfile(memberEditProfileDto);
-		return ResponseEntity.ok(result);
+	public ResponseEntity<MemberResponse> memberEditProfile(
+		@RequestBody MemberEditProfileRequest memberEditProfileRequest) {
+		return ResponseEntity.ok(this.userService.editMemberProfile(memberEditProfileRequest));
 	}
 
 	@PostMapping("/api/auth/password")
-	public ResponseEntity<?> sendPasswordResetEmail(@RequestBody MemberInfoDto memberInfoDto) {
-		return ResponseEntity.ok(mailService.sendResetPasswordMail(memberInfoDto));
+	public ResponseEntity<MailSendResponse> sendPasswordResetEmail(
+		@RequestBody MemberInfoRequest memberInfoRequest) {
+		return ResponseEntity.ok(mailService.sendResetPasswordMail(memberInfoRequest));
 	}
 
 	@PutMapping("/api/auth/resetPassword")
-	public ResponseEntity<?> passwordReset(
+	public ResponseEntity<Boolean> passwordReset(
 		@RequestParam String uuid
-		,@RequestBody MemberPasswordResetDto memberPasswordResetDto)
+		,@RequestBody MemberPasswordResetRequest memberPasswordResetRequest)
 	{
-		return ResponseEntity.ok(userService.resetPassword(uuid,memberPasswordResetDto));
+		return ResponseEntity.ok(userService.resetPassword(uuid, memberPasswordResetRequest));
 	}
 
 	@GetMapping("/api/auth/kakao/sign-in")
