@@ -119,7 +119,7 @@ public class UserService implements UserDetailsService {
 		return this.memberRepository.save(newMember).toMemberResponse();
 	}
 	@Transactional
-	public MemberResponse signUpSubmit(String uuid) {
+	public MemberResponse submitSignUp(String uuid) {
 		Member findMember = this.memberRepository.findByUuid(uuid)
 			.orElseThrow(() -> new UnauthorizedMemberException());
 
@@ -127,6 +127,7 @@ public class UserService implements UserDetailsService {
 
 		return this.memberRepository.save(findMember).toMemberResponse();
 	}
+
 	@Transactional
 	public TokenResponse signIn(SignInRequest signInRequest) {
 		if (checkInvalidEmail(signInRequest.getEmail())) {
@@ -279,14 +280,14 @@ public class UserService implements UserDetailsService {
 	}
 
 	//유저 정보 가져오기
-	public MemberResponse getMemberInfo(String email) {
+	public MemberResponse findMember(String email) {
 		Member findMember = checkInvalidMember(email);
 		return findMember.toMemberResponse();
 	}
 
 	// user 정보 수정(nickName 밖에 없음)
 	@Transactional
-	public MemberResponse editMemberNickName(MemberEditNickNameRequest memberEditNickNameRequest) {
+	public MemberResponse modifyMemberNickName(MemberEditNickNameRequest memberEditNickNameRequest) {
 		Member findMember = checkInvalidMember(memberEditNickNameRequest.getEmail());
 
 		boolean existNickName = this.memberRepository.existsByNickName(
@@ -303,7 +304,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	@Transactional
-	public MemberResponse editMemberProfile(MemberEditProfileRequest memberEditProfileRequest) {
+	public MemberResponse modifyMemberProfile(MemberEditProfileRequest memberEditProfileRequest) {
 		Member findMember = checkInvalidMember(memberEditProfileRequest.getEmail());
 
 		findMember.editProfile(memberEditProfileRequest.getProfile());
@@ -427,7 +428,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	@Transactional
-	public MemberResponse withdrawMember(MemberWithDrawRequest memberWithDrawRequest) {
+	public MemberResponse removeMember(MemberWithDrawRequest memberWithDrawRequest) {
 		Member findMember = checkInvalidMember(memberWithDrawRequest.getEmail());
 
 		if (!checkCorrectPassword(memberWithDrawRequest.getPassword(), findMember.getPassword())) {

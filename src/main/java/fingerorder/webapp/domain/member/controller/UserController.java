@@ -34,15 +34,15 @@ public class UserController {
 	private String API_KEY;
 
 	@PostMapping("/api/auth/sign-up")
-	public ResponseEntity<MemberResponse> signUp(@RequestBody SignUpRequest signUpParam) {
-		MemberResponse unAuthMember = this.userService.signUp(signUpParam);
+	public ResponseEntity<MemberResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
+		MemberResponse unAuthMember = this.userService.signUp(signUpRequest);
 		this.mailService.sendUserAuthMail(unAuthMember);
 		return ResponseEntity.ok(unAuthMember);
 	}
 
 	@PutMapping("/api/auth/sign-up")
 	public ResponseEntity<MemberResponse> signUpSubmit(@RequestParam String uuid) {
-		MemberResponse result = this.userService.signUpSubmit(uuid);
+		MemberResponse result = this.userService.submitSignUp(uuid);
 		return ResponseEntity.ok(result);
 	}
 
@@ -57,33 +57,33 @@ public class UserController {
 	}
 
 	@PostMapping("api/users/delete")
-	public ResponseEntity<MemberResponse> withdrawMember(
+	public ResponseEntity<MemberResponse> memberRemove(
 		@RequestBody MemberWithDrawRequest memberWithDrawRequest) {
-		return ResponseEntity.ok(this.userService.withdrawMember(memberWithDrawRequest));
+		return ResponseEntity.ok(this.userService.removeMember(memberWithDrawRequest));
 	}
 
 	@GetMapping("/api/users")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<MemberResponse> memberInfo(@RequestParam String email) {
-		return ResponseEntity.ok(this.userService.getMemberInfo(email));
+	public ResponseEntity<MemberResponse> memberDetails(@RequestParam String email) {
+		return ResponseEntity.ok(this.userService.findMember(email));
 	}
 
 	@PutMapping("/api/users/edit/nickname")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<MemberResponse> memberEditNickName(
+	public ResponseEntity<MemberResponse> memberNickNameModify(
 		@RequestBody MemberEditNickNameRequest memberEditNickNameRequest) {
-		return ResponseEntity.ok(this.userService.editMemberNickName(memberEditNickNameRequest));
+		return ResponseEntity.ok(this.userService.modifyMemberNickName(memberEditNickNameRequest));
 	}
 
 	@PutMapping("/api/users/edit/profile")
 	@PreAuthorize("hasRole('MEMBER') or hasRole('MERCHANT')")
-	public ResponseEntity<MemberResponse> memberEditProfile(
+	public ResponseEntity<MemberResponse> memberProfileModify(
 		@RequestBody MemberEditProfileRequest memberEditProfileRequest) {
-		return ResponseEntity.ok(this.userService.editMemberProfile(memberEditProfileRequest));
+		return ResponseEntity.ok(this.userService.modifyMemberProfile(memberEditProfileRequest));
 	}
 
 	@PostMapping("/api/auth/password")
-	public ResponseEntity<MailSendResponse> sendPasswordResetEmail(
+	public ResponseEntity<MailSendResponse> passwordResetMailSend(
 		@RequestBody MemberInfoRequest memberInfoRequest) {
 		return ResponseEntity.ok(mailService.sendResetPasswordMail(memberInfoRequest));
 	}
@@ -97,7 +97,7 @@ public class UserController {
 	}
 
 	@GetMapping("/api/auth/kakao/sign-in")
-	public String kakaoLoginMember(@RequestParam String type) {
+	public String signInKakao(@RequestParam String type) {
 		StringBuffer loginUrl = new StringBuffer();
 		loginUrl.append("https://kauth.kakao.com/oauth/authorize?client_id=");
 		loginUrl.append(this.API_KEY);
